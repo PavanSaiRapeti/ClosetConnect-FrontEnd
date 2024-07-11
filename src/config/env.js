@@ -3,6 +3,7 @@ export const BASE_URL = 'https://closetconnect-dev-73814f63526e.herokuapp.com/ap
 export const endpoints = {
   registerUser: `${BASE_URL}/auth/register`,
   loginUser: `${BASE_URL}/auth/login`,
+  getUser: `${BASE_URL}/user/12`,
   updateUser: (userId) => `${BASE_URL}/user/update/${userId}`,
   searchUserClothes: (userId, searchParam) => `${BASE_URL}/clothingItems/search?userId=${userId}&${searchParam}`,
 };
@@ -15,6 +16,7 @@ export const enums = {
 
 export const registerUserEndpoint = endpoints.registerUser;
 export const loginUserEndpoint = endpoints.loginUser;
+export const getUserEndpoint = endpoints.getUser;
 export const updateUserEndpoint = endpoints.updateUser;
 export const searchUserClothesEndpoint = endpoints.searchUserClothes;
 

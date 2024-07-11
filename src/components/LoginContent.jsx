@@ -1,14 +1,20 @@
-import React from 'react'
-import { useFormik } from 'formik'
-import Link from 'next/link'
+import React from 'react';
+import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { login } from 'store/actions/authAction'
+import { LOGIN_REQUEST } from 'store/types/apiActionTypes';
 
 const LoginContent = () => {
+  const dispatch = useDispatch();
+  
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     onSubmit: (values, { setSubmitting }) => {
+      debugger;
+      dispatch(login(values.email, values.password)) 
       setTimeout(() => {
         console.log('Login form submitted:', values.email, values.password)
         setSubmitting(false)
@@ -58,6 +64,7 @@ const LoginContent = () => {
           Forgot password?
         </a>
       </form>
+      <button onClick={()=>dispatch({type: LOGIN_REQUEST , payload: { email, password }}) } >press</button>
     </div>
   )
 }

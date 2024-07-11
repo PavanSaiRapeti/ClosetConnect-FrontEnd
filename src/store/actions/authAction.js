@@ -1,35 +1,18 @@
-import { searchUserClothesEndpoint } from "config/env";
+import { LOGIN_REQUEST, LOGOUT_REQUEST, REGISTER_REQUEST } from "store/types/apiActionTypes";
 
-
-export const login = (email, password) => ({
-  type: 'LOGIN',
-  payload: { email, password },
-});
+export const login = (email, password) => {
+  debugger;
+  return {
+    type: LOGIN_REQUEST,
+    payload: { email, password },
+  };
+};
 
 export const register = (data) => ({
-  type: 'REGISTER',
+  type: REGISTER_REQUEST,
   payload: data,
 });
 
 export const logout = () => ({
-  type: 'LOGOUT',
+  type: LOGOUT_REQUEST,
 });
-
-export const searchUserClothesRequest = (
-  userId,
-  searchParam,
-  token,
-  dispatch
-) => {
-  dispatch({
-    type: API_REQUEST,
-    payload: {
-      url: searchUserClothesEndpoint(userId, searchParam),
-      method: "get",
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  });
-};
-export const validateTokenAndGetUser = async (token) => {
-  return { username: "Alice" };
-};

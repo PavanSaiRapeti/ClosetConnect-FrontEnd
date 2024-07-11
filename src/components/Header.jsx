@@ -3,6 +3,7 @@ import Logo from 'websiteInfo/Logo'
 import HeaderComponent from './HeaderComponent'
 
 const Header = ({ user }) => {
+  
   return (
     <div className='header'>
       <div className='w-full pl-2 pr-2'>
@@ -25,7 +26,7 @@ const Header = ({ user }) => {
                       </div>
                   </div>
                   <div className='relative w-1/4 p-2 flex items-center gap-8'>
-                    <HeaderComponent />
+                    <HeaderComponent islogged={user?.isLogged}/>
                   </div>
                 </div>
               </div>

@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { register } from 'store/actions/authAction';
 
 const RegisterContent = () => {
+  const dispatch = useDispatch();
   const [showErrors, setShowErrors] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -41,6 +44,7 @@ const RegisterContent = () => {
       setTimeout(() => {
         console.log('Register form submitted:', values);
         setSubmitting(false);
+        dispatch(register(values));
       }, 400);
     },
   });

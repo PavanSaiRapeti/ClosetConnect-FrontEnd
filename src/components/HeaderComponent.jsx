@@ -2,8 +2,10 @@ import Image from 'next/image'
 import React, { useState } from 'react'
 import shop from '../websiteInfo/shopping.png'
 import user from '../websiteInfo/user.png'
+import { useRouter } from 'next/router'
 
-const HeaderComponent = () => {
+const HeaderComponent = ({isLogged}) => {
+  const router = useRouter();
   return (
     <>
       <div>
@@ -33,7 +35,7 @@ const HeaderComponent = () => {
         </button>
       </div>
       <div >
-        <button className='flex justify-center'>
+        <button onClick={() => isLogged ? router.push('/profile') : router.push('/login')} className='flex justify-center'>
           <Image src={user} alt='user' width={25} height={25} />
         </button>
       </div>

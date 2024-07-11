@@ -1,21 +1,34 @@
+import { getUserEndpoint, loginUserEndpoint, registerUserEndpoint } from 'config/env';
+import { api } from '..';
 
-
-import { loginUserEndpoint, registerUserEndpoint } from '../../../config/env';
-import { API_REQUEST } from '../../../store/types/apiActionTypes';
-
-
-export const registerUser = async (userData, dispatch) => {
+export const registerUser = async (userData) => {
   try {
-    dispatch({ type: API_REQUEST, payload: { url: registerUserEndpoint , method: 'post', data: userData } });
+    const response = await api.post(registerUserEndpoint, userData);
+    return response.data;
   } catch (error) {
     throw new Error(error.response.data.message);
   }
 };
 
-export const loginUser = async (email, password, dispatch) => {
+export const loginUser = async (email, password) => {
+  debugger;
   try {
-    dispatch({ type: API_REQUEST, payload: { url: loginUserEndpoint , method: 'post', data: { email, password } } });
+    const response = await api.post(loginUserEndpoint, { email, password });
+    return response.data;
   } catch (error) {
     throw new Error(error.response.data.message);
+  }
+};
+
+export const validateTokenAndGetUser = async (token) => {
+  try {
+    const response = await api.get(getUserEndpoint, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error('Error validating token and getting user: ' + error.message);
   }
 };
