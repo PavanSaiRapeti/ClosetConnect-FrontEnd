@@ -1,23 +1,21 @@
-import { validateTokenAndGetUser } from 'pages/api/auth/auth'
-import Header from '../../components/Header'
-import { useState } from 'react';
-
+import Header from "@/components/Header";
+import React, { useState } from "react";
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
   const slides = [
     {
-      image: "https://via.placeholder.com/1200x400",
+      image: "https://images.unsplash.com/photo-1560095275-b6fe3ebb506d?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       title: "Welcome to CloseConnect",
       description: "The ultimate thrifting platform for college students."
     },
     {
-      image: "https://via.placeholder.com/1200x400",
+      image: "https://images.unsplash.com/photo-1524578271613-e1ac182ffa2f?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       title: "Sell Your Clothes",
       description: "Easily list your items and make extra cash."
     },
     {
-      image: "https://via.placeholder.com/1200x400",
+      image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       title: "Trade with Peers",
       description: "Swap items with other students and refresh your wardrobe."
     }
@@ -34,15 +32,20 @@ const HeroSection = () => {
   };
 
   return (
-    <section className="relative text-center p-10">
+    <section className="relative text-center p-10" style={{ fontFamily: "Ubuntu" }}>
       <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-white">
         <h2 className="text-4xl font-bold mb-4">{slides[currentSlide].title}</h2>
         <p className="text-lg mb-4">{slides[currentSlide].description}</p>
-        <button onClick={() => window.location.href='/about'} className="bg-white text-purple-600 px-4 py-2 rounded-full font-semibold">Learn More</button>
+        <button
+          onClick={() => window.location.href = '/about'}
+          className="border border-black text-black px-4 py-2 rounded-full font-semibold"
+        >
+          Learn More
+        </button>
         <div className="mt-4">
-          <button onClick={prevSlide} className="mx-2 p-2 bg-white text-purple-600 rounded-full">&lt;</button>
-          <button onClick={nextSlide} className="mx-2 p-2 bg-white text-purple-600 rounded-full">&gt;</button>
+          <button onClick={prevSlide} className="mx-2 p-2 border border-black text-black rounded-full">&lt;</button>
+          <button onClick={nextSlide} className="mx-2 p-2 border border-black text-black rounded-full">&gt;</button>
         </div>
       </div>
     </section>
@@ -52,8 +55,8 @@ const HeroSection = () => {
 // How It Works Component
 const HowItWorks = () => {
   return (
-    <section className="p-10">
-      <h2 className="text-3xl font-bold text-center mb-6">How It Works</h2>
+    <section className="p-10" >
+      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>How It Works</h2>
       <div className="flex flex-col space-y-4">
         <div className="flex items-center space-x-4">
           <div className="bg-purple-600 text-white p-4 rounded-full">1</div>
@@ -79,8 +82,8 @@ const HowItWorks = () => {
 // Features Component
 const Features = () => {
   return (
-    <section className="bg-gray-100 p-10">
-      <h2 className="text-3xl font-bold text-center mb-6">Features</h2>
+    <section className="bg-gray-100 p-10" >
+      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>Features</h2>
       <div className="flex flex-wrap justify-around">
         <div className="w-1/4 p-4 text-center">
           <h3 className="text-xl font-bold mb-2">Ratings & Reviews</h3>
@@ -106,8 +109,8 @@ const Features = () => {
 // Testimonials Component
 const Testimonials = () => {
   return (
-    <section className="p-10 bg-purple-100">
-      <h2 className="text-3xl font-bold text-center mb-6">What Students Are Saying</h2>
+    <section className="p-10" style={{ backgroundColor: "#DAF479"}}>
+      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>What Students Are Saying</h2>
       <div className="flex flex-wrap justify-around">
         <div className="w-1/3 p-4">
           <p className="italic">"CloseConnect is amazing! I sold my old clothes in just a few days."</p>
@@ -135,9 +138,9 @@ const Listing = ({ listing }) => {
         <h3 className="text-lg font-bold">{listing.title}</h3>
         <p className="text-gray-600">${listing.price}</p>
         <div className="flex justify-between mt-4">
-          <button className="bg-purple-600 text-white px-4 py-2 rounded-lg">Bid ({listing.bids})</button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-lg">Trade ({listing.trades})</button>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg">Message ({listing.messages})</button>
+          <button className="border border-black text-black px-4 py-2 rounded-lg">Bid ({listing.bids})</button>
+          <button className="border border-black text-black px-4 py-2 rounded-lg">Trade ({listing.trades})</button>
+          <button className="border border-black text-black px-4 py-2 rounded-lg">Message ({listing.messages})</button>
         </div>
       </div>
     </div>
@@ -147,8 +150,8 @@ const Listing = ({ listing }) => {
 // Product Listing Component
 const ProductListing = ({ listings }) => {
   return (
-    <section className="p-10">
-      <h2 className="text-3xl font-bold text-center mb-6">Product Listings</h2>
+    <section className="p-10" style={{ fontFamily: "Ubuntu" }}>
+      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>Latest Listings</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {listings.map((listing) => (
           <Listing key={listing.id} listing={listing} />
@@ -161,23 +164,27 @@ const ProductListing = ({ listings }) => {
 // Footer Component
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white p-4 text-center">
+    <footer className="bg-gray-800 text-white p-4 text-center" style={{ fontFamily: "Ubuntu" }}>
       <p>&copy; 2024 CloseConnect. All rights reserved.</p>
-      <div className="mt-2">
-        <a href="/contact" className="mx-2">Contact</a>
-        <a href="/privacy" className="mx-2">Privacy Policy</a>
-        <a href="/terms" className="mx-2">Terms of Service</a>
-      </div>
     </footer>
   );
 };
-const Home = ({ user }) => {
-  console.log('user', user);
+
+// Home Component
+const Home = () => {
   const listings = [
-    { id: 1, image: 'https://via.placeholder.com/200', title: 'Red Dress', price: 50, bids: 3, trades: 2, messages: 5 },
-    { id: 2, image: 'https://via.placeholder.com/200', title: 'Blue Jeans', price: 40, bids: 1, trades: 0, messages: 2 },
-    { id: 3, image: 'https://via.placeholder.com/200', title: 'Green Jacket', price: 60, bids: 5, trades: 3, messages: 4 }
+    {
+      id: 1, image: "https://images.unsplash.com/photo-1560095275-b6fe3ebb506d?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      title: 'Retro Jean Bomber', price: 50, bids: 3, trades: 2, messages: 5
+    },
+    {
+      id: 2, image: 'https://via.placeholder.com/200', title: 'Blue Jeans', price: 40, bids: 1, trades: 0, messages: 2
+    },
+    {
+      id: 3, image: 'https://via.placeholder.com/200', title: 'Green Jacket', price: 60, bids: 5, trades: 3, messages: 4
+    }
   ];
+
   return (
     <div>
       <Header />
@@ -188,39 +195,9 @@ const Home = ({ user }) => {
       <Testimonials />
       <Footer />
     </div>
-  )
-}
-
-export async function getServerSideProps({ req, res }) {
-  const token = req?.cookies?.token || true
-
-  if (!token) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    }
-  }
-  // const user = await validateTokenAndGetUser(token);
-
-  // if (user) {
-  //   return {
-  //     redirect: {
-  //       destination: '/login',
-  //       permanent: false,
-  //     },
-  //   };
-  // }
-
-  return {
-    props: {
-      user: null,
-    },
-  }
-}
+  );
+};
 
 export default Home;
-
 
 
