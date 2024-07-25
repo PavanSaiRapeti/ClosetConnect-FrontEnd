@@ -15,4 +15,7 @@ module.exports = {
       },
     ];
   },
+  images: {
+    domains: ['images.unsplash.com', 'example.com'],
+  },
 };
