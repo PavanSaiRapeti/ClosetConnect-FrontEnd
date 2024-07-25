@@ -1,8 +1,9 @@
 import React from 'react';
 
-function Logo() {
-  return (
-    <svg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 363.171 144.372'>
+
+const Logo = React.forwardRef(({ href, ...props }, ref) => (
+  <a href={href} ref={ref} {...props} className='cursor-pointer'>
+    <svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' viewBox='0 0 363.171 144.372'>
       <g id='Group_28' data-name='Group 28' transform='translate(-1568.405 -99.305)'>
         <g id='Group_26' data-name='Group 26' transform='translate(981.066 -1344.202) rotate(60)'>
           <text
@@ -50,7 +51,7 @@ function Logo() {
         </g>
       </g>
     </svg>
-  )
-}
+    </a>
+));
 
 export default Logo

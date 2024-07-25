@@ -1,20 +1,21 @@
 import React from 'react';
 
 const categories = [
-  {
-    name: 'Men',
-    href: '/browse/Men',
-    imgSrc: 'https://example.com/men-image.png',
-  },
+ 
   {
     name: 'Women',
     href: '/browse/Women',
-    imgSrc: 'https://example.com/women-image.png',
+    imgSrc: 'https://images.unsplash.com/photo-1665501434820-50e45aeebfac?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     name: 'All Listings',
     href: '/browse/All',
-    imgSrc: 'https://example.com/women-image.png',
+    imgSrc: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  },
+  {
+    name: 'Men',
+    href: '/browse/Men',
+    imgSrc: 'https://images.unsplash.com/photo-1551488831-00ddcb6c6bd3?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 ];
 
@@ -34,7 +35,7 @@ const Categories = () => {
                 layout="responsive"
                 width={188}
                 height={164}
-                className="lg:mt-2 md:mt-3.5 mt-2.5 h-24 w-116 md:w-188 md:h-24 lg:w-188 lg:h-24 xl:h-164 xl:w-48 2xl:h-164 2xl:w-56 3xl:h-164 m-auto object-none object-center"
+                className=" object-cover lg:mt-2 md:mt-3.5 mt-2.5 h-24 w-116 md:w-188 md:h-24 lg:w-188 lg:h-24 xl:h-164 xl:w-48 2xl:h-164 2xl:w-56 3xl:h-164 m-auto object-center"
               />
               <p className="flex justify-center text-center 3xl:text-base 2xl:text-base xl:text-base lg:text-sm md:text-sm text-sm font-bold font-sans lg:mt-3 mt-2 overflow-hidden product-category-name">
                 {category.name}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { login, setLoading } from 'store/actions/authAction';
 import { useRouter } from 'next/router';
 import { closeLoginPopup } from 'store/actions/commonAction';
@@ -8,6 +8,8 @@ import { closeLoginPopup } from 'store/actions/commonAction';
 const LoginContent = () => {
   const dispatch = useDispatch();
   const router =useRouter();
+  const error = useSelector((state) => state.common.error);
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -15,10 +17,13 @@ const LoginContent = () => {
     },
     onSubmit: (values, { setSubmitting }) => {
       dispatch(login(values.email, values.password));
+      dispatch(setLoading(true));
       setTimeout(() => {
         setSubmitting(false);
         dispatch(closeLoginPopup());
-        router.push('/profile');
+        if(!error){
+          router.push('/profile');
+        }
       }, 400);
     },
   });

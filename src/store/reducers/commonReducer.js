@@ -2,9 +2,11 @@ const initialState = {
     isLoginPopupOpen: false,
     isPopupOpen:false,
     popupInfo:{
-        title:'',
-        content:'',
-    }
+        title:null,
+        content:null,
+    },
+    error:null,
+    info:null
 };
 
 const commonReducer = (state = initialState, action) => {
@@ -15,6 +17,10 @@ const commonReducer = (state = initialState, action) => {
               ...state,
               ...action.payload?.common,
             };
+        case 'SET_INFO':
+            return { ...state, info: action.payload };
+        case 'SET_ERROR':
+            return { ...state, error: action.payload };
         case 'LOGIN_POPUP_OPEN':
             return { ...state, isLoginPopupOpen: true };
         case 'LOGIN_POPUP_ClOSE':
@@ -24,7 +30,8 @@ const commonReducer = (state = initialState, action) => {
         case 'OPEN_POPUP':
             return { ...state, isPopupOpen: true };
         case 'CLOSE_POPUP':
-            return { ...state, isPopupOpen: false };
+            return { ...state, isPopupOpen: false ,  popupInfo: { title:null, content: null },
+                error:null};
         default:
             return state;
     }

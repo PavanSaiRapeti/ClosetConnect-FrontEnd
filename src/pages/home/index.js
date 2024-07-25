@@ -45,7 +45,7 @@ const HeroSection = () => {
         <p className="text-lg mb-4">{slides[currentSlide].description}</p>
         <button
           onClick={() => window.location.href = '/about'}
-          className="border border-black text-ccWhite px-4 py-2 rounded-full font-semibold"
+          className="border border-white bg-ccWhite text-ccBlack  px-4 py-2 rounded-full font-semibold"
         >
           Learn More
         </button>
@@ -116,20 +116,18 @@ const Home = ({listing,reviews,user}) => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   const cookies = parseCookies({req,res});
   const { token, userId } = cookies;
-  const { user } = await checkAuth(token,userId);
-
+  console.log('dog==>',token, userId)
+  let userData =  null
+  if( token ){
+    const { user } = await checkAuth(token,userId);
+    userData = user;
+  }
   
   return {
     props: {
-      user:user,
+      user: userData,
       listing:[],
-      reviews:[  {
-        name: 'John D.',
-        rating: 5,
-        title: 'Outstanding Service!',
-        content:
-          "I've been using their services for over a year now, and I couldn't be happier. The transition to their cloud-based platform was seamless, and their support team is always available to help. Highly recommend!",
-      }]
+      reviews:[]
     },
   }
 })

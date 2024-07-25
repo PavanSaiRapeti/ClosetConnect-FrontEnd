@@ -5,26 +5,41 @@ import {
   VALIDATE_TOKEN_FAILURE,
   VALIDATE_TOKEN_SUCCESS,
   VALIDATE_TOKEN_REQUEST,
-  SET_LOADING
+  SET_LOADING,
+  LOGIN_FAILURE
 } from 'store/types/apiActionTypes';
 
 const initialState = {
   token: null,
-  error: null,
   isLoggedIn: false,
   id: null,
   user: null,
   loading: false,
+  error:null
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'persist/REHYDRATE':
+      return {
+        ...state,
+        error:null,
+      };
     case LOGIN_SUCCESS:
       return { ...state, token: action.payload.token, id: action.payload.id };
     case REGISTER_SUCCESS:
       return { ...state, token: action.payload };
     case LOGOUT_REQUEST:
       return { ...state, token: null,user:null,id:null,isLoggedIn:false };
+    case LOGIN_FAILURE:
+      return {
+        ...state,
+        error: action.error,
+        isLoggedIn: false,
+        token: null,
+        id: null,
+        user: null
+      };
     case VALIDATE_TOKEN_REQUEST:
       return {
         ...state,

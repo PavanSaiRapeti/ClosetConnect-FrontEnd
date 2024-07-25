@@ -31,7 +31,7 @@ const Header = ({ user }) => {
             <div className='bg-gray-100 rounded-2 p-4 rounded-lg' style={{ backgroundColor: '#D2EB63' }}>
               <div className='flex flex-row pl-7 items-center gap-4 h-6 md: justify-between'>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <Link href='/home' passHref>
+                <Link href={`/home`} className='cursor-pointer' >
                 <Logo />
                   </Link>
                 <div className='md:hidden'>

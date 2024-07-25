@@ -15,4 +15,8 @@ export const openPopup = () => ({
 
 export const closePopup = () => ({
     type: 'CLOSE_POPUP',
+    payload:{
+        content:null,
+        error:null
+    }
 });

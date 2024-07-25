@@ -3,10 +3,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { register, setLoading } from 'store/actions/authAction';
+import { closeLoginPopup } from 'store/actions/commonAction';
 
 const RegisterContent = () => {
   const dispatch = useDispatch();
   const [showErrors, setShowErrors] = useState(false);
+  const error = useSelector((state) => state.common.error);
   const formik = useFormik({
     initialValues: {
       userName: '',
@@ -40,11 +42,15 @@ const RegisterContent = () => {
     }),
     onSubmit: (values, { setSubmitting }) => {
       dispatch(setLoading(true));
+      const { confirmPassword, ...payload } = values;
+      dispatch(register(payload));
+      dispatch(setLoading(true));
       setTimeout(() => {
-        console.log('Register form submitted:', values);
-        const { confirmPassword, ...payload } = values;
-        dispatch(register(payload));
         setSubmitting(false);
+        dispatch(closeLoginPopup());
+        if(!error){
+          router.push('/profile');
+        }
       }, 400);
     },
   });
