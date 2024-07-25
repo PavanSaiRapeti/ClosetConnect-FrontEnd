@@ -66,7 +66,7 @@ const Layout = (props) => {
       handleTrigger(true,dispatch,setPopup({title:'Error', content: 'error'}));
     }
     if(info){
-
+      handleTrigger(true,dispatch,setPopup({title:'Error', content: 'error'}));
     }
   }, [error,info,dispatch]);
 
