@@ -53,6 +53,7 @@ const Layout = (props) => {
         break;
       case 'info':
         setSelectedOption(info)
+        break;
       default:
         setSelectedOption(null);
     }
