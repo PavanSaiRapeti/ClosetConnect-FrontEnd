@@ -36,7 +36,7 @@ const Layout = (props) => {
       router.events.off('routeChangeComplete', handleComplete);
       router.events.off('routeChangeError', handleComplete);
     };
-  }, []);
+  }, [router,dispatch]);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {

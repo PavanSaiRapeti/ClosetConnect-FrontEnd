@@ -3,7 +3,7 @@ import FeaturedProducts from "@/components/FeaturedProducts";
 import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
 import { checkAuth } from "pages/authHelpers";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { wrapper } from "store";
 
 // Hero Section Component with Carousel

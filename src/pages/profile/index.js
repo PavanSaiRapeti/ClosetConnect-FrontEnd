@@ -62,7 +62,7 @@ const Profile = ({ user }) => {
       dispatch(closeLoginPopup());
       router.push('/home')
     }
-  },[])
+  },[dispatch])
 
 
   return (

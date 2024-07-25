@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
