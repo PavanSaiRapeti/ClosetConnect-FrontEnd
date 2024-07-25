@@ -10,7 +10,7 @@ import { wrapper } from 'store'
 import { parseCookies } from 'nookies'
 import { validateTokenSuccess } from 'store/actions/authAction'
 import { useDispatch, useSelector } from 'react-redux';
-import { Router, useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 
 const reviews = [
   {

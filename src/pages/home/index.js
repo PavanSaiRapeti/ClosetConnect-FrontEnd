@@ -39,7 +39,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative text-center p-10" style={{ fontFamily: "Ubuntu" }}>
-      <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
+      <Image src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
         <h2 className="text-4xl font-bold mb-4">{slides[currentSlide].title}</h2>
         <p className="text-lg mb-4">{slides[currentSlide].description}</p>

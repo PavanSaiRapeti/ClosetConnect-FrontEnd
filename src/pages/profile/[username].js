@@ -1,6 +1,9 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Layout from 'pages/Layout';
+import ProfileSection from '@/components/Home/ProfileSection';
+import ListingGrid from '@/components/Home/LisitingGrid';
+import ReviewSection from '@/components/Home/ReviewSection';
 
 const UserProfile = ({ user }) => {
   const router = useRouter();

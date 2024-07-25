@@ -171,9 +171,6 @@ const loginPage = () => {
             tabIndex='-1'
             data-name='shopping cart'>
             <span
-              hx-get='/cart/count?promoCode='
-              hx-trigger='addCartEvent from:body, load'
-              hx-target='#header-cart-count'
               className='-top-3.5 absolute font-bold 3xl:left-3 2xl:left-2.5 xl:left-3 lg:left-2 md:left-2 md:ml-0.5 left-2.5 ipadfix:block text-xs'>
               <span id='header-cart-count' className=''></span>
             </span>
