@@ -1,20 +1,19 @@
-import { Provider } from 'react-redux';
-import { wrapper } from '../store/index';
-import { applyMiddleware, createStore } from 'redux';
-import reduxSaga from 'redux-saga';
-import rootSaga from 'store/sagas/rootSaga';
-import rootReducer from 'store/reducers';
+import { useState, useEffect } from 'react';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
 import './index.css';
 import 'styles/globals.css';
-
-const store = createStore(rootReducer, applyMiddleware(reduxSaga(rootSaga)));
+import { wrapper, store, persistor } from '../store';
 
 function MyApp({ Component, pageProps }) {
+
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <PersistGate loading={null} persistor={persistor}>
+        <Component {...pageProps} />
+      </PersistGate>
     </Provider>
   );
 }

@@ -1,29 +1,30 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { login } from 'store/actions/authAction'
-import { LOGIN_REQUEST } from 'store/types/apiActionTypes';
+import { login, setLoading } from 'store/actions/authAction';
+import { useRouter } from 'next/router';
+import { closeLoginPopup } from 'store/actions/commonAction';
 
 const LoginContent = () => {
   const dispatch = useDispatch();
-  
+  const router =useRouter();
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
     },
     onSubmit: (values, { setSubmitting }) => {
-      debugger;
-      dispatch(login(values.email, values.password)) 
+      dispatch(login(values.email, values.password));
       setTimeout(() => {
-        console.log('Login form submitted:', values.email, values.password)
-        setSubmitting(false)
-      }, 400)
+        setSubmitting(false);
+        dispatch(closeLoginPopup());
+        router.push('/profile');
+      }, 400);
     },
-  })
+  });
 
   return (
-    <div id='login' className='tab-pane active'>
+    <div id='login' className='tab-pane active px-4 py-6'>
       <h2 className='text-2xl font-bold mb-4'>Login to Closet Connect</h2>
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <div className='flex flex-col space-y-2'>
@@ -56,17 +57,16 @@ const LoginContent = () => {
         </div>
         <button
           type='submit'
-          className='bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded mt-4 mr-4'
+          className='w-full bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded mt-4'
           disabled={formik.isSubmitting}>
           {formik.isSubmitting ? 'Logging in...' : 'Login'}
         </button>
-        <a href='#' className='text-sm text-gray-600 hover:text-gray-900'>
+        <a href='#' className='text-sm text-gray-600 hover:text-gray-900 block text-center mt-4'>
           Forgot password?
         </a>
       </form>
-      <button onClick={()=>dispatch({type: LOGIN_REQUEST , payload: { email, password }}) } >press</button>
     </div>
-  )
-}
+  );
+};
 
-export default LoginContent
+export default LoginContent;

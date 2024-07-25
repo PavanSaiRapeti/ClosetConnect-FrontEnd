@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
-import { register } from 'store/actions/authAction';
+import { register, setLoading } from 'store/actions/authAction';
 
 const RegisterContent = () => {
   const dispatch = useDispatch();
@@ -17,7 +17,6 @@ const RegisterContent = () => {
       topSize: '',
       bottomSize: '',
       gender: '',
-      role: '',
     },
     validationSchema: Yup.object({
       userName: Yup.string()
@@ -38,13 +37,14 @@ const RegisterContent = () => {
       topSize: Yup.string().required('Required'),
       bottomSize: Yup.string().required('Required'),
       gender: Yup.string().required('Required'),
-      role: Yup.string().required('Required'),
     }),
     onSubmit: (values, { setSubmitting }) => {
+      dispatch(setLoading(true));
       setTimeout(() => {
         console.log('Register form submitted:', values);
+        const { confirmPassword, ...payload } = values;
+        dispatch(register(payload));
         setSubmitting(false);
-        dispatch(register(values));
       }, 400);
     },
   });
@@ -58,13 +58,11 @@ const RegisterContent = () => {
   };
 
   return (
-    <div id="register" className="tab-pane active">
+    <div id="register" className="tab-pane active px-4 py-6">
       <h2 className="text-2xl font-bold mb-4">Create an Account</h2>
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <div className="flex flex-col space-y-2">
-          <label htmlFor="userName" className="block">
-            Username
-          </label>
+          <label htmlFor="userName" className="block">Username</label>
           <input
             type="text"
             id="userName"
@@ -80,9 +78,7 @@ const RegisterContent = () => {
           {showErrors && formik.errors.userName && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.userName}</div>}
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor="email" className="block">
-            Email
-          </label>
+          <label htmlFor="email" className="block">Email</label>
           <input
             type="email"
             id="email"
@@ -95,9 +91,7 @@ const RegisterContent = () => {
           {showErrors && formik.errors.email && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.email}</div>}
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor="password" className="block">
-            Password
-          </label>
+          <label htmlFor="password" className="block">Password</label>
           <input
             type="password"
             id="password"
@@ -110,9 +104,7 @@ const RegisterContent = () => {
           {showErrors && formik.errors.password && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.password}</div>}
         </div>
         <div className="flex flex-col space-y-2">
-          <label htmlFor="confirmPassword" className="block">
-            Confirm Password
-          </label>
+          <label htmlFor="confirmPassword" className="block">Confirm Password</label>
           <input
             type="password"
             id="confirmPassword"
@@ -124,14 +116,11 @@ const RegisterContent = () => {
           />
           {showErrors && formik.errors.confirmPassword && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.confirmPassword}</div>}
         </div>
-       
-        <div className="flex flex-row space-x-4">
-          <div className="flex flex-col space-y-2 mr-4">
-            <label htmlFor="topSize" className="block text-sm font-medium text-gray-700">
-              Top Size
-            </label>
-            <div className="flex flex-row space-x-4">
-              <div className="flex items-center">
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="topSize" className="block text-sm font-medium text-gray-700">Top Size</label>
+            <div className="flex space-x-4">
+              <label className="flex items-center">
                 <input
                   id="SMALL"
                   name="topSize"
@@ -142,11 +131,9 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="SMALL" className="ml-2 block text-xs font-medium text-gray-700">
-                  SMALL
-                </label>
-              </div>
-              <div className="flex items-center">
+                <span className="ml-2 block text-xs font-medium text-gray-700">SMALL</span>
+              </label>
+              <label className="flex items-center">
                 <input
                   id="MEDIUM"
                   name="topSize"
@@ -157,11 +144,9 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="MEDIUM" className="ml-2 block text-xs font-medium text-gray-700">
-                  MEDIUM
-                </label>
-              </div>
-              <div className="flex items-center">
+                <span className="ml-2 block text-xs font-medium text-gray-700">MEDIUM</span>
+              </label>
+              <label className="flex items-center">
                 <input
                   id="LARGE"
                   name="topSize"
@@ -172,19 +157,15 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="LARGE" className="ml-2 block text-xs font-medium text-gray-700">
-                  LARGE
-                </label>
-              </div>
+                <span className="ml-2 block text-xs font-medium text-gray-700">LARGE</span>
+              </label>
             </div>
             {showErrors && formik.errors.topSize && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.topSize}</div>}
           </div>
-          <div className="flex flex-col space-y-2 mr-4">
-            <label htmlFor="bottomSize" className="block text-sm font-medium text-gray-700 ">
-              Bottom Size
-            </label>
-            <div className="flex flex-row space-x-4">
-              <div className="flex items-center">
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="bottomSize" className="block text-sm font-medium text-gray-700">Bottom Size</label>
+            <div className="flex space-x-4">
+              <label className="flex items-center">
                 <input
                   id="SMALL"
                   name="bottomSize"
@@ -195,11 +176,9 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="SMALL" className="ml-2 block text-xs font-medium text-gray-700">
-                  SMALL
-                </label>
-              </div>
-              <div className="flex items-center">
+                <span className="ml-2 block text-xs font-medium text-gray-700">SMALL</span>
+              </label>
+              <label className="flex items-center">
                 <input
                   id="MEDIUM"
                   name="bottomSize"
@@ -210,11 +189,9 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="MEDIUM" className="ml-2 block text-xs font-medium text-gray-700">
-                  MEDIUM
-                </label>
-              </div>
-              <div className="flex items-center">
+                <span className="ml-2 block text-xs font-medium text-gray-700">MEDIUM</span>
+              </label>
+              <label className="flex items-center">
                 <input
                   id="LARGE"
                   name="bottomSize"
@@ -225,21 +202,17 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="LARGE" className="ml-2 block text-xs font-medium text-gray-700">
-                  LARGE
-                </label>
-              </div>
+                <span className="ml-2 block text-xs font-medium text-gray-700">LARGE</span>
+              </label>
             </div>
             {showErrors && formik.errors.bottomSize && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.bottomSize}</div>}
           </div>
         </div>
-        <div className="flex flex-row space-x-4">
-          <div className="flex flex-col space-y-2 mr-4">
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">
-              Gender
-            </label>
-            <div className="flex flex-row space-x-4">
-              <div className="flex items-center">
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-2">
+            <label htmlFor="gender" className="block text-sm font-medium text-gray-700">Gender</label>
+            <div className="flex space-x-4">
+              <label className="flex items-center">
                 <input
                   id="MALE"
                   name="gender"
@@ -250,11 +223,9 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="MALE" className="ml-2 block text-xs font-medium text-gray-700">
-                  MALE
-                </label>
-              </div>
-              <div className="flex items-center">
+                <span className="ml-2 block text-xs font-medium text-gray-700">MALE</span>
+              </label>
+              <label className="flex items-center">
                 <input
                   id="FEMALE"
                   name="gender"
@@ -265,53 +236,13 @@ const RegisterContent = () => {
                   required
                   className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 />
-                <label htmlFor="FEMALE" className="ml-2 block text-xs font-medium text-gray-700">
-                  FEMALE
-                </label>
-              </div>
+                <span className="ml-2 block text-xs font-medium text-gray-700">FEMALE</span>
+              </label>
             </div>
             {showErrors && formik.errors.gender && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.gender}</div>}
           </div>
-          <div className="flex flex-col space-y-2">
-            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
-              Role
-            </label>
-            <div className="flex flex-row space-x-4">
-              <div className="flex items-center">
-                <input
-                  id="USER"
-                  name="role"
-                  type="radio"
-                  value="USER"
-                  checked={formik.values.role === "USER"}
-                  onChange={formik.handleChange}
-                  required
-                  className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                />
-                <label htmlFor="USER" className="ml-2 block text-xs font-medium text-gray-700">
-                  USER
-                </label>
-              </div>
-              <div className="flex items-center">
-                <input
-                  id="ADMIN"
-                  name="role"
-                  type="radio"
-                  value="ADMIN"
-                  checked={formik.values.role === "ADMIN"}
-                  onChange={formik.handleChange}
-                  required
-                  className="form-radio h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                />
-                <label htmlFor="ADMIN" className="ml-2 block text-xs font-medium text-gray-700">
-                  ADMIN
-                </label>
-              </div>
-            </div>
-            {showErrors && formik.errors.role && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.role}</div>}
-          </div>
         </div>
-        <button type="button" onClick={handleRegister} className="bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded" disabled={formik.isSubmitting}>
+        <button type="button" onClick={handleRegister} className="w-full bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded" disabled={formik.isSubmitting}>
           {formik.isSubmitting ? 'Registering...' : 'Register'}
         </button>
       </form>

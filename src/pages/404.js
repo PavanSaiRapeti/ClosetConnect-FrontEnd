@@ -10,6 +10,7 @@ export default function ErrorPage() {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
+          color:'ccWhite'
         }}
       >
         <h1 style={{ fontSize: 64 }}>404</h1>

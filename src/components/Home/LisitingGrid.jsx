@@ -1,56 +1,30 @@
+
 import React from 'react';
+import ListingCard from './components/ListingCard';
 
 const ListingGrid = () => {
+  const listing = {
+    imageSrc: 'https://di2ponv0v5otw.cloudfront.net/posts/2024/01/16/65a723d824237ab76bdea5d3/s_65a726de24237a5bbcdec102.jpg',
+    imageAlt: 'Lululemon burnout OM lightweight/oversized dewberry manifesto scarf/wrap/blanket',
+    title: 'Lululemon burnout OM lightweight/oversized dewberry manifesto scarf/wrap/blanket',
+    price: 'C$60',
+    originalPrice: 'C$128',
+    size: 'US OS',
+    brand: 'lululemon athletica',
+    sellerImage: 'https://di2ponv0v5otw.cloudfront.net/users/2020/01/05/3/t_5e11c884acb24b69c3edb360.jpg',
+    sellerName: 'xxthegirlxx',
+    listingLink: '/listing/Lululemon-burnout-OM-lightweightoversized-dewberry-manifesto-scarfwrapblanket-65a723d824237ab76bdea5d3',
+  };
   return (
     <div className="listing-grid grid grid-cols-5 gap-4">
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
-      <div className="listing-item">
-        <img src="https://via.placeholder.com/150" alt="Product" className="w-full h-auto mb-2" />
-        <h3 className="text-lg font-semibold">Product Name</h3>
-        <p className="text-sm text-gray-600">Description</p>
-        <span className="text-lg font-bold">$19.99</span>
-      </div>
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
+     <ListingCard {...listing} />
     </div>
   );
 };

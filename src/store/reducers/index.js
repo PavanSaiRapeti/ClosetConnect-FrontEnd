@@ -2,6 +2,7 @@ import { combineReducers } from 'redux';
 import authReducer from './authReducer';
 import clothingItemsReducer from './clothingItemsReducer';
 import { HYDRATE } from 'next-redux-wrapper'
+import commonReducer from './commonReducer';
 
 
 // this is to set a flag for initial server renders
@@ -21,7 +22,7 @@ function hydrate(state = {}, action) {
   const { type } = action
   switch (type) {
     case HYDRATE: {
-      if (action.payload.serverCheck.isServer) {
+      if (action?.payload) {
         return { ...state, ...action.payload }
       }
       return state
@@ -34,6 +35,7 @@ function hydrate(state = {}, action) {
 export const combinedReducer = combineReducers({
   auth: authReducer,
   clothingItems: clothingItemsReducer,
+  common:commonReducer
 });
 
 function rootReducer(state, action) {

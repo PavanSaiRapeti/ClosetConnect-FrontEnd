@@ -2,19 +2,9 @@
 
 const Footer = ({ loading }) => {
     return (
-      <footer className="footer">
-        <div className="footer-content">
-          {loading ? (
-            <>
-              <div className="footer-skeleton"></div>
-              <div className="footer-skeleton"></div>
-              <div className="footer-skeleton"></div>
-            </>
-          ) : (
-            <p>&copy; 2022 Your Company Name. All rights reserved.</p>
-          )}
-        </div>
-      </footer>
+      <footer className="bg-gray-800 text-ccWhite p-4 text-center" style={{ fontFamily: "Ubuntu" }}>
+      <p>&copy; 2024 CloseConnect. All rights reserved.</p>
+    </footer>
     );
   };
   
