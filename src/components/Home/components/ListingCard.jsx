@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Image from 'next/image';
 
 const ListingCard = ({ 
   imageSrc, 
@@ -17,10 +18,12 @@ const ListingCard = ({
       <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"250px"}}>
         <a href={listingLink} className="block">
           <div className="relative">
-            <img 
+            <Image 
               src={imageSrc} 
               alt={imageAlt} 
-              className="w-full h-64 object-cover"
+              width={300}
+              height={200}
+              layout="responsive"
             />
           </div>
           <div className="p-4">
@@ -37,9 +40,11 @@ const ListingCard = ({
         </a>
         <div className="flex items-center justify-between p-4 border-t">
           <a href={`/closet/${sellerName}`} className="flex items-center">
-            <img 
+            <Image 
               src={sellerImage} 
               alt={sellerName} 
+              width={40}
+              height={40}
               className="w-10 h-10 rounded-full border-2 border-gray-300"
             />
             <span className="ml-2 text-sm text-gray-700">{sellerName}</span>

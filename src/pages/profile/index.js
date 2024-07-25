@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import ProfileSection from '@/components/Home/ProfileSection'
 import ReviewSection from '@/components/Home/ReviewSection'
 import ListingGrid from '@/components/Home/LisitingGrid'
-import { redirectToLogin } from 'pages/redirect'
-import { checkAuth } from 'pages/authHelpers'
+import { redirectToLogin } from 'utils/redirect'
+import { checkAuth } from 'utils/authHelpers'
 import Layout from 'pages/Layout'
 import { closeLoginPopup } from 'store/actions/commonAction'
 import { wrapper } from 'store'
@@ -62,7 +62,7 @@ const Profile = ({ user }) => {
       dispatch(closeLoginPopup());
       router.push('/home')
     }
-  },[dispatch])
+  },[dispatch, user, router])
 
 
   return (

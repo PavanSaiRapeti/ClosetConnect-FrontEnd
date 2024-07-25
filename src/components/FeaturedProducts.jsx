@@ -3,6 +3,7 @@ import Glider from 'glider-js'
 import 'glider-js/glider.min.css'
 import ListingCard from './Home/components/ListingCard'
 import { ReviewCard } from './Home/ReviewSection'
+import Image from 'next/image';
 
 const FeaturedProducts = ({ products, type, title }) => {
   const gliderTrackRef = useRef(null)
@@ -49,12 +50,12 @@ const FeaturedProducts = ({ products, type, title }) => {
         </div>
         <div className='flex justify-center items-center' style={{ position: 'absolute', top: '13%', height: '81%', width: '80px', left: 0 }}>
         <button className={`glider-prev glider-prev-${title.replace(/\s+/g, '-')} focus:outline-none hidden-mobile`} type='button'>
-          <img src='https://cdn.mscdirect.com/global/v2/img/sliders/slider-arrow-left.svg' alt='scroll products left' />
+          <Image src='https://cdn.mscdirect.com/global/v2/img/sliders/slider-arrow-left.svg' alt='scroll products left' />
         </button>
       </div>
       <div className='flex justify-center items-center' style={{ position: 'absolute', height: '82%', right: '20px', bottom: '5.9%', width: '80px' }}>
         <button className={`glider-next glider-next-${title.replace(/\s+/g, '-')} hidden-mobile focus:outline-none`} type='button'>
-          <img src='https://cdn.mscdirect.com/global/v2/img/sliders/slider-arrow-right.svg' alt='scroll products right' />
+          <Image src='https://cdn.mscdirect.com/global/v2/img/sliders/slider-arrow-right.svg' alt='scroll products right' />
         </button>
       </div>
       <div id={`dots-${title.replace(/\s+/g, '-')}`} className='glider-dots'></div>

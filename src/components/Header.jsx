@@ -3,9 +3,10 @@ import Logo from 'websiteInfo/Logo'
 import HeaderComponent from './HeaderComponent'
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoginPopup, openPopup, setPopup } from 'store/actions/commonAction'
-import { useRouter } from 'next/router'
-import UploadItemForm from './common/UploadItemForm'
+import { useRouter } from 'next/router';
 import { handleTrigger } from 'utils/utils'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -29,9 +30,14 @@ const Header = ({ user }) => {
           <div className='w-full md:w-full p-4 '>
             <div className='bg-gray-100 rounded-2 p-4 rounded-lg' style={{ backgroundColor: '#D2EB63' }}>
               <div className='flex flex-row pl-7 items-center gap-4 h-6 md: justify-between'>
-                <a href='/home'>
-                <Logo />
-                  </a>
+                <Link href='/home' passHref>
+                <Image
+                  src={Logo}
+                  alt="Logo"
+                  width={100}
+                  height={100}
+                />
+                  </Link>
                 <div className='md:hidden'>
                   <button onClick={toggleMenu} className='text-blue-500 focus:outline-none'>
                     <svg
@@ -50,14 +56,14 @@ const Header = ({ user }) => {
                 </div>
                 <div className={`w-full md:flex md:flex-row gap-10 items-center justify-center max-md:hidden`}>
                   <div className='py-2'>
-                    <a onClick={()=>router.push('/browse/Men')} className='text-blue-500 hover:text-blue-700 no-underline'>
+                    <Link href={`/browse/Men`} className='text-blue-500 hover:text-blue-700 no-underline'>
                       Men
-                    </a>
+                    </Link>
                   </div>
                   <div className='py-2'>
-                    <a onClick={()=>router.push('/browse/Women')} className='text-blue-500 hover:text-blue-700 no-underline'>
+                    <Link href={`/browse/Women`} className='text-blue-500 hover:text-blue-700 no-underline'>
                       Women
-                    </a>
+                    </Link>
                   </div>
                 </div>
                   <div className={`w-1/6 md:flex `}>
@@ -99,29 +105,29 @@ const Header = ({ user }) => {
               </div>
               <div className='py-2'>
                 {user ? (
-                  <a href='/logout' className='text-blue-500 hover:text-blue-700 no-underline'>
+                  <Link href='/logout' className='text-blue-500 hover:text-blue-700 no-underline'>
                     Logout
-                  </a>
+                  </Link>
                 ) : (
-                  <a href='/login' onClick={dispatch(openLoginPopup())} className='text-blue-500 hover:text-blue-700 no-underline'>
+                  <Link href='/login' onClick={dispatch(openLoginPopup())} className='text-blue-500 hover:text-blue-700 no-underline'>
                     Login
-                  </a>
+                  </Link>
                 )}
               </div>
               <div className='py-2'>
-                <a href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
+                <Link href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
                   Cart
-                </a>
+                </Link>
               </div>
               <div className='py-2'>
-                <a href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
+                <Link href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
                   Men
-                </a>
+                </Link>
               </div>
               <div className='py-2'>
-                <a href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
+                <Link href='#' className='text-blue-500 hover:text-blue-700 no-underline'>
                   Women
-                </a>
+                </Link>
               </div>
             </div>
           </div>

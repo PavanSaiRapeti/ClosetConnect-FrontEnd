@@ -1,5 +1,5 @@
 import { getUserEndpoint } from "config/env";
-import { api } from "./api/handler";
+import { api } from "../pages/api/handler";
 
 
 

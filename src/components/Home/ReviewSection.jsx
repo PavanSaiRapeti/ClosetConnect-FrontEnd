@@ -25,7 +25,7 @@ const ReviewSection = ({reviews}) => (
     </div>
     <div className="mt-6">
       <h3 className="text-2xl font-bold">Share Your Experience!</h3>
-      <p>We'd love to hear about your experience with our services. Leave us a review and let us know how we're doing!</p>
+      <p>We&apos;d love to hear about your experience with our services. Leave us a review and let us know how we&apos;re doing!</p>
     </div>
   </section>
 );

@@ -1,10 +1,13 @@
 import Categories from "@/components/Categories";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import Image from "next/image";
 import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
-import { checkAuth } from "pages/authHelpers";
+import { checkAuth } from "utils/authHelpers";
 import React, {  useState } from "react";
 import { wrapper } from "store";
+import { useRouter } from 'next/router';
+import { useDispatch } from 'react-redux';
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
@@ -134,5 +137,4 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
 })
 export default Home;
-
 

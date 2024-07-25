@@ -2,7 +2,8 @@ import React from 'react';
 
 import Layout from 'pages/Layout';
 import { wrapper } from 'store';
-
+import Link from 'next/link';
+import Image from 'next/image';
 
 const CategoryPage = ({title}) => {
   const category = false
@@ -13,7 +14,9 @@ const CategoryPage = ({title}) => {
     <nav className="text-sm font-medium text-gray-700">
       <ol className="list-reset p-0 inline-flex">
         <li className="flex items-center">
-          <a href="/home" className="text-indigo-600 hover:text-indigo-800">Home</a>
+          <Link href="/home" passHref>
+            <a>Home</a>
+          </Link>
           <svg className="fill-current w-3 h-3 mx-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M9 18l6-6-6-6"></path>
           </svg>
@@ -31,10 +34,12 @@ const CategoryPage = ({title}) => {
           {!category? <div>Loading...</div>:
             category.products.map((product) => (
               <div key={product.id} className="bg-ccWhite rounded-lg shadow-md p-4">
-                <img
+                <Image
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
+                  width={300}
+                  height={200}
+                  layout="responsive"
                 />
                 <div className="mt-4">
                   <h2 className="text-xl font-bold">{product.name}</h2>

@@ -1,4 +1,5 @@
-import { api } from "../../../pages/api/index";
+import { api } from "../handler";
+
 
 export const updateUser = async (userId, userData, token) => {
     try {

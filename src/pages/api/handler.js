@@ -1,7 +1,6 @@
 // pages/api/handler.js
 
 import axios from 'axios';
-import { validateTokenAndGetUser } from 'pages/authHelpers';
 
 const API_URL = 'https://closetconnect-dev-73814f63526e.herokuapp.com/api/v1';
 
@@ -32,19 +31,4 @@ export default async function handler(req, res) {
   }
 }
 
-export const handleValidate = async (req, res) => {
-  const token = req.headers.authorization?.split(' ')[1]; 
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized: No token provided' });
-  }
-  try {
-    const user = await validateTokenAndGetUser(token); 
-    if (!user) {
-      return res.status(401).json({ error: 'Unauthorized: Invalid token' });
-    }
-    return res.status(200).json({ message: 'User is logged in', user });
-  } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
 
