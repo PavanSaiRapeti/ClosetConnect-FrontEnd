@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import Header from '../components/Header';
-import Footer from '../components/footer';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from '@/components/Lightbox';
 import Login from '@/components/Login';
@@ -11,6 +10,7 @@ import { setLoading } from 'store/actions/authAction';
 import { useRouter } from 'next/router';
 import Loading from '@/components/Loading';
 import UploadItemForm from '@/components/common/UploadItemForm';
+import Footer from '../components/Footer';
 
 const Layout = (props) => {
   const{children,user}=props
