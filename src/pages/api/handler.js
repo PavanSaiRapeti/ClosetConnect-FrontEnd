@@ -17,18 +17,19 @@ export default async function handler(req, res) {
   console.log('==>12', method, body);
 
   switch (method) {
-      case 'POST':
+      case 'POST': {
           const response = await api.post(url, payload);
           console.log('===>resss', response);
           return res.status(response.status).json(response.data);
-      case 'GET':
+      }
+      case 'GET': {
           const getResponse = await api.get(url, { headers: payload.headers });
           console.log('==>getres3', getResponse);
           return res.status(getResponse.status).json(getResponse.data);
-      default:
+      }
+      default: {
           res.setHeader('Allow', ['POST', 'GET']);
           return res.status(405).end(`Method ${method} Not Allowed`);
+      }
   }
 }
-
-

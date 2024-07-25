@@ -3,10 +3,10 @@ import Logo from 'websiteInfo/Logo'
 import HeaderComponent from './HeaderComponent'
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoginPopup, openPopup, setPopup } from 'store/actions/commonAction'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
+import UploadItemForm from './common/UploadItemForm'
 import { handleTrigger } from 'utils/utils'
-import Link from 'next/link'
-import Image from 'next/image'
+import Link from 'next/link';
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -30,13 +30,9 @@ const Header = ({ user }) => {
           <div className='w-full md:w-full p-4 '>
             <div className='bg-gray-100 rounded-2 p-4 rounded-lg' style={{ backgroundColor: '#D2EB63' }}>
               <div className='flex flex-row pl-7 items-center gap-4 h-6 md: justify-between'>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <Link href='/home' passHref>
-                <Image
-                  src={Logo}
-                  alt="Logo"
-                  width={100}
-                  height={100}
-                />
+                <Logo />
                   </Link>
                 <div className='md:hidden'>
                   <button onClick={toggleMenu} className='text-blue-500 focus:outline-none'>

@@ -1,5 +1,4 @@
 import React from 'react';
-import Image from 'next/image';
 
 const categories = [
   {
@@ -29,7 +28,7 @@ const Categories = () => {
         {categories.map((category) => (
           <a key={category.name} href={category.href}>
             <div className="h-44 md:h-160 xl:h-268 2xl:h-268 3xl:h-268 bg-ccWhite rounded-2xl p-3 cursor-pointer hover:shadow-2xl">
-              <Image
+              <img
                 src={category.imgSrc}
                 alt={category.name}
                 layout="responsive"

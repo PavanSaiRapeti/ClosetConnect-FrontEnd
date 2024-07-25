@@ -1,9 +1,8 @@
 import React from 'react';
-
 import Layout from 'pages/Layout';
 import { wrapper } from 'store';
 import Link from 'next/link';
-import Image from 'next/image';
+
 
 const CategoryPage = ({title}) => {
   const category = false
@@ -34,12 +33,10 @@ const CategoryPage = ({title}) => {
           {!category? <div>Loading...</div>:
             category.products.map((product) => (
               <div key={product.id} className="bg-ccWhite rounded-lg shadow-md p-4">
-                <Image
+                <img
                   src={product.image}
                   alt={product.name}
-                  width={300}
-                  height={200}
-                  layout="responsive"
+                  className="w-full h-48 object-cover rounded-t-lg"
                 />
                 <div className="mt-4">
                   <h2 className="text-xl font-bold">{product.name}</h2>

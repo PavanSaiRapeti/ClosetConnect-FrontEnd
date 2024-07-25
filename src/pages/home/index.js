@@ -1,13 +1,10 @@
 import Categories from "@/components/Categories";
 import FeaturedProducts from "@/components/FeaturedProducts";
-import Image from "next/image";
 import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
-import { checkAuth } from "utils/authHelpers";
 import React, {  useState } from "react";
 import { wrapper } from "store";
-import { useRouter } from 'next/router';
-import { useDispatch } from 'react-redux';
+import { checkAuth } from "utils/authHelpers";
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
@@ -42,7 +39,7 @@ const HeroSection = () => {
 
   return (
     <section className="relative text-center p-10" style={{ fontFamily: "Ubuntu" }}>
-      <Image src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" width={100} height={96}/>
+      <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
         <h2 className="text-4xl font-bold mb-4">{slides[currentSlide].title}</h2>
         <p className="text-lg mb-4">{slides[currentSlide].description}</p>
@@ -137,4 +134,5 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
 })
 export default Home;
+
 
