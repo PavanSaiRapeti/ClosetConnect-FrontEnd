@@ -23,7 +23,7 @@ const authReducer = (state = initialState, action) => {
     case 'persist/REHYDRATE':
       return {
         ...state,
-        error:null,
+        error: null,
       };
     case LOGIN_SUCCESS:
       return { ...state, token: action.payload.token, id: action.payload.id };
