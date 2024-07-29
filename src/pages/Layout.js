@@ -24,6 +24,8 @@ const Layout = (props) => {
   const isLoading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.common.error);
   const info = useSelector((state) => state.common.info);
+
+  console.log('user',user);
   
   useEffect(() => {
     const handleStart = () => dispatch(setLoading(true));
@@ -86,7 +88,7 @@ const Layout = (props) => {
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       <div className='h-full'>
-        <Header  user={user} />
+        <Header user={user} />
         {isLoading ? <Loading />:
         <main>
           {children}

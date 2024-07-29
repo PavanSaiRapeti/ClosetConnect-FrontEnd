@@ -1,16 +1,15 @@
 import React from 'react';
 
 const categories = [
- 
-  {
-    name: 'Women',
-    href: '/browse/Women',
-    imgSrc: 'https://images.unsplash.com/photo-1665501434820-50e45aeebfac?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-  },
   {
     name: 'All Listings',
     href: '/browse/All',
     imgSrc: 'https://images.unsplash.com/photo-1509319117193-57bab727e09d?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+  },
+  {
+    name: 'Women',
+    href: '/browse/Women',
+    imgSrc: 'https://images.unsplash.com/photo-1665501434820-50e45aeebfac?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     name: 'Men',

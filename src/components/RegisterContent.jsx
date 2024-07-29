@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { register, setLoading } from 'store/actions/authAction';
 import { closeLoginPopup } from 'store/actions/commonAction';
 
@@ -19,6 +19,7 @@ const RegisterContent = () => {
       topSize: '',
       bottomSize: '',
       gender: '',
+      role: 'USER'
     },
     validationSchema: Yup.object({
       userName: Yup.string()
@@ -48,9 +49,6 @@ const RegisterContent = () => {
       setTimeout(() => {
         setSubmitting(false);
         dispatch(closeLoginPopup());
-        if(!error){
-          router.push('/profile');
-        }
       }, 400);
     },
   });

@@ -13,8 +13,7 @@ export const api = axios.create({
 
 export default async function handler(req, res) {
   const { method, body } = req;
-  const { url, payload } = body; 
-  console.log('==>12', method, body);
+  const { url, payload, headers } = body; 
 
   switch (method) {
     case 'POST': {
@@ -31,8 +30,9 @@ export default async function handler(req, res) {
       }
     }
     case 'GET': {
+      console.log(`==>getreq`, url, headers);
       try {
-        const getResponse = await api.get(url, { headers: payload.headers });
+        const getResponse = await api.get(url, { headers });
         console.log('==>getres3', getResponse);
 
         // Check if the status code is not 200

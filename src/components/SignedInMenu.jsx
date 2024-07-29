@@ -20,6 +20,7 @@ const SignedInMenu = ({ setIsSignedInMenuOpen, userName }) => {
       <div className="px-4 py-2">
         <p className="text-gray-700">Welcome, {userName}!</p>
         <p className="text-gray-500 text-sm">You are signed in.</p>
+        <Button text={"Profile"} onClick={()=>router.push('/profile')} />
       </div>
       <div className="px-4 py-2">
         <Button text={"Logout"} onClick={handleLogout} />

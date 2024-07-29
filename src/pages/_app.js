@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import {  ReactReduxContext } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
@@ -10,11 +10,16 @@ import { wrapper, store, persistor } from '../store';
 function MyApp({ Component, pageProps }) {
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
+    <ReactReduxContext.Consumer>
+    {({ store }) => (
+      <PersistGate
+        persistor={store.__PERSISTOR}
+        loading={<div>Loading</div>}
+      >
         <Component {...pageProps} />
       </PersistGate>
-    </Provider>
+    )}
+  </ReactReduxContext.Consumer>
   );
 }
 

@@ -62,3 +62,30 @@ body {
   box-shadow: 0 1px 4px -1px rgba(0, 0, 0, .25) !important;
 }
 
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.pagination li {
+  margin: 0 5px;
+}
+
+.pagination li a {
+  cursor: pointer;
+  padding: 8px 16px;
+  border: 1px solid #ddd;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.pagination li a:hover {
+  background-color: #ddd;
+}
+
+.pagination li.active a {
+  background-color: #007bff;
+  color: white;
+  border: 1px solid #007bff;
+}

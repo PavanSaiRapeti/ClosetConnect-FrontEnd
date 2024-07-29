@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 
-const UploadItemForm = ({ onSubmit }) => {
+const UploadItemForm = ({ onSubmit, uploadImage }) => {
   const initialValues = {
     description: '',
     type: '',
@@ -22,8 +22,18 @@ const UploadItemForm = ({ onSubmit }) => {
     image: Yup.mixed().required('Image is required'),
   });
 
-  const handleSubmit = (values, { setSubmitting }) => {
-    onSubmit(values);
+  const handleSubmit = async (values, { setSubmitting }) => {
+    // Submit the form data excluding the image
+    const { image, ...formData } = values;
+    const response = await onSubmit(formData); // Assuming onSubmit returns the ID
+
+    // Now upload the image using the received ID
+    if (response.id && image) {
+      const formDataImage = new FormData();
+      formDataImage.append('image', image);
+      await uploadImage(response.id, formDataImage); // Implement uploadImage function
+    }
+
     setSubmitting(false);
   };
 
@@ -47,19 +57,31 @@ const UploadItemForm = ({ onSubmit }) => {
           <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700">Type</label>
             <Field
-              type="text"
+              as="select"
               name="type"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            >
+              <option value="">Select type</option>
+              <option value="TOPS">Tops</option>
+              <option value="BOTTOMS">Bottoms</option>
+              <option value="DRESSES">Dresses</option>
+              <option value="OUTERWEAR">Outerwear</option>
+            </Field>
             <ErrorMessage name="type" component="div" className="text-red-500 text-sm" />
           </div>
           <div className="col-span-1">
             <label className="block text-sm font-medium text-gray-700">Clothing Item Size</label>
             <Field
-              type="text"
+              as="select"
               name="clothingItemSize"
               className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            >
+              <option value="">Select size</option>
+              <option value="SMALL">Small</option>
+              <option value="MEDIUM">Medium</option>
+              <option value="LARGE">Large</option>
+              <option value="EXTRA_LARGE">Extra Large</option>
+            </Field>
             <ErrorMessage name="clothingItemSize" component="div" className="text-red-500 text-sm" />
           </div>
           <div className="col-span-1">
@@ -118,6 +140,7 @@ const UploadItemForm = ({ onSubmit }) => {
 
 UploadItemForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
+  uploadImage: PropTypes.func.isRequired,
 };
 
 export default UploadItemForm;

@@ -1,7 +1,7 @@
 import React from 'react';
 
 const FilterComponent = ({ filters, handleFilterChange }) => {
-  const { type, category, size, priceRange, shipping, condition, availability } = filters;
+  const { type, category, size, priceRange, shipping, condition, availability, description, clothingItemSize, name, gender, status } = filters;
 
   const handleFilterSelection = (e) => {
     const { name, value } = e.target;
@@ -13,11 +13,32 @@ const FilterComponent = ({ filters, handleFilterChange }) => {
       <h3 className="text-lg font-semibold mb-2">Filter</h3>
       <div className="grid grid-cols-1 gap-4">
         <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="description">Description</label>
+          <input id="description" name="description" className="border rounded-lg p-2 w-full" value={description} onChange={handleFilterSelection} />
+        </div>
+        <div>
           <label className="block text-sm font-medium mb-1" htmlFor="type">Type</label>
           <select id="type" name="type" className="border rounded-lg p-2 w-full" value={type} onChange={handleFilterSelection}>
-            <option value="All Types">All Types</option>
-            <option value="Listing">Listing</option>
+            <option value="TOPS">Tops</option>
+            <option value="BOTTOMS">Bottoms</option>
+            <option value="ACCESSORIES">Accessories</option>
           </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="clothingItemSize">Clothing Item Size</label>
+          <input id="clothingItemSize" name="clothingItemSize" className="border rounded-lg p-2 w-full" value={clothingItemSize} onChange={handleFilterSelection} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="name">Name</label>
+          <input id="name" name="name" className="border rounded-lg p-2 w-full" value={name} onChange={handleFilterSelection} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="gender">Gender</label>
+          <input id="gender" name="gender" className="border rounded-lg p-2 w-full" value={gender} onChange={handleFilterSelection} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="status">Status</label>
+          <input id="status" name="status" className="border rounded-lg p-2 w-full" value={status} onChange={handleFilterSelection} />
         </div>
         <div>
           <label className="block text-sm font-medium mb-1" htmlFor="category">Category</label>

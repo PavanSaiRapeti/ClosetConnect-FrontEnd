@@ -53,7 +53,6 @@ const reviews = [
 
 const Profile = ({ user }) => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const router=useRouter();  
   useEffect(()=>{
     if(user){
@@ -89,11 +88,11 @@ const Profile = ({ user }) => {
             <ListingGrid />
           </div>
         </div>
-        <div className='w-full md:w-1/6'>
+        {/* <div className='w-full md:w-1/6'>
           <div className='flex justify-center'>
             <ReviewSection reviews={reviews} />
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
     </Layout>

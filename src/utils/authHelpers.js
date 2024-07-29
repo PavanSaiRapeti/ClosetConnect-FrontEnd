@@ -7,18 +7,20 @@ export async function checkAuth(token,userId,headers={}) {
     if (!token || !userId) {
       return  { isRedirect:true, user: null};
     }
-    const requestData = { url: getUserEndpoint(userId), payload: {} };
-    const response = await api.get(requestData.url, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        ...headers
-      }
-    });
+    try {
+      const response = await fetch(getUserEndpoint(userId), {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      const userData = await response.json();
   
-    if (!response.data) {
+      return { isRedirect:false, user: userData};
+      
+    } catch (error) {
+      console.error('Error fetching user data:', error);
       return  { isRedirect:true, user: null};
     }
-  
-    return { isRedirect:false, user: response.data};
+ 
 }
 

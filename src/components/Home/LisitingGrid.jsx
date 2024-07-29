@@ -1,30 +1,50 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ListingCard from './components/ListingCard';
+import ReactPaginate from 'react-paginate';
+import { searchUserItemRequest } from 'store/actions/searchItemAction';
 
 const ListingGrid = () => {
-  const listing = {
-    imageSrc: 'https://di2ponv0v5otw.cloudfront.net/posts/2024/01/16/65a723d824237ab76bdea5d3/s_65a726de24237a5bbcdec102.jpg',
-    imageAlt: 'Lululemon burnout OM lightweight/oversized dewberry manifesto scarf/wrap/blanket',
-    title: 'Lululemon burnout OM lightweight/oversized dewberry manifesto scarf/wrap/blanket',
-    price: 'C$60',
-    originalPrice: 'C$128',
-    size: 'US OS',
-    brand: 'lululemon athletica',
-    sellerImage: 'https://di2ponv0v5otw.cloudfront.net/users/2020/01/05/3/t_5e11c884acb24b69c3edb360.jpg',
-    sellerName: 'xxthegirlxx',
-    listingLink: '/listing/Lululemon-burnout-OM-lightweightoversized-dewberry-manifesto-scarfwrapblanket-65a723d824237ab76bdea5d3',
-  };
+  const { loading, data, error } = useSelector(state => state.clothingItems);
+
   return (
-    <div className="listing-grid grid grid-cols-5 gap-4">
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
-     <ListingCard {...listing} />
+    <div className="p-4">
+      {loading && <p>Loading...</p>}
+      {error && <p className="text-red-500">Error: {error}</p>}
+      {data && (
+        <div>
+          <div className="listing-grid grid grid-cols-5 gap-4">
+            {data.content.map((listing, index) => (
+              <ListingCard key={index} {...listing} />
+            ))}
+            {data.content.length === 0 && (
+              <div className="dummy-value">
+                No items found. Please try a different search.
+              </div>
+            )}
+          </div>
+          <ReactPaginate
+            previousLabel={'Previous'}
+            nextLabel={'Next'}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={data.totalPages}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageChange}
+            containerClassName={'pagination flex justify-center mt-4'}
+            subContainerClassName={'pages pagination'}
+            activeClassName={'active'}
+            pageClassName={'mx-1'}
+            pageLinkClassName={'px-3 py-1 border rounded'}
+            previousClassName={'mx-1'}
+            nextClassName={'mx-1'}
+            previousLinkClassName={'px-3 py-1 border rounded'}
+            nextLinkClassName={'px-3 py-1 border rounded'}
+            activeLinkClassName={'bg-blue-500 text-white'}
+          />
+        </div>
+      )}
     </div>
   );
 };

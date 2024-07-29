@@ -7,13 +7,12 @@ import { useRouter } from 'next/router'
 import UploadItemForm from './common/UploadItemForm'
 import { handleTrigger } from 'utils/utils'
 import Link from 'next/link';
+import SearchBar from './common/SearchBar'
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const dispatch =useDispatch();
-  const router=useRouter();
-
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
@@ -21,6 +20,10 @@ const Header = ({ user }) => {
     handleTrigger(isLoggedIn,dispatch,setPopup({title:'Upload Listing Items', content: 'upload'}));
     
   }
+   const router = useRouter();
+  const { asPath } = router;
+  const pathValue = asPath.split('/')[1].split('?')[0]; // Get the value between '/' and '?' if '?' is present
+  console.log('==>path', pathValue);
 
   return (
     <div className='header'>
@@ -71,7 +74,7 @@ const Header = ({ user }) => {
                   </div>
 
                 <div className={`relative w-1/4 p-2 flex items-center justify-center gap-8 max-md:hidden`}>
-                  <HeaderComponent user={user} />
+                  <HeaderComponent pathValue={pathValue} />
                 </div>
               </div>
             </div>
@@ -80,25 +83,7 @@ const Header = ({ user }) => {
         {isOpen && (
           <div className='md:hidden'>
             <div className='flex flex-col items-center'>
-              <div className={`relative w-1/4 p-2 flex items-center gap-8 `}>
-                <div className='relative text-gray-600 focus-within:text-gray-400 w-full md-full max-w-md mx-auto'>
-                  <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
-                    <button type='submit' className='p-1 focus:outline-none focus:shadow-outline'>
-                      <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' viewBox='0 0 50 50'>
-                        <path d='M 21 3 C 11.6 3 4 10.6 4 20 C 4 29.4 11.6 37 21 37 C 24.354553 37 27.47104 36.01984 30.103516 34.347656 L 42.378906 46.621094 L 46.621094 42.378906 L 34.523438 30.279297 C 36.695733 27.423994 38 23.870646 38 20 C 38 10.6 30.4 3 21 3 z M 21 7 C 28.2 7 34 12.8 34 20 C 34 27.2 28.2 33 21 33 C 13.8 33 8 27.2 8 20 C 8 12.8 13.8 7 21 7 z'></path>
-                      </svg>
-                    </button>
-                  </span>
-                  <input
-                    type='search'
-                    name='q'
-                    className='w-full py-2 text-sm text-ccWhite bg-ccWhite rounded-md pl-10 focus:outline-none focus:bg-ccWhite focus:text-gray-900'
-                    placeholder='Search...'
-                    autoComplete='off'
-                    required
-                  />
-                </div>
-              </div>
+              <SearchBar pathValue={pathValue}/>
               <div className='py-2'>
                 {user ? (
                   <Link href='/logout' className='text-blue-500 hover:text-blue-700 no-underline'>

@@ -97,7 +97,7 @@ const Footer = () => {
 
 
 const Home = ({listing,reviews,user}) => {
-
+ console.log('===>user',user)
   return (
     <Layout user={user}>
         <div className="flex flex-col items-center justify-center ">

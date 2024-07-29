@@ -29,13 +29,13 @@ const IconView = () => {
      }
 
       <li className="sign-in-icon  relative list-none">  
-        <button onMouseEnter={() => setIsSignInMenuOpen(true)} onClick={() => setIsSignInMenuOpen(false)} className="focus:outline-none cursor-pointer hidden md:block">  
+        <button onMouseEnter={() => setIsSignInMenuOpen(true)} onClick={() => {setIsSignInMenuOpen(false); router.push('/profile')}} className="focus:outline-none cursor-pointer hidden md:block">  
           <div className="text-center inline-block w-14 text-primary-variant-2 rounded-sm">  
             <i className="fas fa-user-circle text-2xl text-center leading-6"></i> 
           </div>  
         </button>
         {isSignInMenuOpen && (
-          isLoggedIn ? (
+          user ? (
             <SignedInMenu setIsSignedInMenuOpen={setIsSignInMenuOpen} userName={user? user.name : 'Guest'} />
           ) : (
             <SignInMenu setIsSignInMenuOpen={setIsSignInMenuOpen} />
