@@ -70,7 +70,6 @@ export function* validateTokenAndGetUserSaga(action) {
   
 export function* registerSaga(action) {
     try {
-      debugger;
         const requestData = { url: registerUserEndpoint, payload: {  ...action.payload} }; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
         const {token , id}=response.data
@@ -84,7 +83,6 @@ export function* registerSaga(action) {
             maxAge: 30 * 24 * 60 * 60,
             path: '/',
         });
-        debugger;
         if (response.success) {
             yield put({ type: REGISTER_SUCCESS, payload: {  token: response.data.token } });
             yield put({ type: SET_LOADING ,isLoading:false });

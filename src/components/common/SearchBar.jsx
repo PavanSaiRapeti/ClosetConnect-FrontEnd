@@ -8,7 +8,6 @@ const SearchBar = ({pathValue}) => {
   const dispatch = useDispatch();
 
   const handleSearch = () => {
-    debugger;
     setPage(0);
     if(pathValue === 'profile'){
       dispatch(searchUserItemRequest({ itemName, page: 0 ,user:true, size:''}));
