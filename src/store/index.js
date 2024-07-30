@@ -6,80 +6,39 @@ import { createWrapper } from 'next-redux-wrapper';
 import rootSaga from './sagas/rootSaga';
 import rootReducer from './reducers';
 
-// const sagaMiddleware = createSagaMiddleware();
-
-// const persistConfig = {
-//   key: 'root',
-//   storage,
-//   whitelist: ['auth']
-// };
-
-// const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-// const isBrowser = typeof window !== "undefined";
-// const composeEnhancers = isBrowser && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
-// const makeStore = () => {
-//   const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(sagaMiddleware)));
-//   store.sagaTask = sagaMiddleware.run(rootSaga);
-//   return store;
-// };
-
-// const store = makeStore();
-// const persistor = persistStore(store);
-
-// export { store, persistor };
-// export const wrapper = createWrapper(makeStore);
-
-
-
-
-const makeStore = () => {
-  let store;
-
+const makeStore = (context) => {
   const sagaMiddleware = createSagaMiddleware();
-
-  const isClient = typeof window !== "undefined";
-
-const isBrowser = typeof window !== "undefined";
-const composeEnhancers = isBrowser && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const isServer = typeof window === 'undefined';
+  const isBrowser = typeof window !== "undefined";
+  const composeEnhancers = isBrowser && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth']
+    whitelist: ['auth','common','search','user','trade','item']
   };
-  
+
   const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-  if (isClient) {
     const { persistStore } = require("redux-persist");
 
     //NOTE: We create store without initialState as we shall implement initial states in our individual reducers.
-    store = createStore(
+    const store = createStore(
       persistedReducer,
       composeEnhancers(applyMiddleware(sagaMiddleware))
     );
 
-    store.sagaTask = sagaMiddleware.run(rootSaga);
-    store.sagaTask.toPromise().catch(error => {
-      console.log(error);
-      throw error;
-    });
-    store.__PERSISTOR = persistStore(store);
+  store.sagaTask = sagaMiddleware.run(rootSaga);
 
-  } else {
-
-    //NOTE: We create store without initialState as we shall implement initial states in our individual reducers.
-    store = createStore(
-      rootReducer,
-      applyMiddleware(sagaMiddleware)
-    );
-
-    store.sagaTask = sagaMiddleware.run(rootSaga);
-    store.sagaTask.toPromise().catch(error => {
-      console.log(error);
-      throw error;
+  if (!isServer) {
+    store.__PERSISTOR = persistStore(store, null, () => {
+      // Ensure the HYDRATE action is dispatched with a valid payload
+      if (context) {
+        store.dispatch({
+          type: '__NEXT_REDUX_WRAPPER_HYDRATE__',
+          payload: context,
+        });
+      }
     });
   }
 

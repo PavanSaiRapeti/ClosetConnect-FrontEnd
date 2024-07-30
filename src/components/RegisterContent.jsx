@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, setLoading } from 'store/actions/authAction';
 import { closeLoginPopup } from 'store/actions/commonAction';
+import Button from './Button';
 
 const RegisterContent = () => {
   const dispatch = useDispatch();
@@ -246,9 +247,11 @@ const RegisterContent = () => {
             {showErrors && formik.errors.gender && <div className="alert alert-pink text-red-500" role="alert">{formik.errors.gender}</div>}
           </div>
         </div>
-        <button type="button" onClick={handleRegister} className="w-full bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded" disabled={formik.isSubmitting}>
-          {formik.isSubmitting ? 'Registering...' : 'Register'}
-        </button>
+        <Button 
+          text={formik.isSubmitting ? 'Registering...' : 'Register'}
+          onClick={handleRegister}
+          disabled={formik.isSubmitting}
+        />
       </form>
     </div>
   );

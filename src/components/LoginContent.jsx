@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, setLoading } from 'store/actions/authAction';
 import { useRouter } from 'next/router';
 import { closeLoginPopup } from 'store/actions/commonAction';
+import Button from './Button';
 
 const LoginContent = () => {
   const dispatch = useDispatch();
@@ -60,12 +61,12 @@ const LoginContent = () => {
             required
           />
         </div>
-        <button
-          type='submit'
-          className='w-full bg-ccPink hover:bg-ccBlack text-ccWhite font-bold py-2 px-4 rounded mt-4'
-          disabled={formik.isSubmitting}>
-          {formik.isSubmitting ? 'Logging in...' : 'Login'}
-        </button>
+        <Button
+          text={formik.isSubmitting ? 'Logging in...' : 'Login'}
+          onClick={formik.handleSubmit}
+          className='w-full bg-ccBlack hover:bg-ccPink text-ccWhite font-bold py-2 px-4 rounded mt-4'
+          disabled={formik.isSubmitting}
+        />
         <a href='#' className='text-sm text-gray-600 hover:text-gray-900 block text-center mt-4'>
           Forgot password?
         </a>

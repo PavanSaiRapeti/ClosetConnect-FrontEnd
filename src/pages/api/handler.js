@@ -14,14 +14,14 @@ export const api = axios.create({
 export default async function handler(req, res) {
   const { method, body } = req;
   const { url, payload, headers, isMethod } = body;
-
+  console.log('==>isMethod', isMethod);
   switch (method) {
     case 'POST': {
       switch (isMethod) {
         case 'GET':
           console.log(`==>getreq`, url, headers);
           try {
-            const getResponse = await api.get(url, headers);
+            const getResponse = await api.get(url, {headers});
             console.log('==>getres3', getResponse);
 
             // Check if the status code is not 200
@@ -53,6 +53,17 @@ export default async function handler(req, res) {
             });
           }
         case 'PUT':
+        try {
+          const response = await api.put(url, payload, { headers });
+          console.log('===>putResponse', response);
+          return res.status(response.status).json(response.data);
+        } catch (error) {
+          console.error('Error in PUT request:', error.response.data.message);
+          return res.status(error.response?.status || 500).json({
+            message: error.response.data.message,
+            error: error,
+          });
+        }
         case 'DELETE':
         default: {
           try {

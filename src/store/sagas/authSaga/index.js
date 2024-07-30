@@ -1,8 +1,8 @@
 import { put, call, takeLatest, takeLeading, takeEvery } from 'redux-saga/effects';
-import {  LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_FAILURE, REGISTER_SUCCESS, VALIDATE_TOKEN_FAILURE, VALIDATE_TOKEN_SUCCESS, SET_LOADING, LOGIN_REQUEST, REGISTER_REQUEST, LOGOUT_REQUEST, VALIDATE_TOKEN_REQUEST } from '../../types/apiActionTypes';
+import {  LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_FAILURE, REGISTER_SUCCESS, VALIDATE_TOKEN_FAILURE, VALIDATE_TOKEN_SUCCESS, SET_LOADING, LOGIN_REQUEST, REGISTER_REQUEST, LOGOUT_REQUEST, VALIDATE_TOKEN_REQUEST, UPDATE_USER_REQUEST, GET_USER_REQUEST } from '../../types/apiActionTypes';
 import axios from 'axios';
-import { getUserEndpoint, handlerEndpoint, loginUserEndpoint, registerUserEndpoint } from 'config/env';
-import { destroyCookie, setCookie } from 'nookies';
+import { getUserEndpoint, handlerEndpoint, loginUserEndpoint, registerUserEndpoint, updateUserEndpoint } from 'config/env';
+import { destroyCookie, parseCookies, setCookie } from 'nookies';
 import { validateTokenFailure, validateTokenSuccess } from 'store/actions/authAction';
 import Router from 'next/router';
 
@@ -11,7 +11,7 @@ export function* loginSaga(action) {
     try {
         yield put({ type: SET_LOADING ,isLoading:true });
         const { email, password } = action.payload;
-        const requestData = { url: loginUserEndpoint, payload: { email, password } }; 
+        const requestData = { url: loginUserEndpoint, payload: { email, password } ,isMethod: 'POST'}; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
         const {token , id}=response.data
         console.log('==>t0',token);
@@ -43,7 +43,6 @@ export function* loginSaga(action) {
 export function* validateTokenAndGetUserSaga(action) {
   console.log('validated saga triggered', action);
     const { token, userId, headers } = action.payload;
-    console.log('==>',action.payload)
     if (!token || !userId) {
       yield put(validateTokenFailure('Token or userId is missing'));
       return;
@@ -70,7 +69,7 @@ export function* validateTokenAndGetUserSaga(action) {
   
 export function* registerSaga(action) {
     try {
-        const requestData = { url: registerUserEndpoint, payload: {  ...action.payload} }; 
+        const requestData = { url: registerUserEndpoint, payload: {  ...action.payload} ,isMethod: 'POST'}; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
         const {token , id}=response.data
         setCookie(null, 'token', token, {
@@ -107,9 +106,53 @@ export function* logoutSaga(action) {
     }
 }
 
-export function* watchAuthSagas() {
+
+export function* updateUserSaga(action) {
+  try {
+      yield put({ type: SET_LOADING, isLoading: true });
+      const cookies = parseCookies();
+      const { token, userId } = cookies;
+      const requestData = { url: updateUserEndpoint(userId) , payload: {...action.payload}, isMethod: 'PUT' };
+      const response = yield call(axios.post, handlerEndpoint , requestData);
+      
+      if (response.data) {
+          yield put({ type: 'UPDATE_USER_SUCCESS', payload: response.data });
+      } else {
+          yield put({ type: 'UPDATE_USER_FAILURE', error: response.error });
+      }
+      yield put({ type: SET_LOADING, isLoading: false });
+  } catch (error) {
+      console.error('Update user error:', error.response);
+      yield put({ type: 'SET_ERROR', payload: error?.response?.data?.message?.[0] || "Unknown error" });
+      yield put({ type: SET_LOADING, isLoading: false });
+  }
+}
+
+export function* getUserSaga(action) {
+  try {
+      yield put({ type: SET_LOADING, isLoading: true });
+      const { userId } = action.payload;
+      const requestData = { url: getUserEndpoint(userId) , payload: {} , isMethod: 'GET' };
+      const response = yield call(axios.post, handlerEndpoint , requestData);
+      
+      if (response.data) {
+          yield put({ type: 'GET_USER_SUCCESS', payload: response.data });
+      } else {
+          yield put({ type: 'GET_USER_FAILURE', error: response.error });
+      }
+      yield put({ type: SET_LOADING, isLoading: false });
+  } catch (error) {
+      console.error('Get user error:', error.response);
+      yield put({ type: 'SET_ERROR', payload: error?.response?.data?.message?.[0] || "Unknown error" });
+      yield put({ type: SET_LOADING, isLoading: false });
+  }
+}
+
+export default function* watchAuthSagas() {
   yield takeEvery(LOGIN_REQUEST, loginSaga);
   yield takeEvery(REGISTER_REQUEST, registerSaga);
   yield takeEvery(LOGOUT_REQUEST, logoutSaga);
   yield takeEvery(VALIDATE_TOKEN_REQUEST, validateTokenAndGetUserSaga);
+  yield takeEvery(UPDATE_USER_REQUEST, updateUserSaga);
+  yield takeEvery(GET_USER_REQUEST, getUserSaga);
 }

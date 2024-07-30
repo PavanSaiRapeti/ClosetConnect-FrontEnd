@@ -4,6 +4,7 @@ import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
 import React, {  useState } from "react";
 import { wrapper } from "store";
+import { LOGIN_SUCCESS, SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
 import { checkAuth } from "utils/authHelpers";
 
 // Hero Section Component with Carousel
@@ -26,7 +27,9 @@ const HeroSection = () => {
       description: "Swap items with other students and refresh your wardrobe."
     }
   ];
+  
 
+  
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
@@ -114,23 +117,31 @@ const Home = ({listing,reviews,user}) => {
   );
 };
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
-  const cookies = parseCookies({req,res});
+  const cookies = parseCookies({ req, res });
   const { token, userId } = cookies;
-  console.log('dog==>',token, userId)
-  let userData =  null
-  if( token ){
-    const { user } = await checkAuth(token,userId);
-    userData = user;
+  console.log('dog==>', token, userId, store);
+  let userData = null;
+  if (token) {
+    const { user } = await checkAuth(token, userId);
+    userData = user || null;
+    if (user) {
+      store.dispatch({
+        type: VALIDATE_TOKEN_SUCCESS,
+        payload: { user: userData, isLoggedIn: true }
+      });
+      store.dispatch({
+        type: SET_USER_ID,
+        payload: userId
+      });
+    }
   }
-  
+
   return {
     props: {
-      user: userData,
-      listing:[],
-      reviews:[]
+      user: userData || null, // Ensure user is null if undefined
+      listing: [],
+      reviews: []
     },
   }
-})
+});
 export default Home;
-
-

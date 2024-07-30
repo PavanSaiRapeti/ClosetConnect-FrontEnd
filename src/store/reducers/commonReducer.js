@@ -4,6 +4,7 @@ const initialState = {
     popupInfo:{
         title:null,
         content:null,
+        data:null
     },
     error:null,
     info:null

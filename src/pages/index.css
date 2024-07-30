@@ -89,3 +89,96 @@ body {
   color: white;
   border: 1px solid #007bff;
 }
+
+.newtons-cradle {
+  --uib-size: 400px; 
+  --uib-speed: 1.2s;
+  --uib-color: #474554;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--uib-size);
+  height: var(--uib-size);
+}
+
+.newtons-cradle__dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 0.5rem;
+  width: 0.5rem;
+  transform-origin: center top;
+}
+
+.newtons-cradle__dot::after {
+  content: '';
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+}
+
+.newtons-cradle__dot:first-child {
+  animation: swing var(--uib-speed) linear infinite;
+}
+
+.newtons-cradle__dot:last-child {
+  animation: swing2 var(--uib-speed) linear infinite;
+}
+
+@keyframes swing {
+  0% {
+      transform: rotate(0deg);
+      animation-timing-function: ease-out;
+  }
+  25% {
+      transform: rotate(70deg);
+      animation-timing-function: ease-in;
+  }
+  50% {
+      transform: rotate(0deg);
+      animation-timing-function: linear;
+  }
+}
+
+@keyframes swing2 {
+  0% {
+      transform: rotate(0deg);
+      animation-timing-function: linear;
+  }
+  50% {
+      transform: rotate(0deg);
+      animation-timing-function: ease-out;
+  }
+  75% {
+      transform: rotate(-70deg);
+      animation-timing-function: ease-in;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .newtons-cradle {
+      --uib-size: 150px;
+  }
+}
+
+
+.skeleton {
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}

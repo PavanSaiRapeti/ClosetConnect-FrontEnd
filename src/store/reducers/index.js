@@ -1,8 +1,11 @@
 import { combineReducers } from 'redux';
 import authReducer from './authReducer';
-import clothingItemsReducer from './clothingItemsReducer';
 import { HYDRATE } from 'next-redux-wrapper'
 import commonReducer from './commonReducer';
+import searchReducer from './searchReducer';
+import userReducer from './userReducer';
+import tradeReducer from './tradeReducer';
+import itemReducer from './itemReducer';
 
 
 // this is to set a flag for initial server renders
@@ -32,14 +35,22 @@ function hydrate(state = {}, action) {
   }
 }
 
-export const combinedReducer = combineReducers({
+// Combine all reducers
+const combinedReducer = combineReducers({
   auth: authReducer,
-  clothingItems: clothingItemsReducer,
-  common:commonReducer
+  common: commonReducer,
+  search: searchReducer,
+  user: userReducer,
+  trade: tradeReducer,
+  item: itemReducer,
 });
 
-function rootReducer(state, action) {
-  const intermediateState = combinedReducer(state, action)
-  return hydrate(intermediateState, action)
-}
-export default rootReducer
+const rootReducer = (state, action) => {
+  if (action.type === HYDRATE) {
+    return state;
+  }
+
+  return combinedReducer(state, action);
+};
+
+export default rootReducer;

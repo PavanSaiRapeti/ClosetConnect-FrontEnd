@@ -6,7 +6,8 @@ import {
   VALIDATE_TOKEN_SUCCESS,
   VALIDATE_TOKEN_REQUEST,
   SET_LOADING,
-  LOGIN_FAILURE
+  LOGIN_FAILURE,
+  HYDRATE
 } from 'store/types/apiActionTypes';
 
 const initialState = {
@@ -15,22 +16,19 @@ const initialState = {
   id: null,
   user: null,
   loading: false,
-  error:null
+  error: null
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'persist/REHYDRATE':
-      return {
-        ...state,
-        error: null,
-      };
     case LOGIN_SUCCESS:
       return { ...state, token: action.payload.token, id: action.payload.id };
+    case 'LOGIN_SET_ERROR':
+      return { ...state, error: action.payload };
     case REGISTER_SUCCESS:
       return { ...state, token: action.payload };
     case LOGOUT_REQUEST:
-      return { ...state, token: null,user:null,id:null,isLoggedIn:false };
+      return { ...state, token: null, user: null, id: null, isLoggedIn: false };
     case LOGIN_FAILURE:
       return {
         ...state,
@@ -62,6 +60,11 @@ const authReducer = (state = initialState, action) => {
       };
     case SET_LOADING:
       return { ...state, isLoading: action.payload };
+    case HYDRATE:
+      return {
+        ...state,
+        ...action.payload.auth
+      };
     default:
       return state;
   }

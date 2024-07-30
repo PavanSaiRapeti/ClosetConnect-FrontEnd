@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { searchUserItemRequest } from 'store/actions/searchItemAction';
+import { searchUserItemRequest } from 'store/actions/searchAction';
 
-const SearchBar = ({pathValue}) => {
+const SearchBar = ({ pathValue }) => {
   const [itemName, setItemName] = useState('');
   const [page, setPage] = useState(0);
   const dispatch = useDispatch();
 
   const handleSearch = () => {
     setPage(0);
-    if(pathValue === 'profile'){
-      dispatch(searchUserItemRequest({ itemName, page: 0 ,user:true, size:''}));
-    }else{
-      dispatch(searchUserItemRequest({ itemName, page: 0 ,size:'',user:false}));
+    if (pathValue === 'profile') {
+      dispatch(searchUserItemRequest({ itemName, page: 0, user: true, size: '' }));
+    } else {
+      dispatch(searchUserItemRequest({ itemName, page: 0, size: '', user: false }));
     }
   };
 
@@ -22,9 +22,14 @@ const SearchBar = ({pathValue}) => {
     }
   };
 
+  const handleClear = () => {
+    setItemName('');
+    setPage(0);
+  };
+
   return (
-    <div className='flex items-center justify-center p-4'>
-      <div className='relative text-gray-600 focus-within:text-gray-400 w-full max-w-lg mx-auto'>
+    <div className='w-full flex p-2'>
+      <div className='relative text-gray-600 focus-within:text-gray-400 w-full max-w-lg ml-auto sm:max-w-md md:max-w-lg lg:max-w-xl'>
         <span className='absolute inset-y-0 left-0 flex items-center pl-2'>
           <button type='submit' className='p-1 focus:outline-none focus:shadow-outline' onClick={handleSearch}>
             <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' viewBox='0 0 50 50'>
@@ -37,12 +42,21 @@ const SearchBar = ({pathValue}) => {
           name='itemName'
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
-          onKeyDown={handleKeyPress} // Changed from onKeyPress to onKeyDown
+          onKeyDown={handleKeyPress}
           className='w-full py-2 text-sm text-gray-900 bg-white rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900'
           placeholder='Search by item name...'
           autoComplete='off'
           required
         />
+        {itemName && (
+          <span className='absolute inset-y-0 right-0 flex items-center pr-2'>
+            <button type='button' className='p-1 focus:outline-none focus:shadow-outline' onClick={handleClear}>
+              <svg xmlns='http://www.w3.org/2000/svg' className='w-5 h-5' viewBox='0 0 20 20' fill='currentColor'>
+                <path fillRule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-10.707a1 1 0 00-1.414-1.414L10 8.586 7.707 6.293a1 1 0 00-1.414 1.414L8.586 10l-2.293 2.293a1 1 0 001.414 1.414L10 11.414l2.293 2.293a1 1 0 001.414-1.414L11.414 10l2.293-2.293z' clipRule='evenodd' />
+              </svg>
+            </button>
+          </span>
+        )}
       </div>
     </div>
   );

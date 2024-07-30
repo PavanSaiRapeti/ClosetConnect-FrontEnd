@@ -7,76 +7,63 @@ import Login from '@/components/Login';
 import { closeLoginPopup, closePopup, setPopup } from 'store/actions/commonAction';
 import AllPopUp from '@/components/common/AllPopUp';
 import { useEffect, useState } from 'react';
-import { setLoading } from 'store/actions/authAction';
-import { useRouter } from 'next/router';
 import Loading from '@/components/Loading';
 import UploadItemForm from '@/components/common/UploadItemForm';
 import Footer from '../components/Footer';
 import { handleTrigger } from 'utils/utils';
 
 const Layout = (props) => {
-  const{children,user}=props
+  const { children, user } = props;
   const dispatch = useDispatch();
-  const router = useRouter();
   const isLoginPopupOpen = useSelector((state) => state.common.isLoginPopupOpen);
-  const isPopupOpen=useSelector((state) => state.common.isPopupOpen);
-  const {title, content }=useSelector((state) => state.common.popupInfo);
+  const isPopupOpen = useSelector((state) => state.common.isPopupOpen);
+  const { title, content, data } = useSelector((state) => state.common.popupInfo);
   const isLoading = useSelector((state) => state.auth.loading);
   const error = useSelector((state) => state.common.error);
+  const loginError = useSelector((state) => state.auth.error);
   const info = useSelector((state) => state.common.info);
 
-  console.log('user',user);
-  
-  useEffect(() => {
-    const handleStart = () => dispatch(setLoading(true));
-    const handleComplete = () => dispatch(setLoading(false));
-
-    router.events.on('routeChangeStart', handleStart);
-    router.events.on('routeChangeComplete', handleComplete);
-    router.events.on('routeChangeError', handleComplete);
-
-    setLoading(false);
-
-    return () => {
-      router.events.off('routeChangeStart', handleStart);
-      router.events.off('routeChangeComplete', handleComplete);
-      router.events.off('routeChangeError', handleComplete);
-    };
-  }, [router,dispatch]);
   const [selectedOption, setSelectedOption] = useState(null);
 
   useEffect(() => {
     switch (content) {
       case 'upload':
-       setSelectedOption(<UploadItemForm />)
+        setSelectedOption(<UploadItemForm />);
+        break;
+      case 'edit':
+        setSelectedOption(<UploadItemForm initialData={data} />);
         break;
       case 'error':
-       setSelectedOption(error)
+        setSelectedOption(error);
+        break;
+      case 'loginError':
+        setSelectedOption(loginError);
         break;
       case 'info':
-        setSelectedOption(info)
+        setSelectedOption(info);
         break;
       default:
         setSelectedOption(null);
     }
   }, [content]);
 
-
   useEffect(() => {
-    console.log('+trigrgrer',error);
-    if(error)  {
-      handleTrigger(true,dispatch,setPopup({title:'Error', content: 'error'}));
+    if (error) {
+      handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'error' }));
     }
-    if(info){
-      handleTrigger(true,dispatch,setPopup({title:'Error', content: 'error'}));
+    if (loginError) {
+      handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'loginError' }));
     }
-  }, [error,info,dispatch]);
-
+    if (info) {
+      handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'error' }));
+    }
+  }, [error, info, dispatch]);
 
   const hideLightbox = () => {
     dispatch(closeLoginPopup());
   };
   const onClose = () => {
+    dispatch({type:'LOGIN_SET_ERROR',payload:null})
     dispatch(closePopup());
   };
 
@@ -87,18 +74,17 @@ const Layout = (props) => {
         <meta charSet='utf-8' />
         <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
-      <div className='h-full'>
+      <div className='min-h-screen flex flex-col'>
         <Header user={user} />
-        {isLoading ? <Loading />:
-        <main>
-          {children}
-        </main>}
-         <Footer />
+          <main className='flex-grow'>
+            {children}
+          </main>
+        <Footer className='w-full' />
       </div>
-      <Lightbox isOpen={isLoginPopupOpen} onClose={hideLightbox} content={<Login/>} />
-      <AllPopUp isOpen={isPopupOpen} onClose={onClose} title={title} content={selectedOption}/>
+      <Lightbox isOpen={isLoginPopupOpen} onClose={hideLightbox} content={<Login />} />
+      <AllPopUp isOpen={isPopupOpen} onClose={onClose} title={title} content={selectedOption} />
     </>
-  )
-}
+  );
+};
 
-export default Layout
+export default Layout;

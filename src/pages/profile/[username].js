@@ -4,14 +4,10 @@ import Layout from 'pages/Layout';
 import ProfileSection from '@/components/Home/ProfileSection';
 import ListingGrid from '@/components/Home/LisitingGrid';
 import ReviewSection from '@/components/Home/ReviewSection';
+import { getUser } from 'utils/utils';
+import UserNotFound from 'pages/usernotfound';
 
 const UserProfile = ({ user }) => {
-  const router = useRouter();
-  const { username } = router.query;
-
-  if (!user) {
-    return <div>User not found</div>;
-  }
 
   return (
     <Layout>
@@ -51,11 +47,14 @@ const UserProfile = ({ user }) => {
 
 export const getServerSideProps = async (context) => {
   const { username } = context.params;
-  const user = false;
-
+  console.log('===>')
+  const user = await getUser(username);
   if (!user) {
     return {
-      notFound: true,
+      redirect: {
+        destination: '/usernotfound',
+        permanent: false,
+      },
     };
   }
 

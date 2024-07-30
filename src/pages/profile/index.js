@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import ProfileSection from '@/components/Home/ProfileSection'
 import ReviewSection from '@/components/Home/ReviewSection'
 import ListingGrid from '@/components/Home/LisitingGrid'
@@ -11,65 +11,43 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router'
 import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
-
-const reviews = [
-  {
-    name: 'John D.',
-    rating: 5,
-    title: 'Outstanding Service!',
-    content:
-      "I've been using their services for over a year now, and I couldn't be happier. The transition to their cloud-based platform was seamless, and their support team is always available to help. Highly recommend!",
-  },
-  {
-    name: 'Emily R.',
-    rating: 5,
-    title: 'Excellent Customer Support',
-    content:
-      "The customer support team is phenomenal. They were patient and thorough in addressing all my queries. The cloud solution they provided has significantly improved our team's productivity. Two thumbs up!",
-  },
-  {
-    name: 'Michael S.',
-    rating: 5,
-    title: 'Highly Reliable and Secure',
-    content:
-      "Security was a major concern for us, but their cloud services have proven to be incredibly reliable and secure. We've had zero issues, and the peace of mind is priceless. Fantastic service!",
-  },
-  {
-    name: 'Sarah L.',
-    rating: 5,
-    title: 'A Game Changer for Our Business',
-    content:
-      'Moving to the cloud with their assistance has been a game-changer for our business. The scalability and flexibility we now have are unparalleled. Our operations have never been smoother!',
-  },
-  {
-    name: 'David K.',
-    rating: 5,
-    title: 'Impressive Innovation',
-    content:
-      'Their cloud solutions have empowered us to innovate and stay ahead of the competition. The access to the latest technologies has opened up new opportunities for growth. Truly impressive!',
-  },
-]
+import Skeleton from '@/components/common/Skeleton'
+import { getClothingItemRequest, getUserClothingItemsRequest } from 'store/actions/ItemAction'
+import { setUserId } from 'store/actions/userAction'
 
 
 const Profile = ({ user }) => {
   const dispatch = useDispatch();
-  const router=useRouter();  
-  useEffect(()=>{
-    if(user){
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(true);
+  const userId = useSelector(state => state.auth.id);
+  const items = useSelector(state => state.item.items);
+  const [page, setPage] = useState(0);
+  console.log('==>userId', userId,items);
+
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    if (user) {
       dispatch(validateTokenSuccess(user));
-    }else{
+    } else {
       dispatch(closeLoginPopup());
       router.push('/home')
     }
-  },[dispatch, user, router])
+  }, [dispatch, user, router])
 
+  useEffect(() => {
+    dispatch(getUserClothingItemsRequest(userId, 5,page));
+  }, [page, dispatch, userId]);
 
   return (
     <Layout user={user}>
-    <div className='flex flex-col w-full h-full'>
-      <div className='flex flex-col md:flex-row'>
-        <div className='w-full md:w-1/6'>
-          <div className='flex justify-center'>
+      <div className='flex flex-col w-full h-full p-4'>
+        <div className='flex flex-col md:flex-row w-full h-full space-y-4 md:space-y-0 md:space-x-4'>
+          <div className='w-full md:w-1/6 h-full flex justify-center mb-4 md:mb-0'>
             <ProfileSection
               userName={user?.userName}
               topSize={user?.topSize}
@@ -81,31 +59,28 @@ const Profile = ({ user }) => {
               profilePicture={user?.profilePicture}
             />
           </div>
-        </div>
-        <div className='w-full md:w-2/3'>
-          <h1 className='font-extrabold'>LISTING</h1>
-          <div className='p-1'>
-            <ListingGrid />
+          <div className='w-full md:w-2/3 h-full flex flex-col mb-4 md:mb-0'>
+            <h1 className='font-extrabold'>LISTING</h1>
+            <div className='p-1 h-full flex-grow'>
+              <ListingGrid page={page} setPage={setPage} />
+            </div>
+          </div>
+          <div className='w-full md:w-1/6 flex justify-center'>
+            {/* <ReviewSection reviews={reviews} /> */}
           </div>
         </div>
-        {/* <div className='w-full md:w-1/6'>
-          <div className='flex justify-center'>
-            <ReviewSection reviews={reviews} />
-          </div>
-        </div> */}
       </div>
-    </div>
     </Layout>
   )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
-  const cookies = parseCookies({req,res});
+  const cookies = parseCookies({ req, res });
   const { token, userId } = cookies;
-  const { isRedirect, user } = await checkAuth(token,userId);
-  console.log('==>123',cookies,isRedirect, user)
+  const { isRedirect, user } = await checkAuth(token, userId);
+  console.log('==>123', cookies, isRedirect, user);
   if (isRedirect) return redirectToLogin;
- 
+  store.dispatch(setUserId(userId));
   return {
     props: {
       user: user,

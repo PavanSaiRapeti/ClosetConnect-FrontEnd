@@ -2,14 +2,17 @@ import React from 'react';
 import Layout from 'pages/Layout';
 import { wrapper } from 'store';
 import Link from 'next/link';
+import { parseCookies } from 'nookies';
+import { checkAuth } from 'utils/authHelpers';
+import { VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
 
 
-const CategoryPage = ({title}) => {
+const CategoryPage = ({title, user}) => {
   const category = false
 
 
   return (
-  <Layout>
+  <Layout user={user}>
     <nav className="text-sm font-medium text-gray-700">
       <ol className="list-reset p-0 inline-flex">
         <li className="flex items-center">
@@ -55,11 +58,24 @@ const CategoryPage = ({title}) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) => async (context) => {
     const { slug } = context.params;
-
-  
+    const cookies = parseCookies(context);
+    const { token, userId } = cookies;
+    console.log('dog==>', token, userId, store);
+    let userData = null;
+    if (token) {
+      const { user } = await checkAuth(token, userId);
+      userData = user || null;
+      if (user) {
+        store.dispatch({
+          type: VALIDATE_TOKEN_SUCCESS,
+          payload: { user: userData, isLoggedIn: true }
+        });
+      }
+    }
       return {
         props: {
             title:slug,
+            user: userData,
         },
       };
     }
