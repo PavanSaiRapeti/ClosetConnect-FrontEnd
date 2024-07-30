@@ -3,7 +3,7 @@ import ListingCard from '@/components/Home/components/ListingCard';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import { wrapper } from 'store';
 
-const ItemDetails = ({ item,listing }) => {
+const ItemDetails = ({ item, listing }) => {
 
   if (!item) {
     return <div className="p-6 bg-ccWhite rounded-lg shadow-lg">Loading...</div>;
@@ -35,6 +35,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { slug } = params;
   // await store.dispatch(fetchItemDetails(slug));
   const item = store.getState().item.data;
+  const listing = store.getState().listing.data;
 
   return {
     props: {
@@ -44,6 +45,4 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   };
 });
 
-
-
-
+export default ItemDetails;
