@@ -6,9 +6,11 @@ import { createUserItemEndpoint, enums } from 'config/env';
 import { createUserItem, updateUserItem, uploadItemImage } from 'utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { createClothingItemRequest, updateClothingItemRequest } from 'store/actions/ItemAction';
+import { setPopup } from 'store/actions/commonAction';
 
 const UploadItemForm = ({ onSubmit, initialData }) => {
-  const userId = useSelector(state => state.auth.id);
+  const userId = useSelector(state => state.user.userId);
+  const token = useSelector(state => state.user.token);
   const item = useSelector(state => state.item.item);
   const dispatch = useDispatch();
   const initialValues = {
@@ -34,7 +36,7 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
     let response;
     if (initialData) {
       // Edit mode
-      response = await dispatch(updateClothingItemRequest(id, formData));
+     dispatch(updateClothingItemRequest(id, formData));
     } else {
       // Create mode
       response = await fetch(createUserItemEndpoint(userId), {
@@ -42,17 +44,18 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*',
+          'authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(formData),
       }).then(res => res.json());
     }
-
-    console.log(response, '===>response');
-
     const formDataImage = new FormData();
     formDataImage.append('file', image);
-    await uploadItemImage(item?.id, formDataImage);
+    const responseImage = await uploadItemImage(id ? id: response?.id, formDataImage, token);
+    if(responseImage){
     setSubmitting(false);
+    dispatch(setPopup({title: 'success', content: 'Item uploaded successfully'}));
+    }
   };
 
   return (

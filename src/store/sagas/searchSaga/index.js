@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import { 
     SEARCH_USER_ITEM_REQUEST, 
@@ -13,6 +13,7 @@ import { handlerEndpoint, searchAllClothingItemsEndpoint, searchUserClothesEndpo
 
 function* searchUserItemSaga(action) {
     try {
+        debugger;
         yield put({ type: SET_LOADING, isLoading: true });
         const { userId, itemName, size, page } = action.payload;
         const searchParams = {
@@ -20,12 +21,8 @@ function* searchUserItemSaga(action) {
             size,
             page
         };
-        const queryString = Object.keys(searchParams)
-            .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
-            .join('&');
-            
         const requestData = { 
-            url: searchUserClothesEndpoint(userId, queryString),    
+            url: searchUserClothesEndpoint(userId, searchParams),    
             payload: {...action.payload}, 
             isMethod: 'GET' 
         };
@@ -47,9 +44,9 @@ function* searchUserItemSaga(action) {
 function* searchAllClothingItemsSaga(action) {
     try {
         yield put({ type: SET_LOADING, isLoading: true });
-        const { itemType, size, page } = action.payload;
+        const { itemName, size, page } = action.payload.itemType;
         const requestData = { 
-            url: searchAllClothingItemsEndpoint(itemType, size, page), 
+            url: searchAllClothingItemsEndpoint(itemName, size?size:10, page), 
             payload:{},
             isMethod: 'GET'
         };
@@ -70,5 +67,5 @@ function* searchAllClothingItemsSaga(action) {
 
 export default function* watchSearchSagas() {
     yield takeEvery(SEARCH_USER_ITEM_REQUEST, searchUserItemSaga);
-    yield takeEvery(SEARCH_ALL_CLOTHING_ITEMS_REQUEST, searchAllClothingItemsSaga);
+    yield takeLatest(SEARCH_ALL_CLOTHING_ITEMS_REQUEST, searchAllClothingItemsSaga);
 }

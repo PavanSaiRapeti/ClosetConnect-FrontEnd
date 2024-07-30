@@ -18,7 +18,7 @@ export const endpoints = {
   getUserClothes: (userId, itemName, size, page) => `${BASE_URL}/clothingItems/search?userId=${userId}&itemName=${itemName}&size=${size}&page=${page}`,
   updateItem: (itemId, userId) => `${BASE_URL}/clothingItems/update/${itemId}/${userId}`,
   getItemImage: (itemId) => `${BASE_URL}/clothingItems/${itemId}/cloth-image`,
-  searchAllClothingItems: (itemType, size, page) => `${BASE_URL}/clothingItems/search/all?itemType=${itemType}&size=${size}&page=${page}`,
+  searchAllClothingItems: (itemName, size, page) => `${BASE_URL}/clothingItems/search/all?itemName=${itemName}&size=${size}&page=${page}`,
   requestTrade: `${BASE_URL}/trades/requestTrade`,
   getUserSentTrades: (userId, page) => `${BASE_URL}/trades/user/${userId}/sentTrades?page=${page}`,
   getUserReceivedTrades: (userId, page) => `${BASE_URL}/trades/user/${userId}/receivedTrades?page=${page}`,

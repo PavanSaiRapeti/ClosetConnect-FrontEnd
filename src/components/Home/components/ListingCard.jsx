@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from '@/components/common/Skeleton';// Import the dummy image
 import { data } from 'autoprefixer';
-import { handleTrigger } from 'utils/utils';
+import { deleteItem, getItemImage, handleTrigger } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPopup } from 'store/actions/commonAction';
 
 const ListingCard = ({ 
   listing,
-  isLoading,
-  onDelete
+  isLoading
 }) => {
   const user = useSelector(state => state.auth.user);
+  const userId = useSelector(state => state.user.userId);
+  const token = useSelector(state => state.user.token);
   const dispatch = useDispatch();
-  const dummyImage = 'https://via.placeholder.com/250'; 
+  const [image, setImage] = useState('https://via.placeholder.com/250');
   const defaultText = 'N/A';
   const initialData = {
     description: listing.description || "",
@@ -28,6 +29,30 @@ const ListingCard = ({
     handleTrigger((user ? true : false), dispatch, setPopup({ title: 'Upload Listing Items', content: 'edit', data: initialData }));
 
   }
+
+
+  useEffect(async () => {
+    if(listing?.id){
+    try { 
+      const response= await getItemImage(listing.id, token);
+        setImage(response);
+        debugger;
+      console.log('==>image', image);
+    } catch (error) {
+        console.error('Failed to delete item:', error);
+      }
+    }
+  }, [listing]);
+
+  const handleDelete = async () => {
+    debugger;
+    try {
+      await deleteItem(listing.id, userId,token);
+    } catch (error) {
+      console.error('Failed to delete item:', error);
+    }
+  };
+  
 
   if (isLoading) {
     return (
@@ -51,19 +76,15 @@ const ListingCard = ({
         <a href={listing.listingLink} className="block">
           <div className="relative">
             <img 
-              src={listing.photoUrl || dummyImage} 
+              src={image} 
               alt={listing.name || defaultText} 
               className="w-full h-64 object-cover"
-              onError={(e) => {
-                e.target.onerror = null; // Prevents infinite loop if default image is also not found
-                e.target.src = dummyImage;
-              }}
             />
             <div className="absolute top-2 right-2 flex space-x-2">
               <button className="p-1 text-ccBlack" title="Edit" onClick={handleEdit}>
                 <i className="fas fa-ellipsis-h text-lg"></i>
               </button>
-              <button className="p-1 text-ccBlack" title="Delete" onClick={onDelete}>
+              <button className="p-1 text-ccBlack" title="Delete" onClick={() =>handleDelete(initialData?.id)}>
                 <i className="fas fa-trash text-lg"></i>
               </button>
             </div>

@@ -19,12 +19,14 @@ const searchReducer = (state = initialState, action) => {
         case SEARCH_USER_ITEM_REQUEST:
         return {
             ...state,
+            payload: action.payload,
             loading: true,
             error: null
         };
         case SEARCH_ALL_CLOTHING_ITEMS_REQUEST:
             return {
                 ...state,
+                payload: action.payload,
                 loading: true,
                 error: null
             };

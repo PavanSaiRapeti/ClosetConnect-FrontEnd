@@ -13,17 +13,15 @@ import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
 import Skeleton from '@/components/common/Skeleton'
 import { getClothingItemRequest, getUserClothingItemsRequest } from 'store/actions/ItemAction'
-import { setUserId } from 'store/actions/userAction'
+import { setToken, setUserId } from 'store/actions/userAction'
 
 
 const Profile = ({ user }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const userId = useSelector(state => state.auth.id);
-  const items = useSelector(state => state.item.items);
+
   const [page, setPage] = useState(0);
-  console.log('==>userId', userId,items);
 
 
   useEffect(() => {
@@ -39,9 +37,7 @@ const Profile = ({ user }) => {
     }
   }, [dispatch, user, router])
 
-  useEffect(() => {
-    dispatch(getUserClothingItemsRequest(userId, 5,page));
-  }, [page, dispatch, userId]);
+
 
   return (
     <Layout user={user}>
@@ -81,6 +77,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   console.log('==>123', cookies, isRedirect, user);
   if (isRedirect) return redirectToLogin;
   store.dispatch(setUserId(userId));
+  store.dispatch(setToken(token));
   return {
     props: {
       user: user,

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { searchUserItemRequest } from 'store/actions/searchAction';
+import { searchAllClothingItemsRequest, searchUserItemRequest } from 'store/actions/searchAction';
 
 const SearchBar = ({ pathValue }) => {
   const [itemName, setItemName] = useState('');
@@ -12,7 +12,7 @@ const SearchBar = ({ pathValue }) => {
     if (pathValue === 'profile') {
       dispatch(searchUserItemRequest({ itemName, page: 0, user: true, size: '' }));
     } else {
-      dispatch(searchUserItemRequest({ itemName, page: 0, size: '', user: false }));
+      dispatch(searchAllClothingItemsRequest({ itemName, page: 0, size: '', user: false }));
     }
   };
 

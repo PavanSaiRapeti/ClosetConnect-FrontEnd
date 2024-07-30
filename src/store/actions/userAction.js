@@ -8,6 +8,10 @@ export const updateUserRequest = (user) => ({
     type: SET_USER_ID,
     payload: userId
   });
+  export const setToken = (token) => ({
+    type: 'SET_TOKEN',
+    payload: token
+  });
   
   export const updateUserSuccess = (response) => ({
     type: UPDATE_USER_SUCCESS,

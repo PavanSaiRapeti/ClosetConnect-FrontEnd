@@ -20,26 +20,15 @@ const makeStore = (context) => {
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-    const { persistStore } = require("redux-persist");
-
-    //NOTE: We create store without initialState as we shall implement initial states in our individual reducers.
-    const store = createStore(
-      persistedReducer,
-      composeEnhancers(applyMiddleware(sagaMiddleware))
-    );
+  const store = createStore(
+    persistedReducer,
+    composeEnhancers(applyMiddleware(sagaMiddleware))
+  );
 
   store.sagaTask = sagaMiddleware.run(rootSaga);
 
   if (!isServer) {
-    store.__PERSISTOR = persistStore(store, null, () => {
-      // Ensure the HYDRATE action is dispatched with a valid payload
-      if (context) {
-        store.dispatch({
-          type: '__NEXT_REDUX_WRAPPER_HYDRATE__',
-          payload: context,
-        });
-      }
-    });
+    store.__PERSISTOR = persistStore(store);
   }
 
   return store;

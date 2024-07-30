@@ -96,9 +96,12 @@ export const getAllItems = async (size, page) => {
   return response.json();
 };
 
-export const deleteItem = async (itemId, userId) => {
+export const deleteItem = async (itemId, userId, token) => {
   const response = await fetch(deleteItemEndpoint(itemId, userId), {
     method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
   });
   return response.json();
 };
@@ -108,9 +111,12 @@ export const getItem = async (itemId) => {
   return response.json();
 };
 
-export const uploadItemImage = async (itemId, formData) => {
+export const uploadItemImage = async (itemId, formData, token) => {
   const response = await fetch(uploadItemImageEndpoint(itemId), {
     method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
     body: formData,
   });
   return response.json();
@@ -132,7 +138,14 @@ export const updateItem = async (itemId, userId, data) => {
   return response.json();
 };
 
-export const getItemImage = async (itemId) => {
-  const response = await fetch(getItemImageEndpoint(itemId));
-  return response.json();
+export const getItemImage = async (itemId, token) => {
+  const response = await fetch(getItemImageEndpoint(itemId), {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  const arrayBuffer = await response.arrayBuffer();
+  const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
+  const imageUrl = URL.createObjectURL(blob);
+  return imageUrl;
 };

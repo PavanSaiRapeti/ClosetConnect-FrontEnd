@@ -9,8 +9,10 @@ import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 const ListingGrid = ({page, setPage}) => {
   const dispatch = useDispatch();
   const { loading, items, error } = useSelector(state => state.item);
+  const userId = useSelector(state => state.user.userId);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
+ console.log('lisitng', items);
   useEffect(() => {
     if (error) {
       dispatch(setPopup({
@@ -24,14 +26,18 @@ const ListingGrid = ({page, setPage}) => {
     setPage(selected);
   };
 
+  useEffect(() => {
+    dispatch(getUserClothingItemsRequest(userId, 5,page));
+  }, [page, dispatch, userId]);
+
   return (
     <div className="p-6 bg-ccWhite rounded-lg shadow-lg">
         <div>
           <div className="listing-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {items?.content.map((listing, index) => (
-              <ListingCard key={index} listing={listing} isLoading={false} />
+            {items?.content?.map((listing, index) => (
+              <ListingCard key={listing.id} listing={listing} isLoading={false} />
             ))}
-            {(items?.content.length === 0 && !loading) && (
+            {(items?.content?.length === 0 && !loading) && (
               <div className="dummy-value text-center text-ccGray-500">
                 No items found. Please try a different search.
               </div>

@@ -69,6 +69,8 @@ export function* validateTokenAndGetUserSaga(action) {
   
 export function* registerSaga(action) {
     try {
+      destroyCookie(null, 'token', { path: '/' });
+      destroyCookie(null, 'userId', { path: '/' });
         const requestData = { url: registerUserEndpoint, payload: {  ...action.payload} ,isMethod: 'POST'}; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
         const {token , id}=response.data
