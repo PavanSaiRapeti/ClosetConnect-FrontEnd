@@ -13,7 +13,6 @@ import { handlerEndpoint, searchAllClothingItemsEndpoint, searchUserClothesEndpo
 
 function* searchUserItemSaga(action) {
     try {
-        debugger;
         yield put({ type: SET_LOADING, isLoading: true });
         const { userId, itemName, size, page } = action.payload;
         const searchParams = {

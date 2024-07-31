@@ -36,7 +36,6 @@ const ListingCard = ({
     try { 
       const response= await getItemImage(listing.id, token);
         setImage(response);
-        debugger;
       console.log('==>image', image);
     } catch (error) {
         console.error('Failed to delete item:', error);
@@ -45,7 +44,6 @@ const ListingCard = ({
   }, [listing]);
 
   const handleDelete = async () => {
-    debugger;
     try {
       await deleteItem(listing.id, userId,token);
     } catch (error) {
