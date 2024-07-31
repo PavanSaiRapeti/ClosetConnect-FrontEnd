@@ -43,7 +43,7 @@ const Layout = (props) => {
         setSelectedOption(info);
         break;
       default:
-        setSelectedOption(null);
+        setSelectedOption(content);
     }
   }, [content]);
 

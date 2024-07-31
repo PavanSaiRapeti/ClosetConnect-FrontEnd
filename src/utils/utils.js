@@ -128,14 +128,19 @@ export const getUserClothes = async (userId, itemName, size, page) => {
 };
 
 export const updateItem = async (itemId, userId, data) => {
-  const response = await fetch(updateItemEndpoint(itemId, userId), {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  return response.json();
+  try {
+    const response = await fetch(updateItemEndpoint(itemId, userId), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    return response.json();
+  } catch (error) {
+    console.error('Failed to update item:', error);
+    throw error;
+  }
 };
 
 export const getItemImage = async (itemId, token) => {

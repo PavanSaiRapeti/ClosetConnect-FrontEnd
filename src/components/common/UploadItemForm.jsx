@@ -12,6 +12,7 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
   const userId = useSelector(state => state.user.userId);
   const token = useSelector(state => state.user.token);
   const item = useSelector(state => state.item.item);
+  const [error, setError] = useState(false);
   const dispatch = useDispatch();
   const initialValues = {
     description: initialData?.description || '',
@@ -35,19 +36,23 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
     const { image, id, ...formData } = values;
     let response;
     if (initialData) {
-      // Edit mode
      dispatch(updateClothingItemRequest(id, formData));
     } else {
       // Create mode
-      response = await fetch(createUserItemEndpoint(userId), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      }).then(res => res.json());
+      try {
+        const res = await fetch(createUserItemEndpoint(userId), {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        });
+        response = await res.json();
+      } catch (error) {
+        setError(true);
+      }
     }
     const formDataImage = new FormData();
     formDataImage.append('file', image);
@@ -55,6 +60,10 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
     if(responseImage){
     setSubmitting(false);
     dispatch(setPopup({title: 'success', content: 'Item uploaded successfully'}));
+    }
+    if(error){
+      setSubmitting(false);
+      dispatch(setPopup({title: 'failed', content: 'Item failed to upload'}));
     }
   };
 
