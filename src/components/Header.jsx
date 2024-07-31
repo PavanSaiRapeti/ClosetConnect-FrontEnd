@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Logo from 'websiteInfo/Logo'
 import { useDispatch, useSelector } from 'react-redux'
-import { openLoginPopup, openPopup, setPopup } from 'store/actions/commonAction'
+import { openLoginPopup, openPopup, setPageLoading, setPopup } from 'store/actions/commonAction'
 import { useRouter } from 'next/router'
 import { handleTrigger } from 'utils/utils'
 import Link from 'next/link';
@@ -10,9 +10,11 @@ import { logout } from 'store/actions/authAction'
 import IconView from './IconView'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
+import Skeleton from './common/Skeleton'
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const pageLoading = useSelector((state) => state.common.pageLoading);
   const dispatch = useDispatch();
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -31,6 +33,38 @@ const Header = ({ user }) => {
     router.push('/home');
     setIsSignedInMenuOpen(false);
   };
+
+
+
+  if (pageLoading) {
+    return (
+      <header>
+        <div className='w-full pl-2 pr-2 mt-2 shadow-lg'>
+          <div className='w-full flex flex-col md:flex-row items-center justify-between'>
+                       <div className='w-full md:w-full'>
+              <div className='mt-4 bg-gray-100 rounded-lg' style={{ backgroundColor: '#D2EB63' }}>
+                <div className='flex flex-row px-7 p-auto items-center gap-4 md:items-center justify-between'>
+                  <Skeleton width={100} height={40} />
+                  <div className='md:hidden'>
+                    <Skeleton width={24} height={24} />
+                  </div>
+                  <div className={`w-full flex flex-row max-md:hidden`}>
+                    <Skeleton width={200} height={40} />
+                    <div className="flex items-center">
+                      <Skeleton width={40} height={40} />
+                    </div>
+                  </div>
+                  <div className={`relative w-auto flex items-center align-baseline justify-center gap-8 max-md:hidden`}>
+                    <Skeleton width={100} height={40} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header >

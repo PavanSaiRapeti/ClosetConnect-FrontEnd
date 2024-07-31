@@ -7,17 +7,14 @@ const initialState = {
         data:null
     },
     error:null,
-    info:null
+    info:null,
+    pageLoading:false,
 };
 
 const commonReducer = (state = initialState, action) => {
     switch (action.type) {
-        case 'persist/REHYDRATE':
-            console.log('Rehydrated state:', action.payload);
-            return {
-              ...state,
-              ...action.payload?.common,
-            };
+        case 'SET_PAGE_LOADING':
+            return { ...state, pageLoading: action.payload };
         case 'SET_INFO':
             return { ...state, info: action.payload };
         case 'SET_ERROR':

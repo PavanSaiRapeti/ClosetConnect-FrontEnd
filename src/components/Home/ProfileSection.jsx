@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FilterComponent from './components/FilterComponent';
 import Avatar from '../Avatar';
 import { useSelector } from 'react-redux';
-
+import Skeleton from '../common/Skeleton';
+import { setPageLoading } from 'store/actions/commonAction';
 
 const ProfileSection = ({ 
   email, 
@@ -21,6 +22,8 @@ const ProfileSection = ({
     availability: 'All Items'
   });
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const pageLoading = useSelector((state) => state.common.pageLoading);
+
   const handleFilterChange = (filterName, value) => {
     setFilters({
       ...filters,
@@ -30,8 +33,21 @@ const ProfileSection = ({
     // Example: sendRequest(filters);
   };
 
-  const handleUploadClothes = () => {
-    isLoggedIn ? alert('upload') : alert('login')
+  if (pageLoading) {
+    return (
+      <div className="profile-section w-full max-w-xs mx-auto p-6 bg-ccWhite shadow-lg rounded-lg">
+        <div className="flex items-center mb-6">
+          <Skeleton circle={true} height={64} width={64} />
+          <div className="ml-4">
+            <Skeleton width={128} height={24} />
+            <Skeleton width={192} height={16} />
+            <Skeleton width={96} height={16} />
+            <Skeleton width={96} height={16} />
+            <Skeleton width={96} height={16} />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

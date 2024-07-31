@@ -151,8 +151,8 @@ export function* getUserSaga(action) {
 }
 
 export default function* watchAuthSagas() {
-  yield takeEvery(LOGIN_REQUEST, loginSaga);
-  yield takeEvery(REGISTER_REQUEST, registerSaga);
+  yield takeLatest(LOGIN_REQUEST, loginSaga);
+  yield takeLatest(REGISTER_REQUEST, registerSaga);
   yield takeEvery(LOGOUT_REQUEST, logoutSaga);
   yield takeEvery(VALIDATE_TOKEN_REQUEST, validateTokenAndGetUserSaga);
   yield takeEvery(UPDATE_USER_REQUEST, updateUserSaga);

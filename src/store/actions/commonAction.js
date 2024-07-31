@@ -20,3 +20,7 @@ export const closePopup = () => ({
         error:null
     }
 });
+export const setPageLoading = (isLoading) => ({
+    type: 'SET_PAGE_LOADING',
+    payload: isLoading,
+});

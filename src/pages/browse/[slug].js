@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from 'pages/Layout';
 import { wrapper } from 'store';
 import Link from 'next/link';
 import { parseCookies } from 'nookies';
 import { checkAuth } from 'utils/authHelpers';
 import { VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
-
+import ListingGrid from '@/components/Home/LisitingGrid';
 
 const CategoryPage = ({title, user}) => {
-  const category = false
-
+  const category = false;
+  const [page, setPage] = useState(0);
 
   return (
   <Layout user={user}>
@@ -29,27 +29,30 @@ const CategoryPage = ({title, user}) => {
       </ol>
     </nav>
     <section className="p-10" style={{ fontFamily: 'Ubuntu' }}>
-        <div className="max-w-4xl mx-auto bg-ccWhite p-6 rounded-lg shadow-lg">
+      <div className="w-full bg-ccWhite p-6 rounded-lg shadow-lg flex">
+        <aside className="w-1/4 pr-6">
+          <h2 className="text-2xl font-bold mb-4">Filters</h2>
+          {/* Add your filter components here */}
+          <div className="mb-4">
+            <label className="block text-gray-700">Category</label>
+            <select className="w-full mt-1 p-2 border rounded">
+              <option>All Categories</option>
+              {/* Add more options here */}
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Price Range</label>
+            <input type="range" className="w-full mt-1" />
+          </div>
+          {/* Add more filters as needed */}
+        </aside>
+        <div className="w-3/4">
           <h1 className="text-3xl font-bold mb-2">{category.name}</h1>
           <p className="text-gray-600 mb-4">{category.description}</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {!category? <div>Loading...</div>:
-            category.products.map((product) => (
-              <div key={product.id} className="bg-ccWhite rounded-lg shadow-md p-4">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded-t-lg"
-                />
-                <div className="mt-4">
-                  <h2 className="text-xl font-bold">{product.name}</h2>
-                  <p className="text-gray-600">${product.price}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+          <ListingGrid page={page} setPage={setPage} />
         </div>
-      </section>
+      </div>
+    </section>
   </Layout>
     
   );

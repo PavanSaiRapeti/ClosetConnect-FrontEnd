@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import ProfileSection from '@/components/Home/ProfileSection'
-import ReviewSection from '@/components/Home/ReviewSection'
 import ListingGrid from '@/components/Home/LisitingGrid'
 import Layout from 'pages/Layout'
-import { closeLoginPopup } from 'store/actions/commonAction'
+import { closeLoginPopup, setPageLoading } from 'store/actions/commonAction'
 import { wrapper } from 'store'
 import { parseCookies } from 'nookies'
 import { validateTokenSuccess } from 'store/actions/authAction'
@@ -11,24 +10,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/router'
 import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
-import Skeleton from '@/components/common/Skeleton'
-import { getClothingItemRequest, getUserClothingItemsRequest } from 'store/actions/ItemAction'
+import { getUserClothingItemsRequest } from 'store/actions/ItemAction'
 import { setToken, setUserId } from 'store/actions/userAction'
 
 
 const Profile = ({ user }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
-
+  const items = useSelector(state => state.item.items);
+  const itemsLength = items?.content?.length;
+  const userId = useSelector(state => state.user.userId);
   const [page, setPage] = useState(0);
 
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
 
+  useEffect(() => {
     if (user) {
       dispatch(validateTokenSuccess(user));
     } else {
@@ -37,7 +33,9 @@ const Profile = ({ user }) => {
     }
   }, [dispatch, user, router])
 
-
+  useEffect(() => {
+    dispatch(getUserClothingItemsRequest(userId, 5,page));
+  }, [page, dispatch, userId,itemsLength]);
 
   return (
     <Layout user={user}>
@@ -78,6 +76,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   if (isRedirect) return redirectToLogin;
   store.dispatch(setUserId(userId));
   store.dispatch(setToken(token));
+  store.dispatch(setPageLoading(true));
+  
   return {
     props: {
       user: user,

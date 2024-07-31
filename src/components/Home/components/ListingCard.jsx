@@ -4,7 +4,7 @@ import Skeleton from '@/components/common/Skeleton';// Import the dummy image
 import { data } from 'autoprefixer';
 import { deleteItem, getItemImage, handleTrigger } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPopup } from 'store/actions/commonAction';
+import { setPageLoading, setPopup } from 'store/actions/commonAction';
 
 const ListingCard = ({ 
   listing,
@@ -30,7 +30,6 @@ const ListingCard = ({
 
   }
 
-
   useEffect(async () => {
     if(listing?.id){
     try { 
@@ -41,6 +40,7 @@ const ListingCard = ({
         console.error('Failed to delete item:', error);
       }
     }
+    // dispatch(setPageLoading(false));
   }, [listing]);
 
   const handleDelete = async () => {
@@ -50,28 +50,10 @@ const ListingCard = ({
       console.error('Failed to delete item:', error);
     }
   };
-  
-
-  if (isLoading) {
-    return (
-      <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"250px"}}>
-        <Skeleton height="256px" />
-        <div className="p-4">
-          <Skeleton width="80%" height="24px" />
-          <Skeleton width="60%" height="24px" />
-          <Skeleton width="40%" height="24px" />
-        </div>
-        <div className="flex items-center justify-between p-4 border-t">
-          <Skeleton circle width="40px" height="40px" />
-          <Skeleton width="60px" height="24px" />
-        </div>
-      </div>
-    );
-  }
 
   return (
       <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"250px"}}>
-        <a href={listing.listingLink} className="block">
+        <a href={`/itemDetails/${listing.name}?id=${listing?.id}`} className="block">
           <div className="relative">
             <img 
               src={image} 

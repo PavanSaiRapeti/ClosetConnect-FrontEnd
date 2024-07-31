@@ -10,6 +10,11 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'persist/REHYDRATE':
+      return {
+        ...state,
+        ...action.payload.user,
+      };
     case SET_USER_ID:
       return {
         ...state,

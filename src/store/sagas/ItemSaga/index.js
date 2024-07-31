@@ -90,9 +90,7 @@ function* getClothingItemSaga(action) {
         console.error('Get clothing item error:', error.response);
         yield put({ type: GET_CLOTHING_ITEM_FAILURE, error: error.response.data });
         yield put({ type: "SET_ERROR", payload: error.response.data.message || "Unknown error" });
-    } finally {
-        yield put({ type: SET_LOADING, isLoading: false });
-    }
+    } 
 }
 
 function* getUserClothingItemsSaga(action) {
@@ -106,6 +104,7 @@ function* getUserClothingItemsSaga(action) {
             }, isMethod: 'GET' };
         const response = yield call(axios.post, handlerEndpoint, requestData);
         yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
+        yield put({ type: 'SET_PAGE_LOADING', pageLoading: false });
     } catch (error) {
         console.error('Get user clothing items error:', error.response);
         yield put({ type: GET_USER_CLOTHING_ITEMS_FAILURE, error: error.response.data });
@@ -128,9 +127,7 @@ function* getAllClothingItemsSaga(action) {
         console.error('Get all clothing items error:', error.response);
         yield put({ type: GET_ALL_CLOTHING_ITEMS_FAILURE, error: error.response.data });
         yield put({ type: SET_ERROR, payload: error.response.data.message || "Unknown error" });
-    } finally {
-        yield put({ type: SET_LOADING, isLoading: false });
-    }
+    } 
 }
 
 export default function* watchItemSagas() {

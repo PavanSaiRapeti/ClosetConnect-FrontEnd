@@ -3,8 +3,13 @@ import Glider from 'glider-js'
 import 'glider-js/glider.min.css'
 import ListingCard from './Home/components/ListingCard'
 import { ReviewCard } from './Home/ReviewSection'
+import { useDispatch, useSelector } from 'react-redux'
+import { setPageLoading } from 'store/actions/commonAction'
+import Skeleton from './common/Skeleton'
 
 const FeaturedProducts = ({ products, type, title }) => {
+  const pageLoading = useSelector(state => state.common.pageLoading)
+  const dispatch = useDispatch();
   const gliderTrackRef = useRef(null)
 
   useEffect(() => {
@@ -21,6 +26,15 @@ const FeaturedProducts = ({ products, type, title }) => {
       })
     }
   }, [title])
+
+
+  useEffect(() => {
+    if (pageLoading) {
+      setTimeout(() => {
+        dispatch(setPageLoading(false));
+      }, 3000);
+    }
+  }, [pageLoading,dispatch]);
 
   const renderProductCard = (product) => {
     switch (type) {
@@ -40,32 +54,44 @@ const FeaturedProducts = ({ products, type, title }) => {
           {title}
         </span>
       </div>
-      {products && products.length > 0 ? (
-        <>
-        <div id={`glider-track-container-${title.replace(/\s+/g, '-')}`} className='glider-container'>
-          <div ref={gliderTrackRef} className='glider flex flex-row' style={{ width: '100%', padding: '3rem', gap: '10rem' }}>
-            {products.map(renderProductCard)}
+      {pageLoading ? (
+        <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "250px" }}>
+          <Skeleton height="256px" />
+          <div className="p-4">
+            <Skeleton width="80%" height="24px" />
+            <Skeleton width="60%" height="24px" />
+            <Skeleton width="40%" height="24px" />
+          </div>
+          <div className="flex items-center justify-between p-4 border-t">
+            <Skeleton circle width="40px" height="40px" />
+            <Skeleton width="60px" height="24px" />
           </div>
         </div>
-        <div className='flex justify-center items-center' style={{ position: 'absolute', top: '13%', height: '81%', width: '80px', left: 0 }}>
-        <button className={`glider-prev glider-prev-${title.replace(/\s+/g, '-')} focus:outline-none hidden-mobile`} type='button'>
-          <img src='https://www.svgrepo.com/show/87499/left-arrow.svg' alt='scroll products left' />
-        </button>
-      </div>
-      <div className='flex justify-center items-center' style={{ position: 'absolute', height: '82%', right: '20px', bottom: '5.9%', width: '80px' }}>
-        <button className={`glider-next glider-next-${title.replace(/\s+/g, '-')} hidden-mobile focus:outline-none`} type='button'>
-          <img src='https://www.svgrepo.com/show/55208/right-arrow.svg' alt='scroll products right' />
-        </button>
-      </div>
-      <div id={`dots-${title.replace(/\s+/g, '-')}`} className='glider-dots'></div>
-      </>
+      ) : products && products.length > 0 ? (
+        <>
+          <div id={`glider-track-container-${title.replace(/\s+/g, '-')}`} className='glider-container'>
+            <div ref={gliderTrackRef} className='glider flex flex-row' style={{ width: '100%', padding: '3rem', gap: '10rem' }}>
+              {products.map(renderProductCard)}
+            </div>
+          </div>
+          <div className='flex justify-center items-center' style={{ position: 'absolute', top: '13%', height: '81%', width: '80px', left: 0 }}>
+            <button className={`glider-prev glider-prev-${title.replace(/\s+/g, '-')} focus:outline-none hidden-mobile`} type='button'>
+              <img src='https://www.svgrepo.com/show/87499/left-arrow.svg' alt='scroll products left' />
+            </button>
+          </div>
+          <div className='flex justify-center items-center' style={{ position: 'absolute', height: '82%', right: '20px', bottom: '5.9%', width: '80px' }}>
+            <button className={`glider-next glider-next-${title.replace(/\s+/g, '-')} hidden-mobile focus:outline-none`} type='button'>
+              <img src='https://www.svgrepo.com/show/55208/right-arrow.svg' alt='scroll products right' />
+            </button>
+          </div>
+          <div id={`dots-${title.replace(/\s+/g, '-')}`} className='glider-dots'></div>
+        </>
       ) : (
         <div className='flex flex-col items-center justify-center h-full pt-28 pb-28'>
           <p className='text-lg text-gray-500'>No products available at the moment.</p>
           <p className='text-sm text-gray-400'>Please check back later.</p>
         </div>
       )}
-      
     </div>
   )
 }

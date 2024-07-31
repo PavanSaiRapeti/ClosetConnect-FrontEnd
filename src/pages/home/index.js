@@ -1,10 +1,13 @@
 import Categories from "@/components/Categories";
+import Skeleton from "@/components/common/Skeleton";
 import FeaturedProducts from "@/components/FeaturedProducts";
 import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
-import React, {  useState } from "react";
+import React, {  useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "store";
-import { LOGIN_SUCCESS, SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
+import { setPageLoading } from "store/actions/commonAction";
+import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
 import { checkAuth } from "utils/authHelpers";
 
 // Hero Section Component with Carousel
@@ -28,7 +31,7 @@ const HeroSection = () => {
     }
   ];
   
-
+const pageLoading =useSelector(state=>state.common.pageLoading)
   
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -41,21 +44,36 @@ const HeroSection = () => {
   };
 
   return (
+
     <section className="relative text-center p-10" style={{ fontFamily: "Ubuntu" }}>
-      <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
+      {slides.length === 0 || pageLoading ? (
+        <Skeleton className="w-full h-96 rounded-lg" />
+      ) : (
+        <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
+      )}
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
-        <h2 className="text-4xl font-bold mb-4">{slides[currentSlide].title}</h2>
-        <p className="text-lg mb-4">{slides[currentSlide].description}</p>
-        <button
-          onClick={() => window.location.href = '/about'}
-          className="border border-white bg-ccWhite text-ccBlack  px-4 py-2 rounded-full font-semibold"
-        >
-          Learn More
-        </button>
-        <div className="mt-4">
-          <button onClick={prevSlide} className="mx-2 p-2 border border-ccWhite text-ccWhite rounded-full">&lt;</button>
-          <button onClick={nextSlide} className="mx-2 p-2 border border-ccWhite text-ccWhite rounded-full">&gt;</button>
-        </div>
+        {slides.length === 0 || pageLoading ? (
+          <>
+            <Skeleton className="h-10 w-3/4 mb-4 rounded" />
+            <Skeleton className="h-6 w-1/2 mb-4 rounded" />
+            <Skeleton className="h-10 w-1/4 rounded-full" />
+          </>
+        ) : (
+          <>
+            <h2 className="text-4xl font-bold mb-4">{slides[currentSlide].title}</h2>
+            <p className="text-lg mb-4">{slides[currentSlide].description}</p>
+            <button
+              onClick={() => window.location.href = '/about'}
+              className="border border-white bg-ccWhite text-ccBlack  px-4 py-2 rounded-full font-semibold"
+            >
+              Learn More
+            </button>
+            <div className="mt-4">
+              <button onClick={prevSlide} className="mx-2 p-2 border border-ccWhite text-ccWhite rounded-full">&lt;</button>
+              <button onClick={nextSlide} className="mx-2 p-2 border border-ccWhite text-ccWhite rounded-full">&gt;</button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
@@ -64,26 +82,51 @@ const HeroSection = () => {
 
 
 const Features = () => {
+  const pageLoading =useSelector (state=>state.common.pageLoading)
+
   return (
     <section className="bg-gray-100 p-10" >
       <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>Features</h2>
       <div className="flex flex-wrap justify-around">
-        <div className="w-1/4 p-4 text-center">
-          <h3 className="text-xl font-bold mb-2">Ratings & Reviews</h3>
-          <p>Get feedback on your items from other students.</p>
-        </div>
-        <div className="w-1/4 p-4 text-center">
-          <h3 className="text-xl font-bold mb-2">Secure Transactions</h3>
-          <p>All transactions are secured with your ONE CARD.</p>
-        </div>
-        <div className="w-1/4 p-4 text-center">
-          <h3 className="text-xl font-bold mb-2">Bids & Trades</h3>
-          <p>Place bids or trade offers on items you like.</p>
-        </div>
-        <div className="w-1/4 p-4 text-center">
-          <h3 className="text-xl font-bold mb-2">Messaging</h3>
-          <p>Communicate directly with sellers.</p>
-        </div>
+        {pageLoading ? (
+          <>
+            <div className="w-1/4 p-4 text-center">
+              <Skeleton className="h-6 w-full mb-2 rounded" />
+              <Skeleton className="h-4 w-3/4 rounded" />
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <Skeleton className="h-6 w-full mb-2 rounded" />
+              <Skeleton className="h-4 w-3/4 rounded" />
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <Skeleton className="h-6 w-full mb-2 rounded" />
+              <Skeleton className="h-4 w-3/4 rounded" />
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <Skeleton className="h-6 w-full mb-2 rounded" />
+              <Skeleton className="h-4 w-3/4 rounded" />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="w-1/4 p-4 text-center">
+              <h3 className="text-xl font-bold mb-2">Ratings & Reviews</h3>
+              <p>Get feedback on your items from other students.</p>
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <h3 className="text-xl font-bold mb-2">Secure Transactions</h3>
+              <p>All transactions are secured with your ONE CARD.</p>
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <h3 className="text-xl font-bold mb-2">Bids & Trades</h3>
+              <p>Place bids or trade offers on items you like.</p>
+            </div>
+            <div className="w-1/4 p-4 text-center">
+              <h3 className="text-xl font-bold mb-2">Messaging</h3>
+              <p>Communicate directly with sellers.</p>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );
@@ -100,7 +143,8 @@ const Footer = () => {
 
 
 const Home = ({listing,reviews,user}) => {
- console.log('===>user',user)
+
+
   return (
     <Layout user={user}>
         <div className="flex flex-col items-center justify-center ">
@@ -120,6 +164,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const cookies = parseCookies({ req, res });
   const { token, userId } = cookies;
   console.log('dog==>', token, userId, store);
+  store.dispatch(setPageLoading(true));
   let userData = null;
   if (token) {
     const { user } = await checkAuth(token, userId);
@@ -135,6 +180,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
       });
     }
   }
+ 
 
   return {
     props: {
