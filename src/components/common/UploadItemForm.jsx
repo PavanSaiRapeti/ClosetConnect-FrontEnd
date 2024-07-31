@@ -35,11 +35,11 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
   const handleSubmit = async (values, { setSubmitting }) => {
     const { image, id, ...formData } = values;
     let response;
-    if (initialData) {
-     dispatch(updateClothingItemRequest(id, formData));
-    } else {
-      // Create mode
-      try {
+    try {
+      if (initialData) {
+        dispatch(updateClothingItemRequest(id, formData));
+      } else {
+        // Create mode
         const res = await fetch(createUserItemEndpoint(userId), {
           method: 'POST',
           headers: {
@@ -50,20 +50,18 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
           body: JSON.stringify(formData),
         });
         response = await res.json();
-      } catch (error) {
-        setError(true);
       }
-    }
-    const formDataImage = new FormData();
-    formDataImage.append('file', image);
-    const responseImage = await uploadItemImage(id ? id: response?.id, formDataImage, token);
-    if(responseImage){
-    setSubmitting(false);
-    dispatch(setPopup({title: 'success', content: 'Item uploaded successfully'}));
-    }
-    if(error){
+      const formDataImage = new FormData();
+      formDataImage.append('file', image);
+      const responseImage = await uploadItemImage(id ? id : response?.id, formDataImage, token);
+      if (responseImage) {
+        setSubmitting(false);
+        dispatch(setPopup({ title: 'success', content: 'Item uploaded successfully' }));
+      }
+    } catch (error) {
+      setError(true);
       setSubmitting(false);
-      dispatch(setPopup({title: 'failed', content: 'Item failed to upload'}));
+      dispatch(setPopup({ title: 'failed', content: 'Item failed to upload' }));
     }
   };
 
