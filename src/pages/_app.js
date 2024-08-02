@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }) {
     <ReactReduxContext.Consumer>
       {({ store }) => (
         <PersistGate persistor={store.__PERSISTOR} loading={<Loading />}>
-          {isRouteChanging ? <Loading /> : <Component {...pageProps} />}
+          { <Component {...pageProps} />}
         </PersistGate>
       )}
     </ReactReduxContext.Consumer>
