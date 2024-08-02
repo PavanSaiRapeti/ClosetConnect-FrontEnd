@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ReactReduxContext.Consumer>
       {({ store }) => (
-        <PersistGate persistor={store.__PERSISTOR} loading={<Loading />}>
+        <PersistGate persistor={store.__PERSISTOR} loading={null}>
           { <Component {...pageProps} />}
         </PersistGate>
       )}
