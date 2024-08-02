@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ReactReduxContext, useDispatch } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
@@ -21,13 +21,11 @@ function MyApp({ Component, pageProps }) {
   }, [isRouteChanging, dispatch]);
 
   return (
-    <ReactReduxContext.Consumer>
-      {({ store }) => (
-        <PersistGate persistor={store.__PERSISTOR} loading={<div>error in gate</div>}>
-          { <Component {...pageProps} />}
-        </PersistGate>
-      )}
-    </ReactReduxContext.Consumer>
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={<Loading />}>
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
   );
 }
 
