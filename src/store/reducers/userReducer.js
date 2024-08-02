@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: null,
   token: null,
+  notification: [],
 };
 
 const userReducer = (state = initialState, action) => {
@@ -14,6 +15,11 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload.user,
+      };
+    case "SET_NOTIFICATION":
+      return {
+        ...state,
+        notification: action.payload,
       };
     case SET_USER_ID:
       return {

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { createClothingItemRequest, updateClothingItemRequest } from 'store/actions/ItemAction';
 import { setPopup } from 'store/actions/commonAction';
 
-const UploadItemForm = ({ onSubmit, initialData }) => {
+const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
   const userId = useSelector(state => state.user.userId);
   const token = useSelector(state => state.user.token);
   const item = useSelector(state => state.item.item);
@@ -30,6 +30,7 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
     clothingItemSize: Yup.string().required('Clothing item size is required'),
     name: Yup.string().required('Name is required'),
     gender: Yup.string().required('Gender is required'),
+    image: isUpdate? '' : Yup.mixed().required('Image is required'),
   });
 
   const handleSubmit = async (values, { setSubmitting }) => {
@@ -51,9 +52,11 @@ const UploadItemForm = ({ onSubmit, initialData }) => {
         });
         response = await res.json();
       }
+      if(image){
       const formDataImage = new FormData();
       formDataImage.append('file', image);
       const responseImage = await uploadItemImage(id ? id : response?.id, formDataImage, token);
+      }
       if (responseImage) {
         setSubmitting(false);
         dispatch(setPopup({ title: 'success', content: 'Item uploaded successfully' }));

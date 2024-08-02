@@ -11,7 +11,8 @@ import { useRouter } from 'next/router'
 import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction'
-import { setToken, setUserId } from 'store/actions/userAction'
+import { setNotification, setToken, setUserId } from 'store/actions/userAction'
+import { getUserNotifications } from 'utils/utils'
 
 
 const Profile = ({ user }) => {
@@ -74,6 +75,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { isRedirect, user } = await checkAuth(token, userId);
   console.log('==>123', cookies, isRedirect, user);
   if (isRedirect) return redirectToLogin;
+
   store.dispatch(setUserId(userId));
   store.dispatch(setToken(token));
   store.dispatch(setPageLoading(true));

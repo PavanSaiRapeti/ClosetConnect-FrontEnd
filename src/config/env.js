@@ -19,11 +19,15 @@ export const endpoints = {
   updateItem: (itemId, userId) => `${BASE_URL}/clothingItems/update/${itemId}/${userId}`,
   getItemImage: (itemId) => `${BASE_URL}/clothingItems/${itemId}/cloth-image`,
   searchAllClothingItems: (itemName, size, page) => `${BASE_URL}/clothingItems/search/all?itemName=${itemName}&size=${size}&page=${page}`,
+  searchAllClothingItemsByType: (itemName, size, page) => `${BASE_URL}/clothingItems/search/all?itemType=${itemName}&size=${size}&page=${page}`,
+  searchAllClothingItemsByGender: (itemName, size, page) => `${BASE_URL}/clothingItems/search/all?gender=${itemName}&size=${size}&page=${page}`,
   requestTrade: `${BASE_URL}/trades/requestTrade`,
   getUserSentTrades: (userId, page) => `${BASE_URL}/trades/user/${userId}/sentTrades?page=${page}`,
   getUserReceivedTrades: (userId, page) => `${BASE_URL}/trades/user/${userId}/receivedTrades?page=${page}`,
   getTrade: (tradeId) => `${BASE_URL}/trades/getTrade/${tradeId}`,
   acceptOrDeclineTrade: (tradeId, userId) => `${BASE_URL}/trades/changeTradeStatus/trade/${tradeId}/user/${userId}`,
+  getUserNotifications: (userId) => `${BASE_URL}/notifications/user/${userId}`,
+  markNotificationAsRead: (notificationId) => `${BASE_URL}/notifications/markAsRead/${notificationId}`,
 };
 
 export const enums = {
@@ -56,3 +60,7 @@ export const getUserSentTradesEndpoint = endpoints.getUserSentTrades;
 export const getUserReceivedTradesEndpoint = endpoints.getUserReceivedTrades;
 export const getTradeEndpoint = endpoints.getTrade;
 export const acceptOrDeclineTradeEndpoint = endpoints.acceptOrDeclineTrade;
+export const searchAllClothingItemsByTypeEndpoint = endpoints.searchAllClothingItemsByType;
+export const searchAllClothingItemsByGenderEndpoint = endpoints.searchAllClothingItemsByGender;
+export const getUserNotificationsEndpoint = endpoints.getUserNotifications;
+export const markNotificationAsReadEndpoint = endpoints.markNotificationAsRead;

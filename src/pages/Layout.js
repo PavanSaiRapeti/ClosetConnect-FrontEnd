@@ -31,7 +31,7 @@ const Layout = (props) => {
         setSelectedOption(<UploadItemForm />);
         break;
       case 'edit':
-        setSelectedOption(<UploadItemForm initialData={data} />);
+        setSelectedOption(<UploadItemForm initialData={data} isUpdate={true} />);
         break;
       case 'error':
         setSelectedOption(error);
@@ -86,5 +86,10 @@ const Layout = (props) => {
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  
+}
+
 
 export default Layout;

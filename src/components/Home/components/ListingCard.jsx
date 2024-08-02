@@ -2,17 +2,26 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Skeleton from '@/components/common/Skeleton';// Import the dummy image
 import { data } from 'autoprefixer';
-import { deleteItem, getItemImage, handleTrigger } from 'utils/utils';
+import { deleteItem, getItemImage, getUser, handleTrigger } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPageLoading, setPopup } from 'store/actions/commonAction';
+import Avatar from '@/components/Avatar';
+import TradeModal from '@/components/TradeModal';
 
 const ListingCard = ({ 
   listing,
-  isLoading
+  isLoading,
+  guestId=null,
+  isSmall=false,
+  selectedItem={},
+  setSelectedItem={}
 }) => {
   const user = useSelector(state => state.auth.user);
   const userId = useSelector(state => state.user.userId);
   const token = useSelector(state => state.user.token);
+  const isOtherUser = parseInt(guestId) !== parseInt(userId);
+  const [guestData, setGuestData] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [image, setImage] = useState('https://via.placeholder.com/250');
   const defaultText = 'N/A';
@@ -34,7 +43,7 @@ const ListingCard = ({
     if(listing?.id){
     try { 
       const response= await getItemImage(listing.id, token);
-        setImage(response);
+      setImage(response);
       console.log('==>image', image);
     } catch (error) {
         console.error('Failed to delete item:', error);
@@ -42,6 +51,18 @@ const ListingCard = ({
     }
     // dispatch(setPageLoading(false));
   }, [listing]);
+  
+
+  useEffect(async () => {
+    if (guestId) {
+      try {
+        const userData = await getUser(guestId);
+        setGuestData(userData);
+      } catch (error) {
+        dispatch(setPopup({ title: 'Error', content: 'Error fetching user data' }));
+      }
+    }
+  }, [listing?.userId]);
 
   const handleDelete = async () => {
     try {
@@ -50,24 +71,47 @@ const ListingCard = ({
       console.error('Failed to delete item:', error);
     }
   };
+  useEffect(() => {
+    console.log('==>guestData', guestData,userId,guestId);
+  }, [guestData,userId,guestId]);
 
-  return (
-      <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"250px"}}>
-        <a href={`/itemDetails/${listing.name}?id=${listing?.id}`} className="block">
+
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
+
+
+  if(isSmall){
+    return (
+      <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
+        <img src={image} alt={listing.name || defaultText} className="w-48 h-48 object-cover " />
+        <span className="mt-2 text-center text-sm font-semibold text-gray-700">{listing.name || defaultText}</span>
+      </div>
+    )
+  }
+    return (
+      <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"350px"}}>
+        <a href={isOtherUser &&  `/All/${listing.name}?id=${listing?.id}`} className="block">
           <div className="relative">
             <img 
               src={image} 
               alt={listing.name || defaultText} 
               className="w-full h-64 object-cover"
             />
-            <div className="absolute top-2 right-2 flex space-x-2">
-              <button className="p-1 text-ccBlack" title="Edit" onClick={handleEdit}>
-                <i className="fas fa-ellipsis-h text-lg"></i>
-              </button>
-              <button className="p-1 text-ccBlack" title="Delete" onClick={() =>handleDelete(initialData?.id)}>
-                <i className="fas fa-trash text-lg"></i>
-              </button>
-            </div>
+            {!isOtherUser && (
+              <div className="absolute top-2 right-2 flex space-x-2">
+                <button className="p-1 text-ccBlack" title="Edit" onClick={handleEdit}>
+                  <i className="fas fa-ellipsis-h text-lg"></i>
+                </button>
+                <button className="p-1 text-ccBlack" title="Delete" onClick={() =>handleDelete(initialData?.id)}>
+                  <i className="fas fa-trash text-lg"></i>
+                </button>
+              </div>
+            )}
           </div>
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-2 truncate text-gray-800">{listing.name || defaultText}</h3>
@@ -94,25 +138,15 @@ const ListingCard = ({
           </div>
         </a>
         <div className="flex items-center justify-between p-4 border-t">
-          {/* <a href={`/profile/${listing.sellerName}`} className="flex items-center">
-            <Avatar username={listing.userName} profilePicture={listing.sellerImage} />
-            <span className="ml-2 text-sm text-gray-700">{listing.userName}</span>
-          </a> */}
-          <div className="flex space-x-2">
-            <button className="relative p-2 text-ccGreen hover:text-blue-600" title="Bids">
-              <i className="fas fa-gavel text-lg"></i>
-              <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-ccWhite bg-red-600 rounded-full">0</span>
-            </button>
-            <button className="relative p-2 text-ccGreen hover:text-blue-600" title="Trades">
-              <i className="fas fa-exchange-alt text-lg"></i>
-              <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-ccWhite bg-red-600 rounded-full">0</span>
-            </button>
-            <button className="relative p-2 text-ccGreen hover:text-blue-600" title="Messages">
-              <i className="fas fa-envelope text-lg"></i>
-              <span className="absolute top-0 right-0 inline-block w-4 h-4 text-xs font-bold text-ccWhite bg-red-600 rounded-full">0</span>
-            </button>
-          </div>
+        {isOtherUser && <button onClick={openModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
+          {isOtherUser && (
+            <a href={`/profile/${listing.name}`} className="flex items-center">
+              <Avatar username={user?.name || 'closet connect'} profilePicture={listing.sellerImage} />
+              <span className="ml-2 text-sm text-gray-700">{user?.name || defaultText}</span>
+            </a>
+          )}
         </div>
+        <TradeModal isVisible={isModalVisible} onClose={closeModal} product={listing} image={image} guestId={guestId} />
       </div>
   );
 };

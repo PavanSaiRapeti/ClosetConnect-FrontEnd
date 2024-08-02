@@ -10,12 +10,18 @@ import {
 const initialState = {
     userItems: [],
     allItems: [],
+    searchItems:[],
     loading: false,
     error: null
 };
 
 const searchReducer = (state = initialState, action) => {
     switch (action.type) {
+        case 'CREATE_ALL_ITEMS':
+            return {
+                ...state,
+                allItems: action.payload
+            };
         case SEARCH_USER_ITEM_REQUEST:
         return {
             ...state,

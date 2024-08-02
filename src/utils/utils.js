@@ -13,9 +13,19 @@ import {
   uploadItemImageEndpoint, 
   getUserClothesEndpoint, 
   updateItemEndpoint, 
-  getItemImageEndpoint 
+  getItemImageEndpoint, 
+  searchAllClothingItemsByTypeEndpoint,
+  searchAllClothingItemsByGenderEndpoint,
+  requestTradeEndpoint,
+  markNotificationAsReadEndpoint,
+  getUserNotificationsEndpoint,
+  getUserSentTradesEndpoint,
+  getUserReceivedTradesEndpoint,
+  getTradeEndpoint,
+  acceptOrDeclineTradeEndpoint
 } from '../config/env';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 export const handleTrigger = (isLoggedIn = true, dispatch,action ) => {
   if (isLoggedIn) {
@@ -110,6 +120,14 @@ export const getItem = async (itemId) => {
   const response = await fetch(getItemEndpoint(itemId));
   return response.json();
 };
+export const getItemByType = async (itemName, size, page) => {
+  const response = await fetch(searchAllClothingItemsByTypeEndpoint(itemName, size, page));
+  return response.json();
+};
+export const getItemByGender = async (itemName, size, page) => {
+  const response = await fetch(searchAllClothingItemsByGenderEndpoint(itemName, size, page));
+  return response.json();
+};
 
 export const uploadItemImage = async (itemId, formData, token) => {
   const response = await fetch(uploadItemImageEndpoint(itemId), {
@@ -144,13 +162,108 @@ export const updateItem = async (itemId, userId, data) => {
 };
 
 export const getItemImage = async (itemId, token) => {
-  const response = await fetch(getItemImageEndpoint(itemId), {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
+  const response = await fetch(getItemImageEndpoint(itemId));
   const arrayBuffer = await response.arrayBuffer();
   const blob = new Blob([arrayBuffer], { type: 'image/jpeg' });
   const imageUrl = URL.createObjectURL(blob);
   return imageUrl;
+};
+
+
+export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, message, date, location, token }) => {
+  try {
+    const tradeData = {
+      "tradeInitiatorId": userId,
+      "itemRequestedId": guestItemId,
+      "initiatorItemId": userItemId,
+      "userToTradeWithId": guestId,
+      "exchangeDate": date,
+      "exchangeLocation": location,
+      "message": message,
+    }
+    const response = await fetch(requestTradeEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(tradeData),
+    });
+    return response;
+  } catch (error) {
+    console.error('Error requesting trade:', error);
+    throw error;
+  }
+};
+
+export const getUserNotifications = async (userId, token) => {
+  try {
+    const response = await fetch(getUserNotificationsEndpoint(userId), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.json();
+    
+  } catch (error) {
+    console.error('Error getting user notifications:', error);
+    throw error;
+  }
+};
+
+export const markNotificationAsRead = async (notificationId) => {
+  try {
+    const response = await fetch(markNotificationAsReadEndpoint(notificationId));
+    return response.data;
+  } catch (error) {
+    console.error('Error marking notification as read:', error);
+    throw error;
+  }
+};
+
+export const getUserSentTrades = async (userId, page = 0) => {
+  try {
+    const response = await fetch(getUserSentTradesEndpoint(userId, page));
+    return response.data;
+  } catch (error) {
+    console.error('Error getting user sent trades:', error);
+    throw error;
+  }
+};
+
+export const getUserReceivedTrades = async (userId, page = 0) => {
+  try {
+    const response = await fetch(getUserReceivedTradesEndpoint(userId, page));
+    return response.data;
+  } catch (error) {
+    console.error('Error getting user received trades:', error);
+    throw error;
+  }
+};
+
+export const getTrade = async (tradeId,token) => {
+  try {
+    const response = await fetch(getTradeEndpoint(tradeId), {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error getting trade:', error);
+    throw error;
+  }
+};
+
+export const acceptOrDeclineTrade = async (tradeId, userId) => {
+  try {
+    const response = await fetch(acceptOrDeclineTradeEndpoint(tradeId, userId));
+    return response.data;
+  } catch (error) {
+    console.error('Error accepting or declining trade:', error);
+    throw error;
+  }
 };

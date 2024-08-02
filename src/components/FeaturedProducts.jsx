@@ -8,7 +8,8 @@ import { setPageLoading } from 'store/actions/commonAction'
 import Skeleton from './common/Skeleton'
 
 const FeaturedProducts = ({ products, type, title }) => {
-  const pageLoading = useSelector(state => state.common.pageLoading)
+  const pageLoading = useSelector(state => state.common.pageLoading);
+  const userId = useSelector(state => state.user.userId);
   const dispatch = useDispatch();
   const gliderTrackRef = useRef(null)
 
@@ -25,21 +26,20 @@ const FeaturedProducts = ({ products, type, title }) => {
         },
       })
     }
+    console.log('products',products,userId);
   }, [title])
 
 
   useEffect(() => {
     if (pageLoading) {
-      setTimeout(() => {
         dispatch(setPageLoading(false));
-      }, 3000);
     }
   }, [pageLoading,dispatch]);
 
   const renderProductCard = (product) => {
     switch (type) {
       case 'listing':
-        return <ListingCard key={product.id} {...product} />
+        return <ListingCard key={product.id} listing={product} guestId={userId}/>
       case 'review':
         return <ReviewCard key={product.id} review={product} />
       default:
@@ -55,7 +55,7 @@ const FeaturedProducts = ({ products, type, title }) => {
         </span>
       </div>
       {pageLoading ? (
-        <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "250px" }}>
+        <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "350px" }}>
           <Skeleton height="256px" />
           <div className="p-4">
             <Skeleton width="80%" height="24px" />
@@ -67,11 +67,11 @@ const FeaturedProducts = ({ products, type, title }) => {
             <Skeleton width="60px" height="24px" />
           </div>
         </div>
-      ) : products && products.length > 0 ? (
+      ) : products && products.numberOfElements > 0 ? (
         <>
           <div id={`glider-track-container-${title.replace(/\s+/g, '-')}`} className='glider-container'>
-            <div ref={gliderTrackRef} className='glider flex flex-row' style={{ width: '100%', padding: '3rem', gap: '10rem' }}>
-              {products.map(renderProductCard)}
+            <div ref={gliderTrackRef} className='glider flex flex-row'>
+              {products.content.map(renderProductCard)}
             </div>
           </div>
           <div className='flex justify-center items-center' style={{ position: 'absolute', top: '13%', height: '81%', width: '80px', left: 0 }}>

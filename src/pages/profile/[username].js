@@ -6,6 +6,9 @@ import ListingGrid from '@/components/Home/LisitingGrid';
 import ReviewSection from '@/components/Home/ReviewSection';
 import { getUser } from 'utils/utils';
 import UserNotFound from 'pages/usernotfound';
+import { checkAuth } from 'utils/authHelpers';
+import { setToken, setUserId } from 'store/actions/userAction';
+import { setPageLoading } from 'store/actions/commonAction';
 
 const UserProfile = ({ user }) => {
 
@@ -47,7 +50,12 @@ const UserProfile = ({ user }) => {
 
 export const getServerSideProps = async (context) => {
   const { username } = context.params;
-  console.log('===>')
+  const cookies = parseCookies({ req, res });
+  const { token, userId } = cookies;
+  store.dispatch(setUserId(userId));
+  store.dispatch(setToken(token));
+  store.dispatch(setPageLoading(true));
+  
   const user = await getUser(username);
   if (!user) {
     return {

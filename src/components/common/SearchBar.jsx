@@ -8,7 +8,7 @@ const SearchBar = ({ pathValue }) => {
   const dispatch = useDispatch();
 
   const handleSearch = () => {
-    setPage(0);
+    setPage(1);
     if (pathValue === 'profile') {
       dispatch(searchUserItemRequest({ itemName, page: 0, user: true, size: '' }));
     } else {
@@ -24,7 +24,7 @@ const SearchBar = ({ pathValue }) => {
 
   const handleClear = () => {
     setItemName('');
-    setPage(0);
+    setPage(1);
   };
 
   return (

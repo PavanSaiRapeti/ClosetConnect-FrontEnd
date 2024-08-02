@@ -3,7 +3,7 @@ import Logo from 'websiteInfo/Logo'
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoginPopup, openPopup, setPageLoading, setPopup } from 'store/actions/commonAction'
 import { useRouter } from 'next/router'
-import { handleTrigger } from 'utils/utils'
+import { getUserNotifications, handleTrigger } from 'utils/utils'
 import Link from 'next/link';
 import SearchBar from './common/SearchBar'
 import { logout } from 'store/actions/authAction'
@@ -11,10 +11,14 @@ import IconView from './IconView'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 import Skeleton from './common/Skeleton'
+import { parseCookies } from 'nookies'
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
   const pageLoading = useSelector((state) => state.common.pageLoading);
+  const userId = useSelector((state) => state.user.userId);
+  const token = parseCookies().token;
+  const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
   const toggleMenu = () => {
     setIsOpen(!isOpen)
@@ -34,11 +38,16 @@ const Header = ({ user }) => {
     setIsSignedInMenuOpen(false);
   };
 
+  useEffect(async () => {
+    const notifications = await getUserNotifications(userId, token);
+    console.log('==>notifications', notifications,token);
+    setNotifications(notifications);
+  }, [userId,token]);
 
 
   if (pageLoading) {
     return (
-      <header>
+      <header className="sticky top-0 z-50">
         <div className='w-full pl-2 pr-2 mt-2 shadow-lg'>
           <div className='w-full flex flex-col md:flex-row items-center justify-between'>
                        <div className='w-full md:w-full'>
@@ -67,7 +76,7 @@ const Header = ({ user }) => {
   }
 
   return (
-    <header >
+    <header className="sticky top-0 z-50">
           <div className='w-full pl-2 pr-2 mt-2 shadow-lg'>
             <div className='w-full flex flex-col md:flex-row items-center justify-between'>
               <div className='w-full md:w-full'>
@@ -104,7 +113,7 @@ const Header = ({ user }) => {
                     </div>
 
                     <div className={`relative w-auto flex items-center align-baseline justify-center gap-8 max-md:hidden`}>
-                      <IconView />
+                      <IconView notifications={notifications} />
                     </div>
                   </div>
                 </div>

@@ -15,7 +15,7 @@ const makeStore = (context) => {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['search','trade','item']
+    whitelist: []
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);

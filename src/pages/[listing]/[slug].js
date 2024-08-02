@@ -40,7 +40,7 @@ const ProductDescription = ({ description, material, maintenance }) => {
     </div>
   );
 }
-const ItemDetails = ({ item, listing, user }) => {
+const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
 
   if (!item) {
     return <div className="p-6 bg-ccWhite rounded-lg shadow-lg">Loading...</div>;
@@ -50,7 +50,7 @@ const ItemDetails = ({ item, listing, user }) => {
     <Layout user={user}>
     <div className="p-6 bg-ccWhite rounded-lg shadow-lg">
     <nav className="text-sm text-gray-500 mb-4">
-        <a href="/" className="hover:underline">Home</a> / <a href="/products" className="hover:underline">All products</a> / <span>{item.name}</span>
+        <a href="/" className="hover:underline">Home</a> / <a href={`/browse/${listingName}`} className="hover:underline">{listingName}</a> / <span>{item.name}</span>
       </nav>
       <ProductPage product={item}/>
       <ProductDescription
@@ -73,7 +73,7 @@ const ItemDetails = ({ item, listing, user }) => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
-  const { slug } = context.params;
+  const { listing, slug } = context.params;
   const { id } = context.query;
   const cookies = parseCookies(context);
   const { token, userId } = cookies;
@@ -101,8 +101,10 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   return {
     props: {
       item: item,
-      listing: null,
+      listingName: listing,
+      listing:null,
       user: userData || null,
+      itemName: slug
     },
   };
 });

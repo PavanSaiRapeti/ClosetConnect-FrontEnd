@@ -19,9 +19,7 @@ const useRouteChange = () => {
           setIsRouteChanging(true);
         };
         const handleComplete = () => {
-          setTimeout(() => {
             setIsRouteChanging(false);
-          }, 2000); // Increased loading time by adding a 2-second delay
         };
         router.events.on('routeChangeStart', handleStart);
         router.events.on('routeChangeComplete', handleComplete);

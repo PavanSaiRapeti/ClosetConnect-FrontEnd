@@ -4,6 +4,10 @@ export const updateUserRequest = (user) => ({
     type: UPDATE_USER_REQUEST,
     payload: user
   });
+  export const setNotification = (notification) => ({
+    type: 'SET_NOTIFICATION',
+    payload: notification
+  });
   export const setUserId = (userId) => ({
     type: SET_USER_ID,
     payload: userId

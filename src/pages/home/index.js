@@ -1,3 +1,4 @@
+import FilterSidebar from "@/components/AllLisiting";
 import Categories from "@/components/Categories";
 import Skeleton from "@/components/common/Skeleton";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -7,8 +8,10 @@ import React, {  useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "store";
 import { setPageLoading } from "store/actions/commonAction";
+import { setToken, setUserId } from "store/actions/userAction";
 import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
 import { checkAuth } from "utils/authHelpers";
+import { getAllItems } from "utils/utils";
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
@@ -143,8 +146,8 @@ const Footer = () => {
 
 
 const Home = ({listing,reviews,user}) => {
-
-
+  const allItems = useSelector(state=>state.search.allItems);
+  console.log('allItems',allItems);
   return (
     <Layout user={user}>
         <div className="flex flex-col items-center justify-center ">
@@ -155,7 +158,7 @@ const Home = ({listing,reviews,user}) => {
       <HeroSection />
       <Features />
       <Categories />
-      <FeaturedProducts products={listing} title={'Featured Listing'} type={'listing'}/>
+      <FeaturedProducts products={allItems} title={'Featured Listing'} type={'listing'}/>
       <FeaturedProducts products={reviews} title={'Reviews'} type={'review'} />
     </Layout>
   );
@@ -174,14 +177,19 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
         type: VALIDATE_TOKEN_SUCCESS,
         payload: { user: userData, isLoggedIn: true }
       });
-      store.dispatch({
-        type: SET_USER_ID,
-        payload: userId
-      });
-    }
+    store.dispatch(setUserId(userId));
+    store.dispatch(setToken(token));
   }
- 
-
+}
+  
+  store.dispatch(setPageLoading(true));
+  const allItems = await getAllItems(30,0);
+  if(allItems){
+   store.dispatch({
+     type: 'CREATE_ALL_ITEMS',
+     payload: allItems
+   });
+  }
   return {
     props: {
       user: userData || null, // Ensure user is null if undefined

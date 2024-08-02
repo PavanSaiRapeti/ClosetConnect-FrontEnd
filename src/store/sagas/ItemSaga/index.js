@@ -95,7 +95,6 @@ function* getClothingItemSaga(action) {
 
 function* getUserClothingItemsSaga(action) {
     try {
-        yield put({ type: SET_LOADING, isLoading: true });
         const { userId, size, page } = action.payload;
         const cookies = parseCookies();
         const { token} = cookies;
