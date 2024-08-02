@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { HYDRATE } from 'next-redux-wrapper';
+import { HYDRATE, SET_ERROR } from 'store/types/apiActionTypes';
 import authReducer from './authReducer';
 import commonReducer from './commonReducer';
 import searchReducer from './searchReducer';
@@ -24,6 +24,11 @@ const rootReducer = (state, action) => {
       ...action.payload, // apply delta from hydration
     };
     return nextState;
+  } else if (action.type === SET_ERROR) {
+    return {
+      ...state,
+      error: action.payload,
+    };
   } else {
     return combinedReducer(state, action);
   }

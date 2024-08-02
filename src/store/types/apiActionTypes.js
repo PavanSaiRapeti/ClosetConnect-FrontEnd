@@ -82,3 +82,6 @@ export const ACCEPT_OR_DECLINE_TRADE_FAILURE = 'ACCEPT_OR_DECLINE_TRADE_FAILURE'
 
 export const SET_USER_ID = 'SET_USER_ID';
 
+// Define the constants
+export const HYDRATE = 'HYDRATE';
+export const SET_ERROR = 'SET_ERROR';
