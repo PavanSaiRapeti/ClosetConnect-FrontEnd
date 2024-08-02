@@ -12,7 +12,7 @@ function Login() {
   ];
 
   return (
-    <div className="container mx-auto  lg:p-12">
+    <div className="container mx-auto lg:p-12">
       <div className='hidden md:block w-1/6 m-auto'>
        <LogoSymbol className='w-full h-auto' />
        </div>

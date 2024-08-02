@@ -8,7 +8,7 @@ import Button from './Button';
 
 const LoginContent = () => {
   const dispatch = useDispatch();
-  const router =useRouter();
+  const router = useRouter();
   const error = useSelector((state) => state.common.error);
 
   const formik = useFormik({
@@ -22,7 +22,7 @@ const LoginContent = () => {
       setTimeout(() => {
         setSubmitting(false);
         dispatch(closeLoginPopup());
-        if(!error){
+        if (!error) {
           router.push('/profile');
         }
       }, 400);
@@ -31,7 +31,7 @@ const LoginContent = () => {
 
   return (
     <div id='login' className='tab-pane active px-4 py-6'>
-      <h2 className='text-2xl font-bold mb-4'>Login to Closet Connect</h2>
+      <h2 className='text-2xl font-bold mb-4 text-center md:text-left'>Login to Closet Connect</h2>
       <form onSubmit={formik.handleSubmit} className="space-y-4">
         <div className='flex flex-col space-y-2'>
           <label htmlFor='email' className='block'>

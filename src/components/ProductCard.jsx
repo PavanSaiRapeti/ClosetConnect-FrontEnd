@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Avatar from './Avatar';
 
-const ProductCard = ({ product }) => {
-  const [image, setImage] = useState('https://placehold.co/600x400.png');
+const ProductCard = ({ product, image }) => {
   const token = useSelector(state => state.auth.token);
 
   useEffect(async () => {
@@ -30,9 +29,9 @@ const ProductCard = ({ product }) => {
             <div>
               <div className="mb-4">
                 <div className="flex items-center space-x-2">
-                  <Avatar src={product.imageUrl} alt="Seller" className="w-8 h-8 rounded-full" />
+                  <Avatar username={product.userFullName} profilePicture={product.sellerImage} />
                   <div>
-                    <p className="text-sm font-semibold">{}</p>
+                    <p className="text-sm font-semibold">{product.userFullName}</p>
                     {/* <p className="text-xs text-gray-500">Updated 8 secs ago</p> */}
                   </div>
                 </div>

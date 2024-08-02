@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 import ReactPaginate from 'react-paginate';
 import CustomPagination from './customPagination';
+import Link from 'next/link';
 
 const AllLisiting = ({title}) => {
 
@@ -52,7 +53,11 @@ useEffect(() => {
     <div className="flex flex-col md:flex-row">
       {/* Overlay */}
       <nav className="text-sm text-gray-500 mb-8">
-        <a href="/home" className="hover:underline">Home</a> / <a href={`/${title}`} className="hover:underline">{title}</a> 
+        <Link href="/home">
+          <a className="hover:underline">Home</a>
+        </Link> / <Link href={`/${title}`}>
+          <a className="hover:underline">{title}</a>
+        </Link>
       </nav>
       <div
         className={`fixed inset-0 bg-gray-800 bg-opacity-50 z-40 ${isFilterOpen ? 'block' : 'hidden'}`}

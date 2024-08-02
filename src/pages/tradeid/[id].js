@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ListingCard from '@/components/Home/components/ListingCard';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import { wrapper } from 'store';
@@ -8,17 +8,22 @@ import { setPageLoading } from 'store/actions/commonAction';
 import { parseCookies } from 'nookies';
 import { checkAuth } from 'utils/authHelpers';
 import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
-import ProductPage from '@/components/ProductCard';
+import Loading from '@/components/Loading';
+
+const SwapComponent = lazy(() => import('@/components/SwapComponent'));
 
 
 
 
-const ItemDetails = ({trade,user}) => {
+const ItemDetails = ({ trade, user }) => {
 
-  console.log('trade==>',trade);
+  console.log('trade==>', trade);
   return (
     <Layout user={user}>
-     Trade information
+      Trade information
+      <Suspense fallback={<Loading />}>
+        <SwapComponent {...trade} />
+      </Suspense>
     </Layout>
 
   );
@@ -31,7 +36,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   console.log('dog==>', token, userId, store);
   store.dispatch(setPageLoading(true));
   let userData = null;
-  
+
 
   if (token) {
     const { user } = await checkAuth(token, userId);
@@ -47,13 +52,15 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
       });
     }
   }
-  const trade = await getTrade(id,token);
+  console.log('trade==>',token,id);
+  const trade = await getTrade(id, token);
+  console.log('trade==>',trade);
   store.dispatch(setPageLoading(false));
 
   return {
     props: {
-       user:userData,
-        trade:trade
+      user: userData,
+      trade: trade
     },
   };
 });

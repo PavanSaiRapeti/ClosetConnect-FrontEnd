@@ -2,6 +2,8 @@ import FilterSidebar from "@/components/AllLisiting";
 import Categories from "@/components/Categories";
 import Skeleton from "@/components/common/Skeleton";
 import FeaturedProducts from "@/components/FeaturedProducts";
+import ListingCard from "@/components/Home/components/ListingCard";
+import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import Layout from "pages/Layout";
 import React, {  useEffect, useState } from "react";
@@ -11,7 +13,7 @@ import { setPageLoading } from "store/actions/commonAction";
 import { setToken, setUserId } from "store/actions/userAction";
 import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
 import { checkAuth } from "utils/authHelpers";
-import { getAllItems } from "utils/utils";
+import { getAllItems, getAllItemsLatest } from "utils/utils";
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
@@ -82,59 +84,82 @@ const pageLoading =useSelector(state=>state.common.pageLoading)
   );
 };
 
+const categories = [
+  {
+    title: 'Men',
+    link: 'browse/Men',
+    image: 'https://via.placeholder.com/600x400',
+  },
+  {
+    title: 'Women',
+    link: 'browse/Women',
+    image: 'https://via.placeholder.com/600x400',
+  },
+  {
+    title: 'Tops',
+    link: 'browse/Tops',
+    image: 'https://via.placeholder.com/600x400',
+  },
+  {
+    title: 'Bottoms',
+    link: 'browse/Bottoms',
+    image: 'https://via.placeholder.com/600x400',
+  },
+];
 
-
-const Features = () => {
-  const pageLoading =useSelector (state=>state.common.pageLoading)
-
+const PromoGridItem = () => {
+  const router = useRouter();
   return (
-    <section className="bg-gray-100 p-10" >
-      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>Features</h2>
-      <div className="flex flex-wrap justify-around">
-        {pageLoading ? (
-          <>
-            <div className="w-1/4 p-4 text-center">
-              <Skeleton className="h-6 w-full mb-2 rounded" />
-              <Skeleton className="h-4 w-3/4 rounded" />
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <Skeleton className="h-6 w-full mb-2 rounded" />
-              <Skeleton className="h-4 w-3/4 rounded" />
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <Skeleton className="h-6 w-full mb-2 rounded" />
-              <Skeleton className="h-4 w-3/4 rounded" />
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <Skeleton className="h-6 w-full mb-2 rounded" />
-              <Skeleton className="h-4 w-3/4 rounded" />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="w-1/4 p-4 text-center">
-              <h3 className="text-xl font-bold mb-2">Ratings & Reviews</h3>
-              <p>Get feedback on your items from other students.</p>
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <h3 className="text-xl font-bold mb-2">Secure Transactions</h3>
-              <p>All transactions are secured with your ONE CARD.</p>
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <h3 className="text-xl font-bold mb-2">Bids & Trades</h3>
-              <p>Place bids or trade offers on items you like.</p>
-            </div>
-            <div className="w-1/4 p-4 text-center">
-              <h3 className="text-xl font-bold mb-2">Messaging</h3>
-              <p>Communicate directly with sellers.</p>
-            </div>
-          </>
-        )}
+    <>
+    {categories.map((category, index) => (
+       <div key={index} className="relative w-full h-full border-4 border-white" onClick={()=>router.push(category.link)}>
+      <div className="relative w-full h-full border-4 border-white">
+        <img
+          className="w-full h-full object-cover"
+          src={category.image}
+          alt={category.title}
+        />
+        <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-white p-4">
+          <h2 className="text-2xl font-bold">{category.title}</h2>
+          <p className="text-lg">Listings</p>
+        </div>
       </div>
-    </section>
+    </div>
+    ))}
+    </>
+   
   );
 };
 
+const ProductShowcase = ({products}) => {
+      const userId = useSelector(state=>state.user.userId);
+      const router = useRouter();
+      return (
+    <div className="w-full mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+        <PromoGridItem />
+       </div>
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4">What&apos;s New</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {products.content.slice(0, 8).map((product) => (
+               <div key={product.id} className="flex justify-center text-center">
+                <ListingCard key={product.id} listing={product} guestId={userId}/>
+                </div>
+              ))}
+        </div>
+      </div>
+    <div className="mt-8 flex justify-center">
+      <button 
+        className="bg-ccGreen text-white font-bold py-2 px-4 rounded hover:bg-ccDarkGreen transition duration-300"
+        onClick={() => router.push('/browse/All')}
+      >
+        view All
+      </button>
+    </div>
+    </div>
+  );
+};
 
 const Footer = () => {
   return (
@@ -145,7 +170,7 @@ const Footer = () => {
 };
 
 
-const Home = ({listing,reviews,user}) => {
+const Home = ({listing,reviews,user,allItemsLatest}) => {
   const allItems = useSelector(state=>state.search.allItems);
   console.log('allItems',allItems);
   return (
@@ -156,9 +181,8 @@ const Home = ({listing,reviews,user}) => {
         </div>
       </div>
       <HeroSection />
-      <Features />
+      <ProductShowcase products={allItemsLatest||[]} />
       <Categories />
-      <FeaturedProducts products={allItems} title={'Featured Listing'} type={'listing'}/>
       <FeaturedProducts products={reviews} title={'Reviews'} type={'review'} />
     </Layout>
   );
@@ -184,6 +208,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   
   store.dispatch(setPageLoading(true));
   const allItems = await getAllItems(30,0);
+  const allItemsLatest = await getAllItemsLatest(30,0);
   if(allItems){
    store.dispatch({
      type: 'CREATE_ALL_ITEMS',
@@ -192,7 +217,8 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   }
   return {
     props: {
-      user: userData || null, // Ensure user is null if undefined
+      user: userData || null,
+      allItemsLatest: allItemsLatest || null,
       listing: [],
       reviews: []
     },

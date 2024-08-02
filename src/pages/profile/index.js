@@ -12,7 +12,6 @@ import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction'
 import { setNotification, setToken, setUserId } from 'store/actions/userAction'
-import { getUserNotifications } from 'utils/utils'
 
 
 const Profile = ({ user }) => {
@@ -33,11 +32,12 @@ const Profile = ({ user }) => {
       router.push('/home')
     }
   }, [dispatch, user, router])
-
-  useEffect(() => {
-    dispatch(getUserClothingItemsRequest(userId, 5,page));
-  }, [page, dispatch, userId,itemsLength]);
-
+ 
+  useEffect(()=>{
+    if(user){
+      dispatch(getUserClothingItemsRequest(userId, 5, 0));
+    }
+  },[dispatch,userId,user])
   return (
     <Layout user={user}>
       <div className='flex flex-col w-full h-full p-4'>
@@ -75,7 +75,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { isRedirect, user } = await checkAuth(token, userId);
   console.log('==>123', cookies, isRedirect, user);
   if (isRedirect) return redirectToLogin;
-
+  store.dispatch(getUserClothingItemsRequest(userId, 5, 0));
   store.dispatch(setUserId(userId));
   store.dispatch(setToken(token));
   store.dispatch(setPageLoading(true));

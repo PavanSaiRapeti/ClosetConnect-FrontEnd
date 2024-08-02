@@ -63,9 +63,9 @@ const RegisterContent = () => {
   };
 
   return (
-    <div id="register" className="tab-pane active px-4 py-6">
+    <div id="register" className="tab-pane active px-4 py-6 max-w-lg mx-auto">
       <h2 className="text-2xl font-bold mb-4">Create an Account</h2>
-      <form onSubmit={formik.handleSubmit} className="space-y-4">
+      <form onSubmit={formik.handleSubmit} className="space-y-4 overflow-y-auto max-h-96">
         <div className="flex flex-col space-y-2">
           <label htmlFor="userName" className="block">Username</label>
           <input

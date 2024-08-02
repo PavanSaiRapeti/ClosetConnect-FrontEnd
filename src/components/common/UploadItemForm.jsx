@@ -3,9 +3,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
 import { createUserItemEndpoint, enums } from 'config/env';
-import { createUserItem, updateUserItem, uploadItemImage } from 'utils/utils';
+import { createUserItem, handleTrigger, updateUserItem, uploadItemImage } from 'utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { createClothingItemRequest, updateClothingItemRequest } from 'store/actions/ItemAction';
+import { createClothingItemRequest, getUserClothingItemsRequest, updateClothingItemRequest } from 'store/actions/ItemAction';
 import { setPopup } from 'store/actions/commonAction';
 
 const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
@@ -41,6 +41,7 @@ const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
         dispatch(updateClothingItemRequest(id, formData));
       } else {
         // Create mode
+        
         const res = await fetch(createUserItemEndpoint(userId), {
           method: 'POST',
           headers: {
@@ -51,20 +52,27 @@ const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
           body: JSON.stringify(formData),
         });
         response = await res.json();
+        if(response.status !== 200){
+          setSubmitting(false);
+          handleTrigger(true,dispatch,setPopup({ title: 'error', content: 'Item failed to upload' }));
+          return;
+        }
       }
+      let responseImage;
       if(image){
       const formDataImage = new FormData();
       formDataImage.append('file', image);
-      const responseImage = await uploadItemImage(id ? id : response?.id, formDataImage, token);
+      responseImage = await uploadItemImage(id ? id : response?.id, formDataImage, token);
       }
       if (responseImage) {
         setSubmitting(false);
-        dispatch(setPopup({ title: 'success', content: 'Item uploaded successfully' }));
+        handleTrigger(true,dispatch,setPopup({ title: 'success', content: (responseImage && responseImage.message) || 'Item uploaded successfully' }));
+        dispatch(getUserClothingItemsRequest(userId, 5, 0));
       }
     } catch (error) {
       setError(true);
       setSubmitting(false);
-      dispatch(setPopup({ title: 'failed', content: 'Item failed to upload' }));
+      handleTrigger(true,dispatch,setPopup({ title: 'failed', content: 'image failed to upload' }));
     }
   };
 

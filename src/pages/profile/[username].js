@@ -9,6 +9,7 @@ import UserNotFound from 'pages/usernotfound';
 import { checkAuth } from 'utils/authHelpers';
 import { setToken, setUserId } from 'store/actions/userAction';
 import { setPageLoading } from 'store/actions/commonAction';
+import { wrapper } from 'store';
 
 const UserProfile = ({ user }) => {
 
@@ -48,27 +49,39 @@ const UserProfile = ({ user }) => {
   );
 };
 
-export const getServerSideProps = async (context) => {
-  const { username } = context.params;
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ params, req, res }) => {
+  const { username } = params;
   const cookies = parseCookies({ req, res });
   const { token, userId } = cookies;
-  store.dispatch(setUserId(userId));
-  store.dispatch(setToken(token));
-  store.dispatch(setPageLoading(true));
-  
-  const user = await getUser(username);
-  if (!user) {
+
+  try {
+    const { isRedirect, user } = await checkAuth(token, userId);
+    if (isRedirect) return redirectToLogin;
+
+    const userProfile = await getUser(username);
+    if (!userProfile) {
+      return {
+        notFound: true,
+      };
+    }
+
+    store.dispatch(setUserId(userId));
+    store.dispatch(setToken(token));
+    store.dispatch(setPageLoading(true));
+
     return {
-      redirect: {
-        destination: '/usernotfound',
-        permanent: false,
+      props: {
+        user: userProfile,
+      },
+    };
+  } catch (error) {
+    console.error('Error in getServerSideProps:', error);
+    return {
+      props: {
+        user: null,
       },
     };
   }
-
-  return {
-    props: { user },
-  };
-};
+});
 
 export default UserProfile;

@@ -3,27 +3,77 @@ import React from 'react';
 
 const HowItWorks = () => {
   return (
-    <section className="p-10">
-      <h2 className="text-3xl font-bold text-center mb-6" style={{ color: "#7459FF" }}>How It Works</h2>
-      <div className="flex flex-col space-y-4">
-        <div className="flex items-center space-x-4">
-          <div className="bg-purple-600 text-ccWhite p-4 rounded-full">1</div>
-          <p>Sign up with your ONE CARD and create a profile.</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="bg-purple-600 text-ccWhite p-4 rounded-full">2</div>
-          <p>Upload your items with a description and price.</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="bg-purple-600 text-ccWhite p-4 rounded-full">3</div>
-          <p>Browse items from other students and place bids or trade offers.</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <div className="bg-purple-600 text-ccWhite p-4 rounded-full">4</div>
-          <p>Communicate with sellers and complete transactions securely.</p>
+    <div className="container mx-auto p-6">
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Our Brand</h2>
+        <p className="mb-4">
+          At Closet Connect, we believe you shouldn&apos;t have to compromise style for functionality. We offer trendy, affordable, and versatile clothing that can be worn multiple ways to suit the many events in your life. Our mission is to provide stylish and functional apparel that empowers you to express your unique style.
+        </p>
+        <p>
+          Founded in 2024, Closet Connect has grown from a small startup to a beloved brand known for its innovative designs and commitment to quality. We believe in creating products that not only look good but also make your life easier.
+        </p>
+      </div>
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Meet Our Founder</h2>
+        <div className="flex flex-col md:flex-row items-start">
+          <div className="md:w-1/2">
+            <p className="mb-4">
+              Hi! I&apos;m Alex, the founder and designer of Closet Connect. Growing up in a small town, I always dreamed of creating my own fashion line. After studying fashion design and working for top brands in New York City, I decided to start my own company.
+            </p>
+            <p className="mb-4">
+              Then, something magical happened: My sweet daughter, Emma, was born. She became my inspiration and the namesake of my brand. At Closet Connect, we create beautiful, functional, and affordable clothing that makes life easier for busy individuals like you.
+            </p>
+            <p className="mb-4">
+              We&apos;re more than a clothing company. I love telling stories, so every collection is inspired by my own life experiences. I hope you find a piece that resonates with you and becomes a part of your story.
+            </p>
+            <p>
+              I&apos;m so grateful for your support. Thank you for shopping with us, and welcome to the Closet Connect family!
+            </p>
+          </div>
+          <div className="md:w-1/2 md:pl-8">
+            <img src="https://via.placeholder.com/300" alt="Founder" className="w-full h-auto object-cover rounded" />
+          </div>
         </div>
       </div>
-    </section>
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Sustainability</h2>
+        <div className="flex flex-col md:flex-row items-start">
+          <div className="md:w-1/2 md:pr-8">
+            <img src="https://via.placeholder.com/300" alt="Sustainability" className="w-full h-auto object-cover rounded" />
+          </div>
+          <div className="md:w-1/2">
+            <p className="mb-4">
+              We believe in the importance of taking care of the Earth. That&apos;s why we&apos;re committed to sustainable practices in everything we do. From using eco-friendly materials to reducing waste in our production process, we&apos;re always looking for ways to minimize our environmental impact.
+            </p>
+            <p className="mb-4">
+              Our eco-friendly clothing is made from high-quality, cruelty-free materials that look and feel just like the real thing. We&apos;re proud to offer products that are not only stylish and functional but also kind to the planet.
+            </p>
+            <p>
+              Thank you for supporting our efforts to create a more sustainable future.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div className="mb-12">
+        <h2 className="text-2xl font-bold mb-4">Giving Back</h2>
+        <div className="flex flex-col md:flex-row items-start">
+          <div className="md:w-1/2">
+            <p className="mb-4">
+              At Closet Connect, we believe in empowering, uplifting, and giving back to our community. That&apos;s why we partner with various charities and organizations to support causes that are close to our hearts.
+            </p>
+            <p className="mb-4">
+              From donating a portion of our profits to providing clothing to those in need, we&apos;re committed to making a positive impact. We believe that together, we can make a difference.
+            </p>
+            <p>
+              Thank you for being a part of our journey and for helping us give back to those in need.
+            </p>
+          </div>
+          <div className="md:w-1/2 md:pl-8">
+            <img src="https://via.placeholder.com/300" alt="Giving Back" className="w-full h-auto object-cover rounded" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

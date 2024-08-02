@@ -5,6 +5,7 @@ import { setPageLoading, setPopup } from 'store/actions/commonAction';
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 import Skeleton from '../common/Skeleton';
 import CustomPagination from '../customPagination';
+import { handleTrigger } from 'utils/utils';
 
 const ListingGrid = ({ page, setPage,isSmall=false, selectedItem={}, setSelectedItem={}}) => {
   const dispatch = useDispatch();
@@ -21,10 +22,10 @@ const ListingGrid = ({ page, setPage,isSmall=false, selectedItem={}, setSelected
   console.log('listing', items);
   useEffect(() => {
     if (error) {
-      dispatch(setPopup({
-        title: 'Error',
-        content: error || 'An error occurred while fetching the listings.'
-      }));
+        handleTrigger(true,dispatch,setPopup({
+          title: 'error',
+          content: error || 'An error occurred while fetching the listings.'
+        }));
     }
   }, [error, dispatch]);
 

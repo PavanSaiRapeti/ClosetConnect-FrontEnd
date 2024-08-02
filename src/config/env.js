@@ -12,6 +12,7 @@ export const endpoints = {
   deleteUserItem: (userId, itemId) => `${BASE_URL}/clothingItems/${itemId}/user/${userId}`,
   getUserItems: (userId, size, page) => `${BASE_URL}/clothingItems/user/${userId}?size=${size}&page=${page}`,
   getAllItems: (size, page) => `${BASE_URL}/clothingItems/all?size=${size}&page=${page}`,
+  getAllItemsLatest: (size, page) => `${BASE_URL}/clothingItems/all?size=${size}&page=${page}&LATEST=true`,
   deleteItem: (itemId, userId) => `${BASE_URL}/clothingItems/${itemId}/user/${userId}`,
   getItem: (itemId) => `${BASE_URL}/clothingItems/cloth/${itemId}`,
   uploadItemImage: (itemId) => `${BASE_URL}/clothingItems/${itemId}/cloth-image`,
@@ -27,7 +28,7 @@ export const endpoints = {
   getTrade: (tradeId) => `${BASE_URL}/trades/getTrade/${tradeId}`,
   acceptOrDeclineTrade: (tradeId, userId) => `${BASE_URL}/trades/changeTradeStatus/trade/${tradeId}/user/${userId}`,
   getUserNotifications: (userId) => `${BASE_URL}/notifications/user/${userId}`,
-  markNotificationAsRead: (notificationId) => `${BASE_URL}/notifications/markAsRead/${notificationId}`,
+  markNotificationAsRead: (notificationId) => `${BASE_URL}/notifications/${notificationId}`,
 };
 
 export const enums = {
@@ -48,6 +49,7 @@ export const updateUserItemEndpoint = endpoints.updateUserItem;
 export const deleteUserItemEndpoint = endpoints.deleteUserItem;
 export const getUserItemsEndpoint = endpoints.getUserItems;
 export const getAllItemsEndpoint = endpoints.getAllItems;
+export const getAllItemsLatestEndpoint = endpoints.getAllItemsLatest;
 export const deleteItemEndpoint = endpoints.deleteItem;
 export const getItemEndpoint = endpoints.getItem;
 export const uploadItemImageEndpoint = endpoints.uploadItemImage;

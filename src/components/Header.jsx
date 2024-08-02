@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, lazy, Suspense } from 'react'
 import Logo from 'websiteInfo/Logo'
 import { useDispatch, useSelector } from 'react-redux'
 import { openLoginPopup, openPopup, setPageLoading, setPopup } from 'store/actions/commonAction'
@@ -7,11 +7,12 @@ import { getUserNotifications, handleTrigger } from 'utils/utils'
 import Link from 'next/link';
 import SearchBar from './common/SearchBar'
 import { logout } from 'store/actions/authAction'
-import IconView from './IconView'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCloudUploadAlt } from '@fortawesome/free-solid-svg-icons'
 import Skeleton from './common/Skeleton'
 import { parseCookies } from 'nookies'
+
+const IconView = lazy(() => import('./IconView'));
 
 const Header = ({ user }) => {
   const [isOpen, setIsOpen] = useState(false)
@@ -113,7 +114,9 @@ const Header = ({ user }) => {
                     </div>
 
                     <div className={`relative w-auto flex items-center align-baseline justify-center gap-8 max-md:hidden`}>
-                      <IconView notifications={notifications} />
+                      <Suspense fallback={<Skeleton width={40} height={40} />}>
+                        <IconView notifications={notifications} />
+                      </Suspense>
                     </div>
                   </div>
                 </div>

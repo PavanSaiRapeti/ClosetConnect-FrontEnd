@@ -1,20 +1,22 @@
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SignedInMenu from './SignedInMenu';
 import SignInMenu from './SignInMenu';
+import { handleTrigger, markNotificationAsRead } from 'utils/utils';
+import { setPopup } from 'store/actions/commonAction';
 
 const IconView = ({notifications}) => { 
   const router = useRouter();
+  const dispatch=useDispatch()
   const [isSignInMenuOpen, setIsSignInMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
+  const [visibleNotifications, setVisibleNotifications] = useState(5);
   const user = useSelector(state => state.auth.user); 
-   // Assuming notifications are stored in state.notifications.items
-  // const notifications = ['Notification 1', 'Notification 2', 'Notification 3'];
   
   useEffect(() => {
-    if (notifications.length > 0 && !hasNewNotifications) {
+    if (notifications && notifications.length > 0 && !hasNewNotifications) {
       setHasNewNotifications(true);
     }
   }, [notifications, hasNewNotifications]);
@@ -28,6 +30,19 @@ const IconView = ({notifications}) => {
     setIsNotificationsOpen(!isNotificationsOpen);
     setIsSignInMenuOpen(false);
     setHasNewNotifications(false);
+  };
+
+  const handleClick = async (notification) => {
+    const response = await markNotificationAsRead(notification && notification.id);
+    if (response) {
+      router.push(`/tradeid/${notification.tradeId}`);
+    }else{
+      handleTrigger(true,dispatch,setPopup({title:'error',content:"Failed to mark notification as read"}));
+    }
+  };
+
+  const handleViewMore = () => {
+    setVisibleNotifications(prev => prev + 5);
   };
 
   return (  
@@ -52,17 +67,24 @@ const IconView = ({notifications}) => {
             <span className="text-xs block">Notifications</span>
           </button>
           {isNotificationsOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg">
+            <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-300 rounded-lg shadow-lg max-h-64 overflow-y-auto">
               <ul className="p-2">
-                {notifications.length>0 ?
-                  notifications.map((notification, index) => (
-                    <li key={index} onClick={() => router.push(`/tradeid/${notification.tradeId}`)} className={`p-2 border-b border-gray-200 last:border-0 ${notification.notificationStatus? 'bg-green-100' :  'bg-red-100'} cursor-pointer`}>
-                      {notification.message}
-                    </li>
-                  ))
-                :
+                {notifications && notifications.length > 0 ? (
+                  <>
+                    {notifications.slice(0, visibleNotifications).map((notification, index) => (
+                      <li key={index} onClick={() => handleClick(notification)} className={`p-2 border-b border-gray-200 last:border-0 ${notification.notificationStatus ? 'bg-green-100' : 'bg-red-100'} cursor-pointer`}>
+                        {notification.message.length > 50 ? `${notification.message.substring(0, 50)}...` : notification.message}
+                      </li>
+                    ))}
+                    {notifications.length > visibleNotifications && (
+                      <li className="p-2 text-center text-blue-500 cursor-pointer" onClick={handleViewMore}>
+                        View more
+                      </li>
+                    )}
+                  </>
+                ) : (
                   <li className="p-2">No notifications</li>
-                }
+                )}
               </ul>
             </div>
           )}

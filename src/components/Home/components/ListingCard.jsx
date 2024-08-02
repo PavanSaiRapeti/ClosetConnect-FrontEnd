@@ -59,7 +59,7 @@ const ListingCard = ({
         const userData = await getUser(guestId);
         setGuestData(userData);
       } catch (error) {
-        dispatch(setPopup({ title: 'Error', content: 'Error fetching user data' }));
+        handleTrigger(true,dispatch,setPopup({ title: 'Error', content: 'Error fetching user data' }));
       }
     }
   }, [listing?.userId]);
@@ -116,33 +116,36 @@ const ListingCard = ({
           <div className="p-4">
             <h3 className="text-lg font-semibold mb-2 truncate text-gray-800">{listing.name || defaultText}</h3>
             <p className="text-sm text-gray-600 mb-2">{listing.description || defaultText}</p>
-            <div className="flex items-center mb-2">
-              <span className="text-xl font-bold text-green-600">{listing.price || defaultText}</span>
-              <span className="text-sm text-gray-500 line-through ml-2">{listing.originalPrice || defaultText}</span>
-            </div>
             <div className="flex flex-wrap text-sm text-gray-600 mb-2">
-              <span className="mr-2">Size: <span className="font-medium text-gray-800">{listing.clothingItemSize || defaultText}</span></span>
-              <span>Brand: <span className="font-medium text-gray-800">{listing.brand || defaultText}</span></span>
-            </div>
-            <div className="flex flex-wrap text-sm text-gray-600 mb-2">
-              <span className="mr-2">Type: <span className="font-medium text-gray-800">{listing.type || defaultText}</span></span>
-              <span>Condition: <span className="font-medium text-gray-800">{listing.itemCondition || defaultText}</span></span>
-            </div>
-            <div className="flex flex-wrap text-sm text-gray-600 mb-2">
-              <span className="mr-2">Gender: <span className="font-medium text-gray-800">{listing.gender ? (listing.gender === 'MALE' ? '♂' : '♀') : defaultText}</span></span>
+              <span className="mr-2">Gender: 
+                <span className="font-medium text-gray-800">
+                  {listing.gender ? (
+                    listing.gender === 'MALE' ? (
+                      <>
+                        <i className="fas fa-mars text-blue-500 ml-1"></i> Male
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-venus text-pink-500 ml-1"></i> Female
+                      </>
+                    )
+                  ) : defaultText}
+                </span>
+              </span>
               <span>Status: <span className="font-medium text-gray-800">{listing.status || defaultText}</span></span>
             </div>
             <div className="flex flex-wrap text-sm text-gray-600 mb-2">
-              <span>Source: <span className="font-medium text-gray-800">{listing.source || defaultText}</span></span>
+              <span>Description: </span> 
             </div>
+            <span className="font-medium text-gray-800">{listing.description || defaultText}</span>
           </div>
         </a>
         <div className="flex items-center justify-between p-4 border-t">
         {isOtherUser && <button onClick={openModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
           {isOtherUser && (
             <a href={`/profile/${listing.name}`} className="flex items-center">
-              <Avatar username={user?.name || 'closet connect'} profilePicture={listing.sellerImage} />
-              <span className="ml-2 text-sm text-gray-700">{user?.name || defaultText}</span>
+              <Avatar username={listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
+              <span className="ml-2 text-sm text-gray-700">{listing?.userFullName  || defaultText}</span>
             </a>
           )}
         </div>

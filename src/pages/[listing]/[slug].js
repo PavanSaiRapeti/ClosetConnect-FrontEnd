@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ListingCard from '@/components/Home/components/ListingCard';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import { wrapper } from 'store';
@@ -42,6 +42,22 @@ const ProductDescription = ({ description, material, maintenance }) => {
 }
 const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
 
+  const [image, setImage] = useState(null);
+
+  useEffect(async () => {
+    console.log('==>listing', listing,item);
+    if(item?.id){
+    try { 
+      const response= await getItemImage(item.id, token);
+      setImage(response);
+      console.log('==>image', image);
+    } catch (error) {
+        console.error('Failed to delete item:', error);
+      }
+    }
+    // dispatch(setPageLoading(false));
+  }, [item]);
+
   if (!item) {
     return <div className="p-6 bg-ccWhite rounded-lg shadow-lg">Loading...</div>;
   }
@@ -52,7 +68,7 @@ const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
     <nav className="text-sm text-gray-500 mb-4">
         <a href="/" className="hover:underline">Home</a> / <a href={`/browse/${listingName}`} className="hover:underline">{listingName}</a> / <span>{item.name}</span>
       </nav>
-      <ProductPage product={item}/>
+      <ProductPage   product={item} image={image}/>
       <ProductDescription
         description="Dopasowane spodnie z denimu z delikatnymi przetarciami. Jeansy mają wysoki stan i długość do kostek, a w pasie wszystko szlufki. Z przodu znajdują się dwie wpuszczane kieszenie, z tyłu dwie naszywane. Zapinane są na zamek ukryty pod listwą i widoczny guzik. Modelka na zdjęciu ma 179 cm wzrostu i nosi rozmiar 34. Wewnętrzna długość nogawki dla rozmiaru 36 to 76,7 cm."
         material="Korpus: 98% BAWEŁNA - 2% ELASTAN"

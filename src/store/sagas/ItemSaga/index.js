@@ -105,9 +105,9 @@ function* getUserClothingItemsSaga(action) {
         yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
         yield put({ type: 'SET_PAGE_LOADING', pageLoading: false });
     } catch (error) {
-        console.error('Get user clothing items error:', error.response);
-        yield put({ type: GET_USER_CLOTHING_ITEMS_FAILURE, error: error.response.data });
-        yield put({ type: "SET_ERROR", payload: error.response.data.message || "Unknown error" });
+        console.error('Get user clothing items error:', error);
+        yield put({ type: GET_USER_CLOTHING_ITEMS_FAILURE, error: "error" });
+        yield put({ type: "SET_ERROR", payload: "Unknown error" });
     } 
 }
 

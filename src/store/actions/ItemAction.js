@@ -84,9 +84,9 @@ export const getClothingItemFailure = (error) => ({
 });
 
 // Get User Clothing Items
-export const getUserClothingItemsRequest = (userId, size, page) => ({
+export const getUserClothingItemsRequest = (userId, size, page,token) => ({
     type: GET_USER_CLOTHING_ITEMS_REQUEST,
-    payload: { userId, size, page }
+    payload: { userId, size, page,token }
 });
 
 export const getUserClothingItemsSuccess = (data) => ({

@@ -11,11 +11,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 import { setToken, setUserId } from 'store/actions/userAction';
 import { setPageLoading } from 'store/actions/commonAction';
-import { getAllItems } from 'utils/utils';
+import { getAllItems, getItemByGender, getItemByType } from 'utils/utils';
 
 const CategoryPage = ({title, user,userId}) => {
   const dispatch = useDispatch();
-  
+
   useEffect(()=>{
     if(userId){
       dispatch(getUserClothingItemsRequest(userId,30,0));
@@ -37,7 +37,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const { slug } = context.params;
     const cookies = parseCookies(context);
     const { token, userId } = cookies;
-    console.log('dog==>', token, userId, store);
     let userData = null;
     if (token) {
       const { user } = await checkAuth(token, userId);
@@ -49,8 +48,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
         });
       }
     }
-   const allItems = await getAllItems(30,0);
-   if(allItems){
+    let allItems;
+    console.log('slug==>',slug === 'Men');
+    if(slug === 'Men'|| slug === 'Women'){
+        allItems = await getItemByGender((slug === 'Men'? 'MALE':'FEMALE'),30,0);
+    }
+    else if(slug === 'Tops'||slug === 'Bottoms'){
+      allItems = await getItemByType((slug === 'Tops'? 'TOPS':'BOTTOMS'),30,0);
+    }
+    else{
+      allItems = await getAllItems(30,0);
+    }
+    console.log('slug==>',allItems);
+    if(allItems){
     store.dispatch({
       type: 'CREATE_ALL_ITEMS',
       payload: allItems
@@ -62,9 +72,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
    store.dispatch(setPageLoading(true));
       return {
         props: {
-            title:slug,
+               title:slug,
               user: userData,
-              userId:userId
+              userId:userId || null
           },
       };
     }

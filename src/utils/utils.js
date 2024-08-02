@@ -1,4 +1,4 @@
-import {  openLoginPopup, openPopup } from 'store/actions/commonAction';
+import { openLoginPopup, openPopup } from 'store/actions/commonAction';
 import { 
   getUserEndpoint, 
   updateUserEndpoint, 
@@ -22,10 +22,13 @@ import {
   getUserSentTradesEndpoint,
   getUserReceivedTradesEndpoint,
   getTradeEndpoint,
-  acceptOrDeclineTradeEndpoint
+  acceptOrDeclineTradeEndpoint,
+  getAllItemsLatestEndpoint
 } from '../config/env';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { parseCookies } from 'nookies';
+import { debounce } from 'lodash';
 
 export const handleTrigger = (isLoggedIn = true, dispatch,action ) => {
   if (isLoggedIn) {
@@ -37,10 +40,15 @@ export const handleTrigger = (isLoggedIn = true, dispatch,action ) => {
 };
 
 export const getUser = async (username) => {
+  const { token }=parseCookies()
   try {
-    const response = await axios.get(getUserEndpoint(username));
-    if (response.status === 200 && response.data) {
-      return response.data;
+    const response = await axios.get(getUserEndpoint(username), {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (response.status === 200 && response) {
+      return response.json();
     }
     return null;
   } catch (error) {
@@ -97,12 +105,22 @@ export const deleteUserItem = async (userId, itemId) => {
 };
 
 export const getUserItems = async (userId, size, page) => {
-  const response = await fetch(getUserItemsEndpoint(userId, size, page));
+  const { token } = parseCookies();
+  const response = await fetch(getUserItemsEndpoint(userId, size, page), {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
   return response.json();
 };
 
 export const getAllItems = async (size, page) => {
   const response = await fetch(getAllItemsEndpoint(size, page));
+  return response.json();
+};
+
+export const getAllItemsLatest = async (size, page) => {
+  const response = await fetch(getAllItemsLatestEndpoint(size, page));
   return response.json();
 };
 
@@ -196,15 +214,18 @@ export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, m
   }
 };
 
-export const getUserNotifications = async (userId, token) => {
+export const getUserNotifications = async (userId) => {
+  const {token}=parseCookies();
   try {
     const response = await fetch(getUserNotificationsEndpoint(userId), {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
     });
-    return response.json();
-    
+    if(response.status===200){
+      return response.json();
+    }
+    return null;
   } catch (error) {
     console.error('Error getting user notifications:', error);
     throw error;
@@ -212,9 +233,17 @@ export const getUserNotifications = async (userId, token) => {
 };
 
 export const markNotificationAsRead = async (notificationId) => {
+  const {token} = parseCookies();
   try {
-    const response = await fetch(markNotificationAsReadEndpoint(notificationId));
-    return response.data;
+    const response = await fetch(markNotificationAsReadEndpoint(notificationId), {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    console.log(response, 'response');
+    
+    return response.json();
   } catch (error) {
     console.error('Error marking notification as read:', error);
     throw error;
@@ -222,9 +251,14 @@ export const markNotificationAsRead = async (notificationId) => {
 };
 
 export const getUserSentTrades = async (userId, page = 0) => {
+  const {token}=parseCookies()
   try {
-    const response = await fetch(getUserSentTradesEndpoint(userId, page));
-    return response.data;
+    const response = await fetch(getUserSentTradesEndpoint(userId, page),{
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.json();
   } catch (error) {
     console.error('Error getting user sent trades:', error);
     throw error;
@@ -232,9 +266,14 @@ export const getUserSentTrades = async (userId, page = 0) => {
 };
 
 export const getUserReceivedTrades = async (userId, page = 0) => {
+  const {token}=parseCookies()
   try {
-    const response = await fetch(getUserReceivedTradesEndpoint(userId, page));
-    return response.data;
+    const response = await fetch(getUserReceivedTradesEndpoint(userId, page),{
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    return response.json();
   } catch (error) {
     console.error('Error getting user received trades:', error);
     throw error;
@@ -248,9 +287,6 @@ export const getTrade = async (tradeId,token) => {
         'Authorization': `Bearer ${token}`,
       },
     });
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
     return response.json();
   } catch (error) {
     console.error('Error getting trade:', error);
@@ -258,10 +294,21 @@ export const getTrade = async (tradeId,token) => {
   }
 };
 
-export const acceptOrDeclineTrade = async (tradeId, userId) => {
+export const acceptOrDeclineTrade = async (tradeId, userId, status, reason) => {
+  const { token } = parseCookies();
   try {
-    const response = await fetch(acceptOrDeclineTradeEndpoint(tradeId, userId));
-    return response.data;
+    const response = await fetch(acceptOrDeclineTradeEndpoint(tradeId, userId), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: status,
+        reason: reason
+      }),
+    });
+    return response.json();
   } catch (error) {
     console.error('Error accepting or declining trade:', error);
     throw error;
