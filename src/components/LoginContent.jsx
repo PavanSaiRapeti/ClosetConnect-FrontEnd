@@ -3,8 +3,9 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, setLoading } from 'store/actions/authAction';
 import { useRouter } from 'next/router';
-import { closeLoginPopup } from 'store/actions/commonAction';
+import { closeLoginPopup, setPopup } from 'store/actions/commonAction';
 import Button from './Button';
+import { handleTrigger } from 'utils/utils';
 
 const LoginContent = () => {
   const dispatch = useDispatch();
@@ -21,10 +22,12 @@ const LoginContent = () => {
       dispatch(setLoading(true));
       setTimeout(() => {
         setSubmitting(false);
-        dispatch(closeLoginPopup());
         if (!error) {
           router.push('/profile');
+          handleTrigger(true, dispatch, setPopup({ title: 'Login Success', content: 'Login Successfully' }));
         }
+        handleTrigger(true, dispatch, setPopup({ title: 'Login Failed', content: 'invalid email or password'  }));
+        dispatch(closeLoginPopup());
       }, 400);
     },
   });

@@ -1,3 +1,5 @@
+import { SET_ERROR } from "store/types/apiActionTypes";
+
 const initialState = {
     isLoginPopupOpen: false,
     isPopupOpen:false,
@@ -17,7 +19,7 @@ const commonReducer = (state = initialState, action) => {
             return { ...state, pageLoading: action.payload };
         case 'SET_INFO':
             return { ...state, info: action.payload };
-        case 'SET_ERROR':
+        case SET_ERROR:
             return { ...state, error: action.payload };
         case 'LOGIN_POPUP_OPEN':
             return { ...state, isLoginPopupOpen: true };

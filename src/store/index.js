@@ -6,37 +6,33 @@ import { createWrapper } from 'next-redux-wrapper';
 import rootSaga from './sagas/rootSaga';
 import rootReducer from './reducers';
 
-
-
 const makeStore = (context) => {
-  
-const persistConfig = {
-  key: 'root',
-  storage,
-  whitelist: ['auth', 'common', 'search', 'trade', 'item'],
-  blacklist: ['user']
-};
-
- const persistedReducer = persistReducer(persistConfig, rootReducer);
   const sagaMiddleware = createSagaMiddleware();
-  let composeEnhancers = compose;
+  const isServer = typeof window === 'undefined';
+  const isBrowser = typeof window !== "undefined";
+  const composeEnhancers = isBrowser && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-  if (typeof window !== 'undefined') {
-    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  }
+  const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: []
+  };
+
+  const persistedReducer = persistReducer(persistConfig, rootReducer);
 
   const store = createStore(
     persistedReducer,
     composeEnhancers(applyMiddleware(sagaMiddleware))
   );
-  store.__PERSISTOR = persistStore(store);
+
   store.sagaTask = sagaMiddleware.run(rootSaga);
+
+  if (!isServer) {
+    store.__PERSISTOR = persistStore(store);
+  }
 
   return store;
 };
 
 const wrapper = createWrapper(makeStore);
-const store = makeStore();
-const persistor = store.__PERSISTOR;
-
-export { wrapper, store, persistor };
+export { wrapper };

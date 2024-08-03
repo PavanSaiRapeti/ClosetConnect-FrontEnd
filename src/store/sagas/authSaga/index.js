@@ -1,5 +1,5 @@
 import { put, call, takeLatest, takeLeading, takeEvery } from 'redux-saga/effects';
-import {  LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_FAILURE, REGISTER_SUCCESS, VALIDATE_TOKEN_FAILURE, VALIDATE_TOKEN_SUCCESS, SET_LOADING, LOGIN_REQUEST, REGISTER_REQUEST, LOGOUT_REQUEST, VALIDATE_TOKEN_REQUEST, UPDATE_USER_REQUEST, GET_USER_REQUEST } from '../../types/apiActionTypes';
+import {  LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT_SUCCESS, LOGOUT_FAILURE, REGISTER_SUCCESS, VALIDATE_TOKEN_FAILURE, VALIDATE_TOKEN_SUCCESS, SET_LOADING, LOGIN_REQUEST, REGISTER_REQUEST, LOGOUT_REQUEST, VALIDATE_TOKEN_REQUEST, UPDATE_USER_REQUEST, GET_USER_REQUEST, SET_ERROR } from '../../types/apiActionTypes';
 import axios from 'axios';
 import { getUserEndpoint, handlerEndpoint, loginUserEndpoint, registerUserEndpoint, updateUserEndpoint } from 'config/env';
 import { destroyCookie, parseCookies, setCookie } from 'nookies';
@@ -31,10 +31,11 @@ export function* loginSaga(action) {
         } else {
             yield put({ type: LOGIN_FAILURE, error: response.error });
             yield put({ type: SET_LOADING ,isLoading:false });
+            yield put({ type: SET_ERROR , payload: error?.response?.data?.message?.[0] || "unKnown error" });
         }
     } catch (error) {
         console.error('Login error:', error.response);
-        yield put({ type: 'SET_ERROR', payload: error?.response?.data?.message?.[0] || "unKnown error" });
+        yield put({ type: SET_ERROR, payload: error?.response?.data?.message?.[0] || "unKnown error" });
         yield put({ type: SET_LOADING ,isLoading:false });
     }
 }
@@ -87,11 +88,11 @@ export function* registerSaga(action) {
             yield put({ type: REGISTER_SUCCESS, payload: {  token: response.data.token } });
             yield put({ type: SET_LOADING ,isLoading:false });
         } else {
-          yield put({ type: 'SET_ERROR', payload: error.response.data.message[0] });
+          yield put({ type: SET_ERROR, payload: error.response.data.message[0] });
           yield put({ type: SET_LOADING ,isLoading:false });
         }
     } catch (error) {
-        yield put({ type: 'SET_ERROR', payload: error?.response?.data?.message?.[0] || "unKnown error"  });
+        yield put({ type: SET_ERROR , payload: error?.response?.data?.message?.[0] || "unKnown error"  });
         yield put({ type: SET_LOADING ,isLoading:false });
     }
 }

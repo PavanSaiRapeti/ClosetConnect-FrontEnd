@@ -30,7 +30,7 @@ const rootReducer = (state, action) => {
       error: action.payload,
     };
   } else if (action.type === 'RESET_STORE') {
-    state = undefined; // Reset the state
+    state = undefined;
   } else {
     return combinedReducer(state, action);
   }
