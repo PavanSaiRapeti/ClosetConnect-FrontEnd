@@ -3,7 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch, useSelector } from 'react-redux';
 import { register, setLoading } from 'store/actions/authAction';
-import { closeLoginPopup, setPopup } from 'store/actions/commonAction';
+import { closeLoginPopup, openPopup, setPopup } from 'store/actions/commonAction';
 import Button from './Button';
 import { handleTrigger } from 'utils/utils';
 
@@ -47,12 +47,7 @@ const RegisterContent = () => {
       dispatch(setLoading(true));
       const { confirmPassword, ...payload } = values;
       dispatch(register(payload));
-        if (!error) {
-        dispatch(setLoading(false));
-        handleTrigger(true, dispatch, setPopup({ title: 'Register Success', content: 'Register Successfully , please go to login' }));
-      }else{
-        handleTrigger(true, dispatch, setPopup({ title: 'Register Failed', content: 'Register Failed, please try again' }));
-      }
+      dispatch(openPopup());
       setSubmitting(false);
     },
   });

@@ -16,6 +16,16 @@ const userReducer = (state = initialState, action) => {
         ...state,
         ...action.payload.user,
       };
+    case 'HYDRATE_USER':
+      return {
+        ...state,
+        userId: null,
+        user: null,
+        loading: false,
+        error: null,
+        token: null,
+        notification: [],
+      };
     case "SET_NOTIFICATION":
       return {
         ...state,

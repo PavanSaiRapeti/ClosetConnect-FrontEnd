@@ -178,14 +178,16 @@ const PromoGridItem = () => {
 const ProductShowcase = ({products}) => {
       const userId = useSelector(state=>state.user.userId);
       const router = useRouter();
+      console.log('products==>',products)
       return (
+        
     <div className="w-full mb-8">
         <div className="mt-8">
         <h2 className="text-2xl font-bold mb-4 flex items-center justify-center">What&apos;s New</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {products.content.slice(0, 8).map((product) => (
                <div key={product.id} className="flex justify-center text-center">
-                <ListingCard key={product.id} listing={product} guestId={userId}/>
+                <ListingCard key={product.id} listing={product} guestId={product?.userId}/>
                 </div>
               ))}
         </div>
@@ -217,6 +219,7 @@ const Home = ({listing,reviews,user,allItemsLatest}) => {
         type: 'CREATE_ALL_ITEMS',
         payload: allItems
       });
+      dispatch(setPageLoading(false));
   },[]);
 
   return (

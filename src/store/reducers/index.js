@@ -24,12 +24,7 @@ const rootReducer = (state, action) => {
       ...action.payload, // apply delta from hydration
     };
     return nextState;
-  } else if (action.type === SET_ERROR) {
-    return {
-      ...state,
-      error: action.payload,
-    };
-  }else {
+  } else {
     return combinedReducer(state, action);
   }
 };

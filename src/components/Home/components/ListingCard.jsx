@@ -105,14 +105,14 @@ const ListingCard = ({
   }
     return (
       <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{width:"350px"}}>
-        <a href={!isOtherUser &&  `/All/${listing.name}?id=${listing?.id}`} className="block">
+        <a href={isOtherUser &&  `/All/${listing.name}?id=${listing?.id}`} className="block">
           <div className="relative">
             <img 
               src={image} 
               alt={listing.name || defaultText} 
               className="w-full h-64 object-cover"
             />
-            {isOtherUser && (
+            {!isOtherUser && (
               <div className="absolute top-2 right-2 flex space-x-2">
                 <button className="p-1 text-ccBlack" title="Edit" onClick={handleEdit}>
                   <i className="fas fa-ellipsis-h text-lg"></i>
@@ -151,8 +151,8 @@ const ListingCard = ({
           </div>
         </a>
         <div className="flex items-center justify-between p-4 border-t">
-        {!isOtherUser    && <button onClick={openModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
-          {!isOtherUser  && (
+        {isOtherUser  && <button onClick={openModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
+          {isOtherUser  && (
             <a href={`/profile/${listing.name}`} className="flex items-center">
               <Avatar username={listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
               <span className="ml-2 text-sm text-gray-700">{listing?.userFullName  || defaultText}</span>

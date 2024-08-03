@@ -27,7 +27,6 @@ export function* loginSaga(action) {
         if (response) {
             yield put({ type: LOGIN_SUCCESS, payload: response.data}); 
             yield put({ type: SET_LOADING ,isLoading:false });
-            yield call(Router.push, '/profile');
         } else {
             yield put({ type: LOGIN_FAILURE, error: response.error });
             yield put({ type: SET_LOADING ,isLoading:false });
@@ -101,8 +100,8 @@ export function* logoutSaga(action) {
     try {
         destroyCookie(null, 'token', { path: '/' });
         destroyCookie(null, 'userId', { path: '/' });
+        yield put({ type: 'HYDRATE_USER' });
         yield put({ type: LOGOUT_SUCCESS });
-        yield put({ type: 'RESET_STORE' });
     } catch (error) {
         yield put({ type: LOGOUT_FAILURE, error: error.message });
     }
