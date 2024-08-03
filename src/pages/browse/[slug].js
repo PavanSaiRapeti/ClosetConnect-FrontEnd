@@ -13,15 +13,24 @@ import { setToken, setUserId } from 'store/actions/userAction';
 import { setPageLoading } from 'store/actions/commonAction';
 import { getAllItems, getItemByGender, getItemByType } from 'utils/utils';
 
-const CategoryPage = ({title, user,userId}) => {
+const CategoryPage = ({title, user,userId,token,allItems}) => {
   const dispatch = useDispatch();
 
   useEffect(()=>{
     if(userId){
       dispatch(getUserClothingItemsRequest(userId,30,0));
+      dispatch(setToken(token));
     }
   },[userId]);
 
+  useEffect(()=>{
+    dispatch({
+      type: 'CREATE_ALL_ITEMS',
+      payload: allItems
+    });
+  },[allItems]);
+  
+  console.log('allItems==>',allItems);
   return (
   <Layout user={user}>
     <section className="p-10" style={{ fontFamily: 'Ubuntu' }}>
@@ -59,22 +68,16 @@ export const getServerSideProps = wrapper.getServerSideProps(
     else{
       allItems = await getAllItems(30,0);
     }
-    console.log('slug==>',allItems);
-    if(allItems){
-    store.dispatch({
-      type: 'CREATE_ALL_ITEMS',
-      payload: allItems
-    });
-   }
-   
+    console.log('allItems==>',allItems);
    store.dispatch(setUserId(userId || null));
    store.dispatch(setToken(token || null));
-   store.dispatch(setPageLoading(true));
       return {
         props: {
                title:slug,
               user: userData,
-              userId:userId || null
+              userId:userId || null,
+              token:token || null,
+              allItems:allItems || []
           },
       };
     }

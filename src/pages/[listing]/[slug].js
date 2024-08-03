@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import ListingCard from '@/components/Home/components/ListingCard';
 import FeaturedProducts from '@/components/FeaturedProducts';
-import { wrapper } from 'store';
-import { getItem } from 'utils/utils';
+import { getItem, getItemImage } from 'utils/utils';
 import Layout from 'pages/Layout';
-import { setPageLoading } from 'store/actions/commonAction';
+import { openLoginPopup, setPageLoading } from 'store/actions/commonAction';
 import { parseCookies } from 'nookies';
 import { checkAuth } from 'utils/authHelpers';
 import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
 import ProductPage from '@/components/ProductCard';
+import { wrapper } from 'store';
+import TradeModal from '@/components/TradeModal';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -43,17 +45,16 @@ const ProductDescription = ({ description, material, maintenance }) => {
 const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
 
   const [image, setImage] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const userId = useSelector(state => state.user.userId);
+  const dispatch = useDispatch();
 
   useEffect(async () => {
     console.log('==>listing', listing,item);
     if(item?.id){
-    try { 
-      const response= await getItemImage(item.id, token);
+      const response= await getItemImage(item.id);
       setImage(response);
       console.log('==>image', image);
-    } catch (error) {
-        console.error('Failed to delete item:', error);
-      }
     }
     // dispatch(setPageLoading(false));
   }, [item]);
@@ -61,28 +62,26 @@ const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
   if (!item) {
     return <div className="p-6 bg-ccWhite rounded-lg shadow-lg">Loading...</div>;
   }
+  const openModal = () => {
+    if(userId){
+      setIsModalVisible(true);
+    }else{
+      dispatch(openLoginPopup());
+    }
+  };
 
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
   return (
     <Layout user={user}>
-    <div className="p-6 bg-ccWhite rounded-lg shadow-lg">
+    <div className="p-6 w-full h-screen bg-ccWhite rounded-lg shadow-lg">
     <nav className="text-sm text-gray-500 mb-4">
         <a href="/" className="hover:underline">Home</a> / <a href={`/browse/${listingName}`} className="hover:underline">{listingName}</a> / <span>{item.name}</span>
       </nav>
-      <ProductPage   product={item} image={image}/>
-      <ProductDescription
-        description="Dopasowane spodnie z denimu z delikatnymi przetarciami. Jeansy mają wysoki stan i długość do kostek, a w pasie wszystko szlufki. Z przodu znajdują się dwie wpuszczane kieszenie, z tyłu dwie naszywane. Zapinane są na zamek ukryty pod listwą i widoczny guzik. Modelka na zdjęciu ma 179 cm wzrostu i nosi rozmiar 34. Wewnętrzna długość nogawki dla rozmiaru 36 to 76,7 cm."
-        material="Korpus: 98% BAWEŁNA - 2% ELASTAN"
-        maintenance={[
-          '/path/to/icon1.png',
-          '/path/to/icon2.png',
-          '/path/to/icon3.png',
-          '/path/to/icon4.png',
-          '/path/to/icon5.png',
-        ]}
-      />
-      <FeaturedProducts products={listing} title={'Featured Listing'} type={'listing'}/>
+      <ProductPage   product={item} image={image} onTrade={openModal}/>
     </div>
-
+    <TradeModal isVisible={isModalVisible} onClose={closeModal} product={listing} image={image} guestId={userId} />
     </Layout>
 
   );
@@ -93,7 +92,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   const { id } = context.query;
   const cookies = parseCookies(context);
   const { token, userId } = cookies;
-  console.log('dog==>', token, userId, store);
+  console.log('dog==>', context,token, userId, store);
   store.dispatch(setPageLoading(true));
   let userData = null;
   const item = await getItem(id);

@@ -11,7 +11,7 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'persist/REHYDRATE':
+    case 'HYDRATE':
       return {
         ...state,
         ...action.payload.user,

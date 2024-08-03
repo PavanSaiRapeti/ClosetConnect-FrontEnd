@@ -9,7 +9,6 @@ import Router from 'next/router';
 export function* loginSaga(action) {
     console.log('Login saga triggered', action);
     try {
-        yield put({ type: SET_LOADING ,isLoading:true });
         const { email, password } = action.payload;
         const requestData = { url: loginUserEndpoint, payload: { email, password } ,isMethod: 'POST'}; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
@@ -96,13 +95,13 @@ export function* registerSaga(action) {
         yield put({ type: SET_LOADING ,isLoading:false });
     }
 }
-
 export function* logoutSaga(action) {
   console.log('out triggres', action);
     try {
         destroyCookie(null, 'token', { path: '/' });
         destroyCookie(null, 'userId', { path: '/' });
         yield put({ type: LOGOUT_SUCCESS });
+        yield put({ type: 'RESET_STORE' });
     } catch (error) {
         yield put({ type: LOGOUT_FAILURE, error: error.message });
     }

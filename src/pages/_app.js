@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(isRouteChanging) {
+    if (isRouteChanging) {
       dispatch(setPageLoading(true));
     }
   }, [isRouteChanging, dispatch]);

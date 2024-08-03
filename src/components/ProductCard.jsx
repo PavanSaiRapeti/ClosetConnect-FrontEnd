@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Avatar from './Avatar';
 
-const ProductCard = ({ product, image }) => {
+const ProductCard = ({ product, image, onTrade }) => {
   const token = useSelector(state => state.auth.token);
 
   useEffect(async () => {
+    console.log('product==>',product,token);
     if (product?.id) {
       try {
         const response = await getItemImage(product.id, token);
@@ -19,11 +20,11 @@ const ProductCard = ({ product, image }) => {
   }, [product]);
 
   return (
-    <div className="font-sans p-8">
+    <div className="font-sans p-8 border border-white-500 bg-white rounded-lg">
       <div className="flex justify-center">
         <div className="flex w-3/4 space-x-8">
           <div className="w-1/2">
-            <img src={image} alt="Product" className="w-[600px] h-[400px] object-cover rounded"  />
+            <img src={image} alt="Product" className=" w-[600px] h-[400px] object-contain rounded" />
           </div>
           <div className="w-1/2 flex flex-col justify-between">
             <div>
@@ -37,22 +38,16 @@ const ProductCard = ({ product, image }) => {
                 </div>
               </div>
               <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
-              <p className="text-sm text-gray-500 mb-4">{product.brand}</p>
-              <div className="flex items-center mb-4">
-                <p className="text-2xl font-bold text-red-500 mr-2">{product.price || 'N/A'}</p>
-                <p className="text-lg text-gray-500 line-through">{product.originalPrice || 'N/A'}</p>
-              </div>
+              <p className="text-sm text-gray-500 mb-4">{product.gender}</p>
               <div className="flex items-center mb-4">
                 <span className="text-sm font-semibold mr-2">TYPE :</span>
-                <button className="border border-gray-300 px-2 py-1 rounded text-sm">{product.type}</button>
+                <span className="border border-gray-300 px-2 py-1 rounded text-sm">{product.type}</span>
               </div>
-            </div>
-            <div>
-              <div className="flex space-x-4 mb-4">
-                <button className="w-1/2 bg-gray-500 text-white px-4 py-2 rounded">Bid</button>
-                <button className="w-1/2 bg-blue-500 text-white px-4 py-2 rounded">Trade</button>
+              <div className="flex mb-4 flex-col">
+                <span className="text-sm font-semibold mr-2">Description :</span>
+                <span className="text-lg text-gray-500 mb-4">{product.description}</span>
+                <button className="bg-ccBlack text-white px-4 py-2 rounded w-full mb-4" onClick={onTrade}><span className="font-bold">Trade Now</span></button>
               </div>
-              <button className="bg-yellow-500 text-black px-4 py-2 rounded w-full mb-4"><span className="font-bold">Message</span></button>
             </div>
           </div>
         </div>

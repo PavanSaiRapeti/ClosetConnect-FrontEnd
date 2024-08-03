@@ -52,7 +52,7 @@ const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
           body: JSON.stringify(formData),
         });
         response = await res.json();
-        if(response.status !== 200){
+        if(!response){
           setSubmitting(false);
           handleTrigger(true,dispatch,setPopup({ title: 'error', content: 'Item failed to upload' }));
           return;

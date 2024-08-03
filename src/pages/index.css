@@ -182,3 +182,7 @@ body {
     opacity: 1;
   }
 }
+
+#hero-image{
+  height: 76rem;
+}

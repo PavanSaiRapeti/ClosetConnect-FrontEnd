@@ -7,6 +7,7 @@ const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, r
   const [currentStatus, setCurrentStatus] = useState(status);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userId);
+  const userName=useSelector((state)=>state.auth.user.userName);
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');
 
@@ -56,20 +57,27 @@ const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, r
         <p className="text-center font-medium text-gray-700">Trade ID: {tradeId}</p>
       </div>
       <div className="flex flex-col items-center my-5 w-full max-w-sm">
-        <textarea
-          className="w-full h-24 p-2 border border-gray-300 rounded mb-4"
-          placeholder="Enter reason here..."
-          value={reason}
-          onChange={(e) => {
-            setReason(e.target.value);
-            setError('');
-          }}
-        />
-        {error && <span className="text-red-500">{error}</span>}
-        <div className="flex justify-between w-full">
-          <button onClick={handleAccept} className="w-24 h-10 bg-green-500 text-white mx-2 rounded hover:bg-green-600 transition duration-300">Accept</button>
-          <button onClick={handleReject} className="w-24 h-10 bg-red-500 text-white mx-2 rounded hover:bg-red-600 transition duration-300">Reject</button>
-        </div>
+         { (userName !== senderName) && (
+          <>
+            <textarea
+              className="w-full h-24 p-2 border border-gray-300 rounded mb-4"
+              placeholder="Enter reason here..."
+              value={reason}
+              onChange={(e) => {
+                setReason(e.target.value);
+                setError('');
+              }}
+            />
+            {error && <span className="text-red-500">{error}</span>}
+            <div className="flex justify-between w-full">
+              <button onClick={handleAccept} className="w-24 h-10 bg-green-500 text-white mx-2 rounded hover:bg-green-600 transition duration-300">Accept</button>
+              <button onClick={handleReject} className="w-24 h-10 bg-red-500 text-white mx-2 rounded hover:bg-red-600 transition duration-300">Reject</button>
+            </div>
+          </>
+         ) }
+
+        
+        
       </div>
     </div>
   );

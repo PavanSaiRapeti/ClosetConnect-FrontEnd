@@ -161,13 +161,15 @@ useEffect(() => {
               </div>
             </div>
           ) : (lisitingArray?.content?.map((listing, index) => (
+            <div key={listing.id} className="flex justify-center text-center">
+               <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={listing?.userId} />
+                </div>
             
-            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={listing?.userId} />
           )))
           }
             {(lisitingArray?.content?.length === 0 && !pageLoading) && (
             <div className="dummy-value text-center text-ccGray-500">
-              No items found. Please try a different search.
+              No Uploaded items found.
             </div>
           )}
            

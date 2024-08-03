@@ -7,15 +7,17 @@ import rootSaga from './sagas/rootSaga';
 import rootReducer from './reducers';
 
 
+
+const makeStore = (context) => {
+  
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'common', 'search', 'user', 'trade', 'item']
+  whitelist: ['auth', 'common', 'search', 'trade', 'item'],
+  blacklist: ['user']
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-const makeStore = (context) => {
+ const persistedReducer = persistReducer(persistConfig, rootReducer);
   const sagaMiddleware = createSagaMiddleware();
   let composeEnhancers = compose;
 

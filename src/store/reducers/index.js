@@ -29,6 +29,8 @@ const rootReducer = (state, action) => {
       ...state,
       error: action.payload,
     };
+  } else if (action.type === 'RESET_STORE') {
+    state = undefined; // Reset the state
   } else {
     return combinedReducer(state, action);
   }

@@ -69,7 +69,7 @@ const ListingGrid = ({ page, setPage,isSmall=false, selectedItem={}, setSelected
 
           {(updatedItems?.content?.length === 0 && !pageLoading) && (
             <div className="dummy-value text-center text-ccGray-500">
-              No items found. Please try a different search.
+              No Uploaded items found.
             </div>
           )}
         </div>
@@ -106,7 +106,7 @@ const ListingGrid = ({ page, setPage,isSmall=false, selectedItem={}, setSelected
 
           {(updatedItems?.content?.length === 0 && !pageLoading) && (
             <div className="dummy-value text-center text-ccGray-500">
-              No items found. Please try a different search.
+              Your Closet Is Empty. Upload items to get started.
             </div>
           )}
         </div>

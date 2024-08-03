@@ -12,14 +12,19 @@ import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction'
 import { setNotification, setToken, setUserId } from 'store/actions/userAction'
+import ReviewSection from '@/components/Home/ReviewSection'
 
+const reviews = [
+  {
+    name: 'John Doe',
+    rating: 4,
+    review: 'Great product!',
+  }
+]
 
-const Profile = ({ user }) => {
+const Profile = ({ user,userId,token }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const items = useSelector(state => state.item.items);
-  const itemsLength = items?.content?.length;
-  const userId = useSelector(state => state.user.userId);
   const [page, setPage] = useState(0);
 
 
@@ -34,9 +39,14 @@ const Profile = ({ user }) => {
   }, [dispatch, user, router])
  
   useEffect(()=>{
+
     if(user){
       dispatch(getUserClothingItemsRequest(userId, 5, 0));
+      dispatch(setUserId(userId));
+      dispatch(setToken(token));
+      dispatch(setPageLoading(true));
     }
+    
   },[dispatch,userId,user])
   return (
     <Layout user={user}>
@@ -75,14 +85,12 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { isRedirect, user } = await checkAuth(token, userId);
   console.log('==>123', cookies, isRedirect, user);
   if (isRedirect) return redirectToLogin;
-  store.dispatch(getUserClothingItemsRequest(userId, 5, 0));
-  store.dispatch(setUserId(userId));
-  store.dispatch(setToken(token));
-  store.dispatch(setPageLoading(true));
   
   return {
     props: {
       user: user,
+      userId: userId || '',
+      token: token || ''
     },
   }
 })

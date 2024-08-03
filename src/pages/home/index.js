@@ -1,7 +1,4 @@
-import FilterSidebar from "@/components/AllLisiting";
-import Categories from "@/components/Categories";
 import Skeleton from "@/components/common/Skeleton";
-import FeaturedProducts from "@/components/FeaturedProducts";
 import ListingCard from "@/components/Home/components/ListingCard";
 import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
@@ -11,16 +8,63 @@ import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "store";
 import { setPageLoading } from "store/actions/commonAction";
 import { setToken, setUserId } from "store/actions/userAction";
-import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
+import { VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
 import { checkAuth } from "utils/authHelpers";
 import { getAllItems, getAllItemsLatest } from "utils/utils";
+
+const reviews = [
+  {
+    id: 1,
+    text: 'CloseConnect is a game-changer! I found so many great deals on items. Highly recommend!',
+    reviewer: 'Alex P.',
+    stars: 5,
+  },
+  {
+    id: 2,
+    text: 'Trading my items on CloseConnect was so easy and convenient. I made extra cash and cleared out my space!',
+    reviewer: 'Jamie L.',
+    stars: 5,
+  },
+  {
+    id: 3,
+    text: 'I love the community aspect of CloseConnect. Trading items with other students is fun and sustainable!',
+    reviewer: 'Taylor R.',
+    stars: 5,
+  },
+  // Add more reviews as needed
+];
+
+const CustomerReviews = () => {
+  return (
+    <div className="text-center p-12 bg-white">
+      <h2 className="text-4xl font-bold text-black mb-10">CUSTOMER REVIEWS</h2>
+      <div className="flex flex-wrap justify-center">
+        {reviews.map((review) => (
+          <div key={review.id} className="bg-white rounded-lg p-6 m-4 w-full md:w-1/3 shadow-lg">
+            <blockquote className="text-gray-800 text-lg mb-4">
+              <span className="text-2xl text-black">“</span>
+              {review.text}
+              <span className="text-2xl text-black">”</span>
+            </blockquote>
+            <div className="text-pink-400 mb-4">
+              {Array(review.stars).fill().map((_, i) => (
+                <span key={i}>&#9733;</span>
+              ))}
+            </div>
+            <p className="text-gray-500">— {review.reviewer}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 // Hero Section Component with Carousel
 const HeroSection = () => {
   
   const slides = [
     {
-      image: "https://images.unsplash.com/photo-1560095275-b6fe3ebb506d?q=80&w=2835&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      image: '/assets/banner.jpg',
       title: "Welcome to CloseConnect",
       description: "The ultimate thrifting platform for college students."
     },
@@ -50,11 +94,11 @@ const pageLoading =useSelector(state=>state.common.pageLoading)
 
   return (
 
-    <section className="relative text-center p-10" style={{ fontFamily: "Ubuntu" }}>
+    <section className="relative text-center" style={{ fontFamily: "Ubuntu" }}>
       {slides.length === 0 || pageLoading ? (
-        <Skeleton className="w-full h-96 rounded-lg" />
+        <Skeleton className="w-full h-full rounded-lg" />
       ) : (
-        <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full h-96 object-cover rounded-lg" />
+        <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full  object-cover rounded-lg"  id="hero-image"/>
       )}
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
         {slides.length === 0 || pageLoading ? (
@@ -88,22 +132,22 @@ const categories = [
   {
     title: 'Men',
     link: 'browse/Men',
-    image: 'https://via.placeholder.com/600x400',
+    image: '/assets/men.png', // Update the image path
   },
   {
     title: 'Women',
     link: 'browse/Women',
-    image: 'https://via.placeholder.com/600x400',
+    image: '/assets/women.png',
   },
   {
     title: 'Tops',
     link: 'browse/Tops',
-    image: 'https://via.placeholder.com/600x400',
+    image: '/assets/top.png',
   },
   {
     title: 'Bottoms',
     link: 'browse/Bottoms',
-    image: 'https://via.placeholder.com/600x400',
+    image: '/assets/bottom.png',
   },
 ];
 
@@ -136,11 +180,8 @@ const ProductShowcase = ({products}) => {
       const router = useRouter();
       return (
     <div className="w-full mb-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
-        <PromoGridItem />
-       </div>
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4">What&apos;s New</h2>
+        <div className="mt-8">
+        <h2 className="text-2xl font-bold mb-4 flex items-center justify-center">What&apos;s New</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {products.content.slice(0, 8).map((product) => (
                <div key={product.id} className="flex justify-center text-center">
@@ -151,28 +192,33 @@ const ProductShowcase = ({products}) => {
       </div>
     <div className="mt-8 flex justify-center">
       <button 
-        className="bg-ccGreen text-white font-bold py-2 px-4 rounded hover:bg-ccDarkGreen transition duration-300"
+        className="bg-purple-700 text-white font-bold py-2 px-4 rounded hover:bg-ccDarkGreen transition duration-300 mb-10"
         onClick={() => router.push('/browse/All')}
       >
         view All
       </button>
     </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
+        <PromoGridItem />
+       </div>
+    
     </div>
   );
 };
 
-const Footer = () => {
-  return (
-    <footer className="bg-gray-800 text-ccWhite p-4 text-center" style={{ fontFamily: "Ubuntu" }}>
-      <p>&copy; 2024 CloseConnect. All rights reserved.</p>
-    </footer>
-  );
-};
 
 
 const Home = ({listing,reviews,user,allItemsLatest}) => {
-  const allItems = useSelector(state=>state.search.allItems);
-  console.log('allItems',allItems);
+  
+  const dispatch = useDispatch();
+  const allItems = allItemsLatest;
+  useEffect(()=>{
+    dispatch({
+        type: 'CREATE_ALL_ITEMS',
+        payload: allItems
+      });
+  },[]);
+
   return (
     <Layout user={user}>
         <div className="flex flex-col items-center justify-center ">
@@ -182,8 +228,7 @@ const Home = ({listing,reviews,user,allItemsLatest}) => {
       </div>
       <HeroSection />
       <ProductShowcase products={allItemsLatest||[]} />
-      <Categories />
-      <FeaturedProducts products={reviews} title={'Reviews'} type={'review'} />
+      <CustomerReviews />
     </Layout>
   );
 };
@@ -209,12 +254,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   store.dispatch(setPageLoading(true));
   const allItems = await getAllItems(30,0);
   const allItemsLatest = await getAllItemsLatest(30,0);
-  if(allItems){
-   store.dispatch({
-     type: 'CREATE_ALL_ITEMS',
-     payload: allItems
-   });
-  }
+
   return {
     props: {
       user: userData || null,

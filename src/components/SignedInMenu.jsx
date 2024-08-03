@@ -59,23 +59,6 @@ const SignedInMenu = ({ setIsSignedInMenuOpen, userName }) => {
               Profile
             </a>
           </li>
-          <li className="mb-2">
-            <a 
-              href="#" 
-              onClick={() => router.push('/notifications')} 
-              className="block w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 rounded-lg hover:from-blue-600 hover:to-blue-800 transition duration-300"
-            >
-              Notifications
-            </a>
-          </li>
-          <li className="mb-2 relative">
-            <a 
-              href="#" 
-              className="block w-full bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 rounded-lg hover:from-blue-600 hover:to-blue-800 transition duration-300"
-            >
-              Messages
-            </a>
-          </li>
         </ul>
       </div>
       <div className="px-6 py-4 border-t border-gray-200">
