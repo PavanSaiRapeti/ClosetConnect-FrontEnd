@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import { useDispatch, useSelector } from 'react-redux';
 import Lightbox from '@/components/Lightbox';
 import Login from '@/components/Login';
-import { closeLoginPopup, closePopup, setPopup } from 'store/actions/commonAction';
+import { closeLoginPopup, closePopup, setPageLoading, setPopup } from 'store/actions/commonAction';
 import AllPopUp from '@/components/common/AllPopUp';
 import { useEffect, useState } from 'react';
 import Loading from '@/components/Loading';
@@ -46,6 +46,10 @@ const Layout = (props) => {
         setSelectedOption(content);
     }
   }, [content]);
+  
+  useEffect(() => {
+    dispatch(setPageLoading(false));
+  }, []);
 
   useEffect(() => {
     if (error) {

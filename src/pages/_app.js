@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Provider, useDispatch } from 'react-redux';
+import { ReactReduxContext, useDispatch } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
@@ -15,17 +15,19 @@ function MyApp({ Component, pageProps }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isRouteChanging) {
+    if(isRouteChanging) {
       dispatch(setPageLoading(true));
     }
   }, [isRouteChanging, dispatch]);
 
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor} loading={<Loading />}>
-        <Component {...pageProps} />
-      </PersistGate>
-    </Provider>
+    <ReactReduxContext.Consumer>
+      {({ store }) => (
+        <PersistGate persistor={store.__PERSISTOR} loading={<Loading />}>
+          {isRouteChanging ? <Loading /> : <Component {...pageProps} />}
+        </PersistGate>
+      )}
+    </ReactReduxContext.Consumer>
   );
 }
 
