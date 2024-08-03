@@ -25,8 +25,10 @@ const LoginContent = () => {
         if (!error) {
           router.push('/profile');
           handleTrigger(true, dispatch, setPopup({ title: 'Login Success', content: 'Login Successfully' }));
+        }else{
+          handleTrigger(true, dispatch, setPopup({ title: 'Login Failed', content: 'invalid email or password'  }));
         }
-        handleTrigger(true, dispatch, setPopup({ title: 'Login Failed', content: 'invalid email or password'  }));
+        
         dispatch(closeLoginPopup());
       }, 400);
     },
