@@ -7,10 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "store";
 import { setPageLoading } from "store/actions/commonAction";
-import { setToken, setUserId } from "store/actions/userAction";
-import { VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
-import { checkAuth } from "utils/authHelpers";
-import { getAllItems, getAllItemsLatest } from "utils/utils";
+import { getAllItemsLatest } from "utils/utils";
 import { validateTokenAndFetchUser } from 'utils/authHelpers';
 
 const reviews = [
@@ -119,8 +116,6 @@ const HeroSection = () => {
     </section>
   );
 };
-
-
 
 const categories = [
   {

@@ -25,9 +25,15 @@ const Footer = ({ loading }) => {
             </Link>
           </div>
           <div className="flex space-x-4">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Facebook</a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Twitter</a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Instagram</a>
+            <Link href="https://facebook.com">
+              <a target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Facebook</a>
+            </Link>
+            <Link href="https://twitter.com">
+              <a target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Twitter</a>
+            </Link>
+            <Link href="https://instagram.com">
+              <a target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Instagram</a>
+            </Link>
           </div>
         </div>
       </div>
