@@ -21,6 +21,10 @@ const Header = ({ user }) => {
   const token = parseCookies().token;
   const [notifications, setNotifications] = useState([]);
   const dispatch = useDispatch();
+  const router = useRouter();
+  const { asPath } = router;
+  const pathValue = asPath.split('/')[1].split('?')[0];
+
   const toggleMenu = () => {
     setIsOpen(!isOpen)
   }
@@ -28,23 +32,23 @@ const Header = ({ user }) => {
     handleTrigger((user ? true : false), dispatch, setPopup({ title: 'Upload Listing Items', content: 'upload' }));
 
   }
-  const router = useRouter();
-  const { asPath } = router;
-  const pathValue = asPath.split('/')[1].split('?')[0];
-  console.log('==>path', pathValue, user);
-
   const handleLogout = () => {
     dispatch(logout());
     router.push('/home');
-    setIsSignedInMenuOpen(false);
+    // setIsSignedInMenuOpen(false); // Ensure this function is defined or remove it
   };
 
-  useEffect(async () => {
-    const notifications = await getUserNotifications(userId, token);
-    console.log('==>notifications', notifications,token);
-    setNotifications(notifications);
-  }, [userId,token]);
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      if (userId && token) {
+        const notifications = await getUserNotifications(userId, token);
+        console.log('==>notifications', notifications, token);
+        setNotifications(notifications);
+      }
+    };
 
+    fetchNotifications();
+  }, [userId, token]);
 
   if (pageLoading) {
     return (
@@ -83,9 +87,10 @@ const Header = ({ user }) => {
               <div className='w-full md:w-full'>
                 <div className='mt-4 bg-gray-100 rounded-lg' style={{ backgroundColor: '#D2EB63'}}>
                   <div className='flex flex-row px-7 p-auto items-center gap-4 md:items-center justify-between'>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <Link href={`/home`} passHref={true} className='cursor-pointer'>
-                      <Logo />
+                    <Link href={`/home`} passHref={true}>
+                      <a className='cursor-pointer'>
+                        <Logo />
+                      </a>
                     </Link>
                     <div className='md:hidden'>
                       <button onClick={toggleMenu} className='text-white focus:outline-none'>
@@ -115,7 +120,7 @@ const Header = ({ user }) => {
 
                     <div className={`relative w-auto flex items-center align-baseline justify-center gap-8 max-md:hidden`}>
                       <Suspense fallback={<Skeleton width={40} height={40} />}>
-                        <IconView notifications={notifications} />
+                        <IconView notifications={notifications} user={user}/>
                       </Suspense>
                     </div>
                   </div>
@@ -128,28 +133,38 @@ const Header = ({ user }) => {
                   <SearchBar pathValue={pathValue} />
                   <div className='py-2'>
                     {user ? (
-                      <Link href='#' onClick={handleLogout} className='text-white hover:text-gray-200 no-underline'>
-                        Logout
+                      <Link href='#'>
+                        <a onClick={handleLogout} className='text-white hover:text-gray-200 no-underline'>
+                          Logout
+                        </a>
                       </Link>
                     ) : (
-                      <Link href='/login' onClick={dispatch(openLoginPopup())} className='text-white hover:text-gray-200 no-underline'>
-                        Login
+                      <Link href='/login'>
+                        <a onClick={() => dispatch(openLoginPopup())} className='text-white hover:text-gray-200 no-underline'>
+                          Login
+                        </a>
                       </Link>
                     )}
                   </div>
                   <div className='py-2'>
-                    <Link href='#' className='text-white hover:text-gray-200 no-underline'>
-                      Cart
+                    <Link href='#'>
+                      <a className='text-white hover:text-gray-200 no-underline'>
+                        Cart
+                      </a>
                     </Link>
                   </div>
                   <div className='py-2'>
-                    <Link href='/browse/Men' className='text-white hover:text-gray-200 no-underline'>
-                      Men
+                    <Link href='/browse/Men'>
+                      <a className='text-white hover:text-gray-200 no-underline'>
+                        Men
+                      </a>
                     </Link>
                   </div>
                   <div className='py-2'>
-                    <Link href='/browse/Women' className='text-white hover:text-gray-200 no-underline'>
-                      Women
+                    <Link href='/browse/Women'>
+                      <a className='text-white hover:text-gray-200 no-underline'>
+                        Women
+                      </a>
                     </Link>
                   </div>
                 </div>

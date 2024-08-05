@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPopup } from 'store/actions/commonAction';
 import { acceptOrDeclineTrade, handleTrigger } from 'utils/utils';
 
-const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, receiverName, requestedItemName, senderName, status, tradeId }) => {
+const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, receiverName, requestedItemName, senderName, status, tradeId, userName }) => {
   const [currentStatus, setCurrentStatus] = useState(status);
   const dispatch = useDispatch();
   const userId = useSelector((state) => state.user.userId);
-  const userName=useSelector((state)=>state.auth.user.userName);
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');
 

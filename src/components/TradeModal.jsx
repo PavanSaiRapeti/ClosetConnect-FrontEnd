@@ -118,6 +118,7 @@ const TradeModalContentNext = ({guestId, itemId, onClose}) => {
             isSmall={true}
             selectedItem={selectedItem}
             setSelectedItem={setSelectedItem}
+            userId={userId}
           />
         )}
       </div>

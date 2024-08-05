@@ -6,14 +6,13 @@ import SignInMenu from './SignInMenu';
 import { handleTrigger, markNotificationAsRead } from 'utils/utils';
 import { setPopup } from 'store/actions/commonAction';
 
-const IconView = ({notifications}) => { 
+const IconView = ({notifications,user}) => { 
   const router = useRouter();
   const dispatch=useDispatch()
   const [isSignInMenuOpen, setIsSignInMenuOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [hasNewNotifications, setHasNewNotifications] = useState(false);
   const [visibleNotifications, setVisibleNotifications] = useState(5);
-  const user = useSelector(state => state.auth.user); 
   
   useEffect(() => {
     if (notifications && notifications.length > 0 && !hasNewNotifications) {

@@ -10,6 +10,7 @@ import {
 } from 'store/types/apiActionTypes';
 import { SET_LOADING, SET_ERROR } from 'store/types/apiActionTypes';
 import { handlerEndpoint, searchAllClothingItemsEndpoint, searchUserClothesEndpoint } from 'config/env';
+import { Router } from 'next/router';
 
 function* searchUserItemSaga(action) {
     try {
@@ -42,25 +43,24 @@ function* searchUserItemSaga(action) {
 
 function* searchAllClothingItemsSaga(action) {
     try {
-        yield put({ type: SET_LOADING, isLoading: true });
-        const { itemName, size, page } = action.payload.itemType;
+        const {itemType, size, page } = action.payload;
+        console.log('itemName==>', itemType,size,page);
         const requestData = { 
-            url: searchAllClothingItemsEndpoint(itemName, size?size:10, page), 
+            url: searchAllClothingItemsEndpoint(itemType, size?size:10, page), 
             payload:{},
             isMethod: 'GET'
         };
         const response = yield call(axios.post, handlerEndpoint, requestData);
         
         if (response.data) {
-            yield put({ type: SEARCH_ALL_CLOTHING_ITEMS_SUCCESS, payload: response.data });
+           
+            yield put({ type: SEARCH_ALL_CLOTHING_ITEMS_SUCCESS, payload: response.data }); 
         } else {
-            yield put({ type: SEARCH_ALL_CLOTHING_ITEMS_FAILURE, error: response.error });
+            yield put({ type: SEARCH_ALL_CLOTHING_ITEMS_FAILURE, error: response.error || "Error fetching items" });
         }
-        yield put({ type: SET_LOADING, isLoading: false });
     } catch (error) {
         console.error('Search all clothing items error:', error.response);
-        yield put({ type: SET_ERROR, payload: error?.response?.data?.message?.[0] || "Unknown error" });
-        yield put({ type: SET_LOADING, isLoading: false });
+        yield put({ type: SET_ERROR, payload: error?.response?.data?.message || "Unknown error" });
     }
 }
 

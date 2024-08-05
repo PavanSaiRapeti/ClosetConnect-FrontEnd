@@ -14,7 +14,7 @@ const CustomPagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={i}
           onClick={() => handlePageClick(i)}
-          className={`px-3 py-1 border rounded mx-1 ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-white text-blue-500'}`}
+          className={`px-3 py-1 border rounded mx-1 ${currentPage === i ? 'bg-purple-700 text-white' : 'bg-white text-purple-700'}`}
         >
           {i + 1}
         </button>
@@ -27,7 +27,7 @@ const CustomPagination = ({ currentPage, totalPages, onPageChange }) => {
     <div className="flex justify-center mt-6">
       <button
         onClick={() => handlePageClick(currentPage - 1)}
-        className="px-3 py-1 border rounded mx-1 bg-white text-blue-500"
+        className="px-3 py-1 border rounded mx-1 bg-white text-purple-700"
         disabled={currentPage === 0}
       >
         Previous
@@ -35,7 +35,7 @@ const CustomPagination = ({ currentPage, totalPages, onPageChange }) => {
       {renderPageNumbers()}
       <button
         onClick={() => handlePageClick(currentPage + 1)}
-        className="px-3 py-1 border rounded mx-1 bg-white text-blue-500"
+        className="px-3 py-1 border rounded mx-1 bg-white text-purple-700"
         disabled={currentPage === totalPages - 1}
       >
         Next

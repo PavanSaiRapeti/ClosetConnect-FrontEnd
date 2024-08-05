@@ -1,7 +1,19 @@
+import { parseCookies } from 'nookies';
 import Layout from 'pages/Layout';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { wrapper } from 'store';
+import { setPageLoading } from 'store/actions/commonAction';
+import { validateTokenAndFetchUser } from 'utils/authHelpers';
 
 const HowItWorks = () => {
+
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setPageLoading(false));
+  }, []);
+
   return (
     <div className="container mx-auto p-6">
       <div className="mb-12">
@@ -77,12 +89,28 @@ const HowItWorks = () => {
   );
 };
 
-const HelpPage = () => {
+const HelpPage = ({user}) => {
   return (
-    <Layout>
+    <Layout user={user}>
       <HowItWorks />
     </Layout>
   );
 };
+
+
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  const cookies = parseCookies({ req });
+  const { token, userId } = cookies;
+  store.dispatch(setPageLoading(true));
+  const userData = await validateTokenAndFetchUser(store, token, userId, res);
+  console.log('===>serverside', userData);
+
+  return {
+    props: {
+      user: userData || null
+    },
+  };
+});
 
 export default HelpPage;

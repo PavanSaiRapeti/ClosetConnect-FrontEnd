@@ -1,18 +1,27 @@
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { setPopup } from 'store/actions/commonAction';
 import { searchAllClothingItemsRequest, searchUserItemRequest } from 'store/actions/searchAction';
+import { handleTrigger } from 'utils/utils';
 
 const SearchBar = ({ pathValue }) => {
   const [itemName, setItemName] = useState('');
+  const searchError = useSelector((state) => state.search.error);
   const [page, setPage] = useState(0);
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleSearch = () => {
     setPage(1);
     if (pathValue === 'profile') {
       dispatch(searchUserItemRequest({ itemName, page: 0, user: true, size: '' }));
     } else {
-      dispatch(searchAllClothingItemsRequest({ itemName, page: 0, size: '', user: false }));
+      if(!searchError){
+        router.push(`/browse/${itemName}?value=true`);
+      }else{
+        handleTrigger(true,dispatch,setPopup({title:'error',content:'Error fetching items',data:'Error fetching items'}));
+      }
     }
   };
 
@@ -25,6 +34,7 @@ const SearchBar = ({ pathValue }) => {
   const handleClear = () => {
     setItemName('');
     setPage(1);
+    router.push('/browse/All');
   };
 
   return (

@@ -9,8 +9,6 @@ import { handleTrigger } from 'utils/utils';
 
 const LoginContent = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const error = useSelector((state) => state.common.error);
 
   const formik = useFormik({
     initialValues: {
@@ -22,13 +20,6 @@ const LoginContent = () => {
       dispatch(setLoading(true));
       setTimeout(() => {
         setSubmitting(false);
-        if (!error) {
-          router.push('/profile');
-          handleTrigger(true, dispatch, setPopup({ title: 'Login Success', content: 'Login Successfully' }));
-        }else{
-          handleTrigger(true, dispatch, setPopup({ title: 'Login Failed', content: 'invalid email or password'  }));
-        }
-        
         dispatch(closeLoginPopup());
       }, 400);
     },

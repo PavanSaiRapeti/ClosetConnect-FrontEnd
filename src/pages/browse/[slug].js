@@ -1,34 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Layout from 'pages/Layout';
 import { wrapper } from 'store';
-import Link from 'next/link';
 import { parseCookies } from 'nookies';
-import { checkAuth } from 'utils/authHelpers';
+import { checkAuth, validateTokenAndFetchUser } from 'utils/authHelpers';
 import { VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
-import ListingGrid from '@/components/Home/LisitingGrid';
 import AllLisiting from '@/components/AllLisiting';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 import { setToken, setUserId } from 'store/actions/userAction';
-import { setPageLoading } from 'store/actions/commonAction';
 import { getAllItems, getItemByGender, getItemByType } from 'utils/utils';
+import { searchAllClothingItemsRequest } from 'store/actions/searchAction';
+import { setPageLoading } from 'store/actions/commonAction';
 
-const CategoryPage = ({title, user,userId,token,allItems}) => {
+const CategoryPage = ({title, user,allItems,value}) => {
   const dispatch = useDispatch();
+  const searchItems = useSelector(state => state.search.allItems);
 
   useEffect(()=>{
-    if(userId){
-      dispatch(getUserClothingItemsRequest(userId,30,0));
-      dispatch(setToken(token));
+    console.log('value==>1',value,title,user);
+    if(value){
+      dispatch(searchAllClothingItemsRequest(title,30,0));
     }
-  },[userId]);
+  },[value,title]);
 
   useEffect(()=>{
     dispatch({
       type: 'CREATE_ALL_ITEMS',
-      payload: allItems
+      payload: value ? searchItems : allItems
     });
-  },[allItems]);
+    dispatch(setPageLoading(false));
+  },[allItems,searchItems,value]);
   
   console.log('allItems==>',allItems);
   return (
@@ -44,22 +45,14 @@ const CategoryPage = ({title, user,userId,token,allItems}) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) => async (context) => {
     const { slug } = context.params;
+    const { res } = context;
+    const {value }=context.query;
     const cookies = parseCookies(context);
     const { token, userId } = cookies;
-    let userData = null;
-    if (token) {
-      const { user } = await checkAuth(token, userId);
-      userData = user || null;
-      if (user) {
-        store.dispatch({
-          type: VALIDATE_TOKEN_SUCCESS,
-          payload: { user: userData, isLoggedIn: true }
-        });
-      }
-    }
+    const  userData = await validateTokenAndFetchUser(store, token, userId, res);
     let allItems;
-    console.log('slug==>',slug === 'Men');
-    if(slug === 'Men'|| slug === 'Women'){
+    if(!value){
+      if(slug === 'Men'|| slug === 'Women'){
         allItems = await getItemByGender((slug === 'Men'? 'MALE':'FEMALE'),30,0);
     }
     else if(slug === 'Tops'||slug === 'Bottoms'){
@@ -68,16 +61,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
     else{
       allItems = await getAllItems(30,0);
     }
-    console.log('allItems==>',allItems);
-   store.dispatch(setUserId(userId || null));
-   store.dispatch(setToken(token || null));
+    }
+    
       return {
         props: {
                title:slug,
               user: userData,
               userId:userId || null,
-              token:token || null,
-              allItems:allItems || []
+              allItems:allItems || [],
+              value:value || null
           },
       };
     }

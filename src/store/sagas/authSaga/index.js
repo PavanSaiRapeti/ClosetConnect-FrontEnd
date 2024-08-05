@@ -27,6 +27,7 @@ export function* loginSaga(action) {
         if (response) {
             yield put({ type: LOGIN_SUCCESS, payload: response.data}); 
             yield put({ type: SET_LOADING ,isLoading:false });
+            Router.push('/profile');
         } else {
             yield put({ type: LOGIN_FAILURE, error: response.error });
             yield put({ type: SET_LOADING ,isLoading:false });

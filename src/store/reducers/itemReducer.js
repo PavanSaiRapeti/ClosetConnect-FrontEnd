@@ -1,3 +1,4 @@
+import { HYDRATE } from 'next-redux-wrapper';
 import {
     CREATE_CLOTHING_ITEM_REQUEST,
     CREATE_CLOTHING_ITEM_SUCCESS,
@@ -15,9 +16,7 @@ import {
     GET_USER_CLOTHING_ITEMS_SUCCESS,
     GET_USER_CLOTHING_ITEMS_FAILURE,
     GET_ALL_CLOTHING_ITEMS_REQUEST,
-    GET_ALL_CLOTHING_ITEMS_SUCCESS,
-    GET_ALL_CLOTHING_ITEMS_FAILURE
-} from 'store/types/apiActionTypes';
+    GET_ALL_CLOTHING_ITEMS_SUCCESS} from 'store/types/apiActionTypes';
 
 const initialState = {
     items: [],
@@ -28,6 +27,11 @@ const initialState = {
 
 const itemReducer = (state = initialState, action) => {
     switch (action.type) {
+        case HYDRATE:
+            return {
+                ...state,
+                ...action.payload.item,
+            };
         case CREATE_CLOTHING_ITEM_REQUEST:
             return {
                 ...state,

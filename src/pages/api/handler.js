@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 
+
 const API_URL = 'https://closetconnect-dev-73814f63526e.herokuapp.com/api/v1';
 
 export const api = axios.create({
