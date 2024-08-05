@@ -12,6 +12,7 @@ import { validateTokenAndFetchUser } from 'utils/authHelpers';
 import TradeModal from "@/components/TradeModal";
 import { getUserClothesEndpoint } from "config/env";
 import { getUserClothingItemsRequest } from "store/actions/ItemAction";
+import Image from 'next/image';
 
 const reviews = [
   {
@@ -96,7 +97,7 @@ const HeroSection = () => {
       {slides.length === 0 || pageLoading ? (
         <Skeleton className="w-full h-full rounded-lg" />
       ) : (
-        <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full object-cover rounded-lg" id="hero-image" />
+        <Image src={slides[currentSlide].image} alt={slides[currentSlide].title} layout="responsive" width={1920} height={1080} className="w-full object-cover rounded-lg" id="hero-image" />
       )}
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
         {slides.length === 0 || pageLoading ? (
@@ -150,10 +151,13 @@ const PromoGridItem = () => {
     {categories.map((category, index) => (
        <div key={index} className="relative w-full h-full border-4 border-white" onClick={()=>router.push(category.link)}>
       <div className="relative w-full h-full border-4 border-white">
-        <img
+        <Image
           className="w-full h-full object-cover"
           src={category.image}
           alt={category.title}
+          layout="responsive"
+          width={500}
+          height={500}
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-white p-4">
           <h2 className="text-2xl font-bold">{category.title}</h2>

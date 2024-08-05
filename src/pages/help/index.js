@@ -5,10 +5,9 @@ import { useDispatch } from 'react-redux';
 import { wrapper } from 'store';
 import { setPageLoading } from 'store/actions/commonAction';
 import { validateTokenAndFetchUser } from 'utils/authHelpers';
+import Image from 'next/image';
 
 const HowItWorks = () => {
-
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setPageLoading(false));
@@ -43,7 +42,7 @@ const HowItWorks = () => {
             </p>
           </div>
           <div className="md:w-1/2 md:pl-8">
-            <img src="/assets/homepage1.png" alt="Founders" className="w-full h-auto object-cover rounded" />
+            <Image src="/assets/homepage1.png" alt="Founders" className="w-full h-auto object-cover rounded" layout="responsive" width={500} height={500} />
           </div>
         </div>
       </div>
@@ -51,7 +50,7 @@ const HowItWorks = () => {
         <h2 className="text-2xl font-bold mb-4">Sustainability</h2>
         <div className="flex flex-col md:flex-row items-start">
           <div className="md:w-1/2 md:pr-8">
-            <img src="https://via.placeholder.com/300" alt="Sustainability" className="w-full h-auto object-cover rounded" />
+            <Image src="https://via.placeholder.com/300" alt="Sustainability" className="w-full h-auto object-cover rounded" layout="responsive" width={300} height={200} />
           </div>
           <div className="md:w-1/2">
             <p className="mb-4">
@@ -81,7 +80,7 @@ const HowItWorks = () => {
             </p>
           </div>
           <div className="md:w-1/2 md:pl-8">
-            <img src="https://via.placeholder.com/300" alt="Giving Back" className="w-full h-auto object-cover rounded" />
+            <Image src="https://via.placeholder.com/300" alt="Giving Back" className="w-full h-auto object-cover rounded" layout="responsive" width={300} height={200} />
           </div>
         </div>
       </div>
