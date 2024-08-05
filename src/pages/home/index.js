@@ -43,9 +43,9 @@ const CustomerReviews = () => {
         {reviews.map((review) => (
           <div key={review.id} className="bg-white rounded-lg p-6 m-4 w-full md:w-1/3 shadow-lg">
             <blockquote className="text-gray-800 text-lg mb-4">
-              <span className="text-2xl text-black">"</span>
+              <span className="text-2xl text-black">&ldquo;</span>
               {review.text}
-              <span className="text-2xl text-black">"</span>
+              <span className="text-2xl text-black">&rdquo;</span>
             </blockquote>
             <div className="text-pink-400 mb-4">
               {Array(review.stars).fill().map((_, i) => (

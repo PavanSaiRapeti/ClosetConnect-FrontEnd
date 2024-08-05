@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 const Footer = ({ loading }) => {
     return (
@@ -10,10 +11,18 @@ const Footer = ({ loading }) => {
             <p className="text-sm">© 2023 CloseConnect. All rights reserved.</p>
           </div>
           <div className="flex space-x-4">
-            <a href="/about" className="text-sm hover:underline">About Us</a>
-            <a href="/contact" className="text-sm hover:underline">Contact</a>
-            <a href="/privacy" className="text-sm hover:underline">Privacy Policy</a>
-            <a href="/terms" className="text-sm hover:underline">Terms of Service</a>
+            <Link href="/about">
+              <a className="text-sm hover:underline">About Us</a>
+            </Link>
+            <Link href="/contact">
+              <a className="text-sm hover:underline">Contact</a>
+            </Link>
+            <Link href="/privacy">
+              <a className="text-sm hover:underline">Privacy Policy</a>
+            </Link>
+            <Link href="/terms">
+              <a className="text-sm hover:underline">Terms of Service</a>
+            </Link>
           </div>
           <div className="flex space-x-4">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-sm hover:underline">Facebook</a>
