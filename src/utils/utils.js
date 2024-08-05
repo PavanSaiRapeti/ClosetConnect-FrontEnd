@@ -39,16 +39,16 @@ export const handleTrigger = (isLoggedIn = true, dispatch,action ) => {
   }
 };
 
-export const getUser = async (username) => {
-  const { token }=parseCookies()
+export const getUser = async (id,token) => {
   try {
-    const response = await axios.get(getUserEndpoint(username), {
+    const response = await axios.get(getUserEndpoint(id), {
       headers: {
         'Authorization': `Bearer ${token}`
       }
     });
+    console.log(response,'1response2');
     if (response.status === 200 && response) {
-      return response.json();
+      return response.data;
     }
     return null;
   } catch (error) {

@@ -1,53 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import ProfileSection from '@/components/Home/ProfileSection'
-import ListingGrid from '@/components/Home/LisitingGrid'
 import Layout from 'pages/Layout'
-import { closeLoginPopup, setPageLoading } from 'store/actions/commonAction'
+import { setPageLoading } from 'store/actions/commonAction'
 import { wrapper } from 'store'
 import { parseCookies } from 'nookies'
-import { validateTokenSuccess } from 'store/actions/authAction'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router'
-import { checkAuth } from 'utils/authHelpers'
 import { redirectToLogin } from 'utils/redirect'
 import { getUserClothingItemsRequest } from 'store/actions/ItemAction'
-import { setNotification, setToken, setUserId } from 'store/actions/userAction'
-import ReviewSection from '@/components/Home/ReviewSection'
+import { setUserId } from 'store/actions/userAction'
+import { validateTokenAndFetchUser } from 'utils/authHelpers';
+import ListingGrid from '@/components/Home/LisitingGrid'
 
-const reviews = [
-  {
-    name: 'John Doe',
-    rating: 4,
-    review: 'Great product!',
-  }
-]
-
-const Profile = ({ user,userId,token }) => {
+const Profile = ({ user, userId }) => {
   const dispatch = useDispatch();
-  const router = useRouter();
   const [page, setPage] = useState(0);
-
-
 
   useEffect(() => {
     if (user) {
-      dispatch(validateTokenSuccess(user));
-    } else {
-      dispatch(closeLoginPopup());
-      router.push('/home')
+      dispatch(getUserClothingItemsRequest(userId, 5, page));
+      dispatch(setUserId(userId))
     }
-  }, [dispatch, user, router])
- 
-  useEffect(()=>{
+  }, [dispatch, userId, user])
 
-    if(user){
-      dispatch(getUserClothingItemsRequest(userId, 5, 0));
-      dispatch(setUserId(userId));
-      dispatch(setToken(token));
-      dispatch(setPageLoading(true));
-    }
-    
-  },[dispatch,userId,user])
   return (
     <Layout user={user}>
       <div className='flex flex-col w-full h-full p-4'>
@@ -62,16 +37,14 @@ const Profile = ({ user,userId,token }) => {
               role={user?.role}
               gender={user?.gender}
               profilePicture={user?.profilePicture}
+              userId={userId}
             />
           </div>
           <div className='w-full md:w-2/3 h-full flex flex-col mb-4 md:mb-0'>
             <h1 className='font-extrabold'>LISTING</h1>
             <div className='p-1 h-full flex-grow'>
-              <ListingGrid page={page} setPage={setPage} />
+              <ListingGrid page={page} setPage={setPage} userId={userId} />
             </div>
-          </div>
-          <div className='w-full md:w-1/6 flex justify-center'>
-            {/* <ReviewSection reviews={reviews} /> */}
           </div>
         </div>
       </div>
@@ -80,17 +53,21 @@ const Profile = ({ user,userId,token }) => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
-  const cookies = parseCookies({ req, res });
+  const cookies = parseCookies({ req });
   const { token, userId } = cookies;
-  const { isRedirect, user } = await checkAuth(token, userId);
-  console.log('==>123', cookies, isRedirect, user);
-  if (isRedirect) return redirectToLogin;
-  
+  console.log('cookies==>', cookies);
+  store.dispatch(setPageLoading(true));
+
+  const userData = await validateTokenAndFetchUser(store, token, userId, res);
+  console.log('userData==>', userData,userId);
+  if (!userData) {
+    return redirectToLogin;
+  }
+
   return {
     props: {
-      user: user,
-      userId: userId || '',
-      token: token || ''
+      user: userData || null,
+      userId: userId || null
     },
   }
 })

@@ -1,4 +1,4 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 import {
     CREATE_CLOTHING_ITEM_REQUEST,
@@ -97,13 +97,15 @@ function* getUserClothingItemsSaga(action) {
     try {
         const { userId, size, page } = action.payload;
         const cookies = parseCookies();
-        const { token} = cookies;
+        const { token , userId:isUserID } = cookies;
+        if(token && isUserID){
         const requestData = { url: getUserItemsEndpoint(userId, size, page), payload: {}, headers:{
             'Authorization': `Bearer ${token}`
             }, isMethod: 'GET' };
         const response = yield call(axios.post, handlerEndpoint, requestData);
-        yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
-        yield put({ type: 'SET_PAGE_LOADING', pageLoading: false });
+                yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
+            yield put({ type: 'SET_PAGE_LOADING', pageLoading: false });
+        }
     } catch (error) {
         console.error('Get user clothing items error:', error);
         yield put({ type: GET_USER_CLOTHING_ITEMS_FAILURE, error: "error" });
@@ -134,6 +136,6 @@ export default function* watchItemSagas() {
     yield takeEvery(UPDATE_CLOTHING_ITEM_REQUEST, updateClothingItemSaga);
     yield takeEvery(DELETE_CLOTHING_ITEM_REQUEST, deleteClothingItemSaga);
     yield takeEvery(GET_CLOTHING_ITEM_REQUEST, getClothingItemSaga);
-    yield takeEvery(GET_USER_CLOTHING_ITEMS_REQUEST, getUserClothingItemsSaga);
+    yield takeLatest(GET_USER_CLOTHING_ITEMS_REQUEST, getUserClothingItemsSaga);
     yield takeEvery(GET_ALL_CLOTHING_ITEMS_REQUEST, getAllClothingItemsSaga);
 }

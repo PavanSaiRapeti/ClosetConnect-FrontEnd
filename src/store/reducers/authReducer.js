@@ -29,6 +29,8 @@ const authReducer = (state = initialState, action) => {
       return { ...state, token: action.payload };
     case LOGOUT_REQUEST:
       return { ...state, token: null, user: null, id: null, isLoggedIn: false };
+    case 'SET_USER':
+      return { ...state, user: action.payload };
     case LOGIN_FAILURE:
       return {
         ...state,

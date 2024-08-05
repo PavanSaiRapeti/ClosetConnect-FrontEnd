@@ -1,7 +1,19 @@
+import { parseCookies } from 'nookies';
 import Layout from 'pages/Layout';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { wrapper } from 'store';
+import { setPageLoading } from 'store/actions/commonAction';
+import { validateTokenAndFetchUser } from 'utils/authHelpers';
 
 const HowItWorks = () => {
+
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setPageLoading(false));
+  }, []);
+
   return (
     <div className="container mx-auto p-6">
       <div className="mb-12">
@@ -14,24 +26,24 @@ const HowItWorks = () => {
         </p>
       </div>
       <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">Meet Our Founder</h2>
+        <h2 className="text-2xl font-bold mb-4">Meet Our Founders</h2>
         <div className="flex flex-col md:flex-row items-start">
           <div className="md:w-1/2">
             <p className="mb-4">
-              Hi! I&apos;m Alex, the founder and designer of Closet Connect. Growing up in a small town, I always dreamed of creating my own fashion line. After studying fashion design and working for top brands in New York City, I decided to start my own company.
+              Hi! We&apos;re Hemaya, Raphael, Luthfaan, and Yinglu, the founders and designers of Closet Connect. Growing up in a small town, we always dreamed of creating our own fashion line. After studying fashion design and working for top brands in New York City, we decided to start our own company.
             </p>
             <p className="mb-4">
-              Then, something magical happened: My sweet daughter, Emma, was born. She became my inspiration and the namesake of my brand. At Closet Connect, we create beautiful, functional, and affordable clothing that makes life easier for busy individuals like you.
+              Then, something magical happened: Our sweet daughter, Emma, was born. She became our inspiration and the namesake of our brand. At Closet Connect, we create beautiful, functional, and affordable clothing that makes life easier for busy individuals like you.
             </p>
             <p className="mb-4">
-              We&apos;re more than a clothing company. I love telling stories, so every collection is inspired by my own life experiences. I hope you find a piece that resonates with you and becomes a part of your story.
+              We&apos;re more than a clothing company. We love telling stories, so every collection is inspired by our own life experiences. We hope you find a piece that resonates with you and becomes a part of your story.
             </p>
             <p>
-              I&apos;m so grateful for your support. Thank you for shopping with us, and welcome to the Closet Connect family!
+              We&apos;re so grateful for your support. Thank you for shopping with us, and welcome to the Closet Connect family!
             </p>
           </div>
           <div className="md:w-1/2 md:pl-8">
-            <img src="https://via.placeholder.com/300" alt="Founder" className="w-full h-auto object-cover rounded" />
+            <img src="/assets/homepage1.png" alt="Founders" className="w-full h-auto object-cover rounded" />
           </div>
         </div>
       </div>
@@ -77,12 +89,28 @@ const HowItWorks = () => {
   );
 };
 
-const HelpPage = () => {
+const HelpPage = ({user}) => {
   return (
-    <Layout>
+    <Layout user={user}>
       <HowItWorks />
     </Layout>
   );
 };
+
+
+
+export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
+  const cookies = parseCookies({ req });
+  const { token, userId } = cookies;
+  store.dispatch(setPageLoading(true));
+  const userData = await validateTokenAndFetchUser(store, token, userId, res);
+  console.log('===>serverside', userData);
+
+  return {
+    props: {
+      user: userData || null
+    },
+  };
+});
 
 export default HelpPage;

@@ -7,10 +7,12 @@ import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 import ReactPaginate from 'react-paginate';
 import CustomPagination from './customPagination';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const AllLisiting = ({title}) => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
     const [size,setSize] = useState(2);
     const allItems = useSelector(state => state.search.allItems);
     const userId = useSelector(state => state.user.userId);
@@ -76,54 +78,27 @@ useEffect(() => {
           </button>
           <h2 className="text-lg font-semibold mb-4">Filter</h2>
           <div className="mb-4">
-            <h3 className="text-sm font-semibold mb-2">Colour</h3>
-            <div className="flex space-x-2">
-              <span className="color-swatch color-swatch--filter color-swatch--black" style={{ backgroundColor: 'black' }}></span>
-              <span className="color-swatch color-swatch--filter color-swatch--brown" style={{ backgroundColor: 'brown' }}></span>
-              <span className="color-swatch color-swatch--filter color-swatch--pink" style={{ backgroundColor: 'pink' }}></span>
-              <span className="color-swatch color-swatch--filter color-swatch--striped" style={{ backgroundColor: 'gray' }}></span>
-            </div>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold mb-2">Size</h3>
+            <h3 className="text-sm font-semibold mb-2">Category</h3>
             <div className="flex flex-col space-y-2">
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Small</span>
+                <input type="radio" name="category" className="form-radio" onChange={() => router.push('/browse/All')} />
+                <span className="ml-2">All</span>
               </label>
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Medium</span>
+                <input type="radio" name="category" className="form-radio" onChange={() => router.push('/browse/Men')} />
+                <span className="ml-2">Men</span>
               </label>
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Large</span>
-              </label>
-            </div>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold mb-2">Styles</h3>
-            <div className="flex flex-col space-y-2">
-              <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Style 1</span>
+                <input type="radio" name="category" className="form-radio" onChange={() => router.push('/browse/Women')} />
+                <span className="ml-2">Women</span>
               </label>
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Style 2</span>
-              </label>
-            </div>
-          </div>
-          <div className="mb-4">
-            <h3 className="text-sm font-semibold mb-2">Collections</h3>
-            <div className="flex flex-col space-y-2">
-              <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Collection 1</span>
+                <input type="radio" name="category" className="form-radio" onChange={() => router.push('/browse/Tops')} />
+                <span className="ml-2">Tops</span>
               </label>
               <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox" />
-                <span className="ml-2">Collection 2</span>
+                <input type="radio" name="category" className="form-radio" onChange={() => router.push('/browse/Bottoms')} />
+                <span className="ml-2">Bottoms</span>
               </label>
             </div>
           </div>

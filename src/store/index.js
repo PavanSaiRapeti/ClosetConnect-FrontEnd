@@ -15,7 +15,7 @@ const makeStore = (context) => {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['common', 'auth', 'search', 'trade', 'item', 'user', 'auth']
+    whitelist: ['user','item','auth']
   };
 
   const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -34,5 +34,5 @@ const makeStore = (context) => {
   return store;
 };
 
-const wrapper = createWrapper(makeStore);
+const wrapper = createWrapper(makeStore, { debug: true });
 export { wrapper };
