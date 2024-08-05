@@ -9,6 +9,9 @@ import { wrapper } from "store";
 import { setPageLoading } from "store/actions/commonAction";
 import { getAllItemsLatest } from "utils/utils";
 import { validateTokenAndFetchUser } from 'utils/authHelpers';
+import TradeModal from "@/components/TradeModal";
+import { getUserClothesEndpoint } from "config/env";
+import { getUserClothingItemsRequest } from "store/actions/ItemAction";
 
 const reviews = [
   {
@@ -164,8 +167,29 @@ const PromoGridItem = () => {
   );
 };
 
-const ProductShowcase = ({ products }) => {
+const ProductShowcase = ({ products, userId }) => {
+  
   const router = useRouter();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [image, setImage] = useState(null);
+
+  
+  const openModal = (listing, image) => {
+    console.log('tri==>', listing);
+    setImage(image);
+    setSelectedListing(listing);
+    setIsModalVisible(true);
+  };
+
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedListing(null);
+  };
+
+
   return (
     <div className="w-full mb-8">
       <div className="mt-8">
@@ -173,7 +197,7 @@ const ProductShowcase = ({ products }) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {products.content.slice(0, 8).map((product) => (
             <div key={product.id} className="flex justify-center text-center">
-              <ListingCard key={product.id} listing={product} guestId={product?.userId} />
+              <ListingCard key={product.id} listing={product} guestId={product?.userId} handleOpenModal={openModal}/>
             </div>
           ))}
         </div>
@@ -189,11 +213,14 @@ const ProductShowcase = ({ products }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <PromoGridItem />
       </div>
+      {selectedListing && (
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
+        )}
     </div>
   );
 };
 
-const Home = ({ user, allItemsLatest }) => {
+const Home = ({ user, allItemsLatest, userId}) => {
   const dispatch = useDispatch();
   const allItems = allItemsLatest;
 
@@ -208,6 +235,13 @@ const Home = ({ user, allItemsLatest }) => {
     initializePage();
   }, [dispatch, allItems]);
 
+  useEffect(() => {
+    if(user){
+      dispatch(getUserClothingItemsRequest(userId, 5, 0));
+    }
+  }, [user]);
+
+
   return (
     <Layout user={user}>
       <div className="flex flex-col items-center justify-center ">
@@ -216,8 +250,9 @@ const Home = ({ user, allItemsLatest }) => {
         </div>
       </div>
       <HeroSection />
-      <ProductShowcase products={allItemsLatest || []} />
+      <ProductShowcase products={allItemsLatest || []} userId={userId} />
       <CustomerReviews />
+     
     </Layout>
   );
 };
@@ -227,7 +262,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { token, userId } = cookies;
   store.dispatch(setPageLoading(true));
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
-  console.log('===>serverside', userData);
 
   const allItemsLatest = await getAllItemsLatest(8, 0);
 
@@ -235,6 +269,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     props: {
       user: userData || null,
       allItemsLatest: allItemsLatest || null,
+      userId:userId || null
     },
   };
 });

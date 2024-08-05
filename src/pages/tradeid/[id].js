@@ -37,11 +37,9 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   const { res } = context;
   const cookies = parseCookies(context);
   const { token, userId } = cookies;
-  console.log('dog==>', token, userId, store);
   store.dispatch(setPageLoading(true));
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
   const trade = await getTrade(id, token);
-  console.log('trade==>',trade);
   store.dispatch({type:'SET_USER', payload: userData });
   return {
     props: {

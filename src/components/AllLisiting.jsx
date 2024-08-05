@@ -8,6 +8,7 @@ import ReactPaginate from 'react-paginate';
 import CustomPagination from './customPagination';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import TradeModal from './TradeModal';
 
 const AllLisiting = ({title}) => {
 
@@ -19,6 +20,9 @@ const AllLisiting = ({title}) => {
     const pageLoading = useSelector((state) => state.common.pageLoading);
     const [lisitingArray, setLisitingArray] = useState(allItems);
 
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedListing, setSelectedListing] = useState(null);
+    const [image, setImage] = useState(null);
 
 useEffect(() => {
     setLisitingArray(allItems);
@@ -49,6 +53,20 @@ useEffect(() => {
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
+  };
+
+
+  const openModal = (listing, image) => {
+    console.log('tri==>', listing);
+    setImage(image);
+    setSelectedListing(listing);
+    setIsModalVisible(true);
+  };
+
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedListing(null);
   };
 
   return (
@@ -137,7 +155,7 @@ useEffect(() => {
             </div>
           ) : (lisitingArray?.content?.map((listing, index) => (
             <div key={listing.id} className="flex justify-center text-center">
-               <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={listing?.userId} />
+               <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={listing?.userId}  handleOpenModal={openModal}/>
                 </div>
             
           )))
@@ -151,6 +169,9 @@ useEffect(() => {
         </div>
         <CustomPagination totalPages={lisitingArray?.totalPages} onPageChange={handlePageChange} />
       </div>
+      {selectedListing && (
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
+        )}
     </div>
   );
 };

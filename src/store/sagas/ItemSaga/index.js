@@ -53,7 +53,6 @@ function* updateClothingItemSaga(action) {
             'Authorization': `Bearer ${token}`
             }};
         const response = yield call(axios.post, handlerEndpoint, requestData);
-        console.log('===>updateResponse', response);
         yield put({ type: UPDATE_CLOTHING_ITEM_SUCCESS, payload: response.data });
     } catch (error) {
         console.error('Update clothing item error:', error?.response);

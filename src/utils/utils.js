@@ -46,7 +46,6 @@ export const getUser = async (id,token) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response,'1response2');
     if (response.status === 200 && response) {
       return response.data;
     }
@@ -241,8 +240,6 @@ export const markNotificationAsRead = async (notificationId) => {
         'Authorization': `Bearer ${token}`,
       },
     });
-    console.log(response, 'response');
-    
     return response.json();
   } catch (error) {
     console.error('Error marking notification as read:', error);

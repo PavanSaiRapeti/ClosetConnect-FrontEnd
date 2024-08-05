@@ -29,7 +29,6 @@ const ProfileSection = memo(({
   const [filterStatus, setFilterStatus] = useState('ALL');
 
   useEffect(() => {
-    console.log('userId==>',isOtherUser,mainUserId,userId); 
     dispatch(setPageLoading(false));
   }, [userId]);
 

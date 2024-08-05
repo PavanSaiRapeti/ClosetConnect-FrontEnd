@@ -55,11 +55,8 @@ const Profile = ({ user, userId }) => {
 export const getServerSideProps = wrapper.getServerSideProps((store) => async ({ req, res }) => {
   const cookies = parseCookies({ req });
   const { token, userId } = cookies;
-  console.log('cookies==>', cookies);
-  store.dispatch(setPageLoading(true));
 
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
-  console.log('userData==>', userData,userId);
   if (!userData) {
     return redirectToLogin;
   }

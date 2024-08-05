@@ -6,12 +6,10 @@ const ProductCard = ({ product, image, onTrade }) => {
   const token = useSelector(state => state.auth.token);
 
   useEffect(async () => {
-    console.log('product==>',product,token);
     if (product?.id) {
       try {
         const response = await getItemImage(product.id, token);
         setImage(response);
-        console.log('==>image', image);
       } catch (error) {
         console.error('Failed to delete item:', error);
       }

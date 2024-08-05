@@ -84,7 +84,6 @@ const TradeModalContentNext = ({guestId, itemId, onClose}) => {
       token: token
     };
     const response = await requestTrade(tradeRequest);
-    console.log("===>res", response)
     if(response.status === 200){
     dispatch(setPopup({
       title: 'Success',
@@ -159,6 +158,7 @@ const TradeModalContentNext = ({guestId, itemId, onClose}) => {
 
 
 const TradeModal = ({ isVisible, onClose, product , image, guestId}) => {
+  console.log('product==>', guestId);
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [

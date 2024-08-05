@@ -104,7 +104,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { token, userId } = cookies;
   store.dispatch(setPageLoading(true));
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
-  console.log('===>serverside', userData);
 
   return {
     props: {

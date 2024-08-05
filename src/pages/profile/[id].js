@@ -18,7 +18,6 @@ const UserProfile = ({ user, userId, guestUser, guestUserId }) => {
   const [page, setPage] = useState(0);
 
   useEffect(() => {
-    console.log('guestUser==>', guestUser);
     if (guestUser) {
       dispatch(getUserClothingItemsRequest(guestUserId, 5, 0));
     }
@@ -56,8 +55,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { id } = params;
   const cookies = parseCookies({ req, res });
   const { token, userId } = cookies;
-  console.log('token==>', token);
-  console.log('userId==>', userId, id);
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
   const userProfile = await getUser(id, token);
   if (!userProfile) {

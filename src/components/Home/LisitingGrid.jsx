@@ -7,7 +7,7 @@ import CustomPagination from '../customPagination';
 import { handleTrigger } from 'utils/utils';
 import TradeModal from '@/components/TradeModal';
 
-const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId ,guestUser=null }) => {
+const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId }) => {
   const dispatch = useDispatch();
   const { items, error } = useSelector(state => state.item);
   const pageLoading = useSelector((state) => state.common.pageLoading);
@@ -46,16 +46,13 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
     setPage(selectedPage);
   };
 
-  const openModal = (listing) => {
+
+  const openModal = (listing, image) => {
     console.log('tri==>', listing);
-    // setImage(image);
+    setImage(image);
     setSelectedListing(listing);
     setIsModalVisible(true);
   };
-
-  useEffect(() => {
-    console.log('isModalVisible==>', currentItems);
-  }, [currentItems]);
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -85,7 +82,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
               className={`cursor-pointer ${selectedItem === listing.id ? 'border-2 border-blue-500' : ''}`}
               onClick={() => setSelectedItem(listing.id)}
             >
-              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} openModal={() => openModal(listing)} />
+              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} handleOpenModal={openModal} />
             </div>
           )))
           }
@@ -122,8 +119,8 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
                 <Skeleton width="60px" height="24px" />
               </div>
             </div>
-          ) : (currentItems?.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} handleOpenModal={() => openModal(listing)} guestUser={guestUser} />
+          ) : (items?.content?.map((listing) => (
+            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} handleOpenModal={openModal} />
           )))
           }
 
@@ -138,10 +135,10 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
           totalPages={items?.totalPages}
           onPageChange={handlePageChange}
         />
-        {selectedListing && (
+      </div>
+      {selectedListing && (
           <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
         )}
-      </div>
     </div>
   );
 };

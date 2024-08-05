@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Skeleton from '@/components/common/Skeleton';
-import { deleteItem, getItemImage, getUser, handleTrigger } from 'utils/utils';
+import { deleteItem, getItemImage, handleTrigger } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { openLoginPopup, setPageLoading, setPopup } from 'store/actions/commonAction';
+import { openLoginPopup, setPopup } from 'store/actions/commonAction';
 import Avatar from '@/components/Avatar';
 
 const ListingCard = ({ 
@@ -17,7 +16,6 @@ const ListingCard = ({
   const userId = useSelector(state => state.user.userId);
   const token = useSelector(state => state.user.token);
   const isOtherUser = parseInt(guestId) !== parseInt(userId);
-  const [guestData, setGuestData] = useState(null);
   const dispatch = useDispatch();
   const [image, setImage] = useState('https://via.placeholder.com/250');
   const defaultText = 'N/A';
@@ -60,6 +58,13 @@ const ListingCard = ({
       handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'Error deleting item' }));
     }
   };
+  const handleTradeNow = () => {
+    if(userId){
+      handleOpenModal(listing,image);
+    }else{
+      dispatch(openLoginPopup());
+    }
+  }
 
   if (isSmall) {
     return (
@@ -118,7 +123,7 @@ const ListingCard = ({
         </div>
       </a>
       <div className="flex items-center justify-between p-4 border-t">
-        {isOtherUser && <button onClick={() => handleOpenModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
+        {isOtherUser && <button onClick={handleTradeNow} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
         {isOtherUser && (
           <a href={`/profile/${listing?.userId}`} className="flex items-center">
             <Avatar username={listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />

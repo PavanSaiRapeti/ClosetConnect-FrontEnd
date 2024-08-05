@@ -50,11 +50,9 @@ const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
   const dispatch = useDispatch();
 
   useEffect(async () => {
-    console.log('==>listing', listing,item);
     if(item?.id){
       const response= await getItemImage(item.id);
       setImage(response);
-      console.log('==>image', image);
     }
     // dispatch(setPageLoading(false));
   }, [item]);
@@ -92,7 +90,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   const { id } = context.query;
   const cookies = parseCookies(context);
   const { token, userId } = cookies;
-  console.log('dog==>', context,token, userId, store);
   store.dispatch(setPageLoading(true));
   let userData = null;
   const item = await getItem(id);

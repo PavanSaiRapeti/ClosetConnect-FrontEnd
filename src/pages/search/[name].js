@@ -26,7 +26,6 @@ const CategoryPage = ({title, user,userId,allItems}) => {
     });
   },[allItems]);
   
-  console.log('allItems==>',allItems);
   return (
   <Layout user={user}>
     <section className="p-10" style={{ fontFamily: 'Ubuntu' }}>
@@ -45,7 +44,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     const { token, userId } = cookies;
     const  userData = await validateTokenAndFetchUser(store, token, userId, res);
     let allItems;
-    console.log('slug==>',slug === 'Men');
     if(slug === 'Men'|| slug === 'Women'){
         allItems = await getItemByGender((slug === 'Men'? 'MALE':'FEMALE'),30,0);
     }

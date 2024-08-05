@@ -26,7 +26,6 @@ const FeaturedProducts = ({ products, type, title }) => {
         },
       })
     }
-    console.log('products',products,userId);
   }, [title])
 
 

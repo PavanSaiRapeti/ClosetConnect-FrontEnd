@@ -17,7 +17,6 @@ const CategoryPage = ({title, user,allItems,value}) => {
   const searchItems = useSelector(state => state.search.allItems);
 
   useEffect(()=>{
-    console.log('value==>1',value,title,user);
     if(value){
       dispatch(searchAllClothingItemsRequest(title,30,0));
     }
@@ -30,8 +29,6 @@ const CategoryPage = ({title, user,allItems,value}) => {
     });
     dispatch(setPageLoading(false));
   },[allItems,searchItems,value]);
-  
-  console.log('allItems==>',allItems);
   return (
   <Layout user={user}>
     <section className="p-10" style={{ fontFamily: 'Ubuntu' }}>
