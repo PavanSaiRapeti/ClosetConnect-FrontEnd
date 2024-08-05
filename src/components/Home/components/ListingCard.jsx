@@ -125,7 +125,7 @@ const ListingCard = ({
         {isOtherUser && <button onClick={handleTradeNow} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
         {isOtherUser && (
           <a href={`/profile/${listing?.userId}`} className="flex items-center">
-            <Avatar username={listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
+            <Avatar username={guestUser?.name ||listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
             <span className="ml-2 text-sm text-gray-700">{guestUser?.name || listing?.userFullName || defaultText}</span>
           </a>
         )}

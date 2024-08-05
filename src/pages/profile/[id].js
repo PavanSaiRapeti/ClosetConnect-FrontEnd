@@ -26,6 +26,9 @@ const UserProfile = ({ user, userId, guestUser, guestUserId }) => {
   return (
     <Layout user={user}>
       <div className='flex flex-col w-full h-full p-4'>
+        <div className='flex justify-center items-center mb-4'>
+        <h1 className='text-3xl font-bold'>{guestUser?.userName}&apos;s Listings</h1>
+        </div>
         <div className='flex flex-col md:flex-row w-full h-full space-y-4 md:space-y-0 md:space-x-4'>
           <div className='w-full md:w-1/6 h-full flex justify-center mb-4 md:mb-0'>
             <ProfileSection

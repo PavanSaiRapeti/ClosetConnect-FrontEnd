@@ -7,7 +7,7 @@ import CustomPagination from '../customPagination';
 import { handleTrigger } from 'utils/utils';
 import TradeModal from '@/components/TradeModal';
 
-const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId }) => {
+const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId, guestUser={} }) => {
   const dispatch = useDispatch();
   const { items, error } = useSelector(state => state.item);
   const pageLoading = useSelector((state) => state.common.pageLoading);
@@ -81,7 +81,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
               className={`cursor-pointer ${selectedItem === listing.id ? 'border-2 border-blue-500' : ''}`}
               onClick={() => setSelectedItem(listing.id)}
             >
-              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} handleOpenModal={openModal} />
+              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} handleOpenModal={openModal} guestUser={guestUser}/>
             </div>
           )))
           }
@@ -119,7 +119,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
               </div>
             </div>
           ) : (items?.content?.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} handleOpenModal={openModal} />
+            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} handleOpenModal={openModal} guestUser={guestUser}/>
           )))
           }
 
