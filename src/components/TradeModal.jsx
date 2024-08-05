@@ -158,7 +158,6 @@ const TradeModalContentNext = ({guestId, itemId, onClose}) => {
 
 
 const TradeModal = ({ isVisible, onClose, product , image, guestId}) => {
-  console.log('product==>', guestId);
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = [

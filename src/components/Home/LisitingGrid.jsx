@@ -48,7 +48,6 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
 
 
   const openModal = (listing, image) => {
-    console.log('tri==>', listing);
     setImage(image);
     setSelectedListing(listing);
     setIsModalVisible(true);

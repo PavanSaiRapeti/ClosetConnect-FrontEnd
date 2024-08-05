@@ -177,7 +177,6 @@ const ProductShowcase = ({ products, userId }) => {
 
   
   const openModal = (listing, image) => {
-    console.log('tri==>', listing);
     setImage(image);
     setSelectedListing(listing);
     setIsModalVisible(true);

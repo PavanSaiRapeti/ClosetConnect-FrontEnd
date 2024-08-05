@@ -34,7 +34,6 @@ const ListingCard = ({
   };
 
   useEffect(() => {
-    console.log('listing12==>', handleOpenModal , isOtherUser,guestId,userId,listing);
     const fetchData = async () => {
       if (listing?.id) {
         try {
