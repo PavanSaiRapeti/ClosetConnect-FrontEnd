@@ -123,7 +123,8 @@ export const getAllItemsLatest = async (size, page) => {
   return response.json();
 };
 
-export const deleteItem = async (itemId, userId, token) => {
+export const deleteItem = async (itemId, userId) => {
+   const {token} = parseCookies();
   const response = await fetch(deleteItemEndpoint(itemId, userId), {
     method: 'DELETE',
     headers: {

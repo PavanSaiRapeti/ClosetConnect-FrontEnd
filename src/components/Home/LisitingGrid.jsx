@@ -6,8 +6,9 @@ import Skeleton from '../common/Skeleton';
 import CustomPagination from '../customPagination';
 import { handleTrigger } from 'utils/utils';
 import TradeModal from '@/components/TradeModal';
+import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 
-const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId, guestUser={} }) => {
+const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId, guestUser={}, isOtherUser = false }) => {
   const dispatch = useDispatch();
   const { items, error } = useSelector(state => state.item);
   const pageLoading = useSelector((state) => state.common.pageLoading);
@@ -18,6 +19,9 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
   const [image, setImage] = useState(null);
 
   useEffect(() => {
+    if(isOtherUser){
+      dispatch(getUserClothingItemsRequest(userId,5,page));
+    }
     if (items?.content) {
       const startIndex = (page) * items?.pageable?.pageSize;
       const endIndex = startIndex + items?.pageable?.pageSize;

@@ -2,9 +2,9 @@ import React, { lazy, Suspense, useEffect } from 'react';
 import ListingCard from '@/components/Home/components/ListingCard';
 import FeaturedProducts from '@/components/FeaturedProducts';
 import { wrapper } from 'store';
-import { getItem, getTrade } from 'utils/utils';
+import { getItem, getTrade, handleTrigger } from 'utils/utils';
 import Layout from 'pages/Layout';
-import { setPageLoading } from 'store/actions/commonAction';
+import { setPageLoading, setPopup } from 'store/actions/commonAction';
 import { parseCookies } from 'nookies';
 import { checkAuth, validateTokenAndFetchUser } from 'utils/authHelpers';
 import { SET_USER_ID, VALIDATE_TOKEN_SUCCESS } from 'store/types/apiActionTypes';
@@ -18,9 +18,9 @@ const SwapComponent = lazy(() => import('@/components/SwapComponent'));
 
 const ItemDetails = ({ trade, user }) => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(setPageLoading(false));
-  }, []);
+
+
+
   return (
     <Layout user={user}>
       Trade information
@@ -41,10 +41,20 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async (c
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
   const trade = await getTrade(id, token);
   store.dispatch({type:'SET_USER', payload: userData });
+  if(trade.status === 'COMPLETED'){
+    handleTrigger(true,store.dispatch,setPopup({title:'Completed',content:"Trade already completed"}));
+    return {
+      redirect: {
+        destination: '/profile?message=Trade already completed',
+        permanent: false,
+      },
+    };
+  }
+  console.log(userData,trade,'==<=userData');
   return {
     props: {
       user: userData || null,
-      trade: trade || null
+      trade: trade || null,
     },
   };
 });

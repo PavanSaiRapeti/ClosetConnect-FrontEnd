@@ -7,10 +7,11 @@ import { createUserItem, handleTrigger, updateUserItem, uploadItemImage } from '
 import { useSelector, useDispatch } from 'react-redux';
 import { createClothingItemRequest, getUserClothingItemsRequest, updateClothingItemRequest } from 'store/actions/ItemAction';
 import { setPopup } from 'store/actions/commonAction';
+import { parseCookies } from 'nookies';
 
 const UploadItemForm = ({ onSubmit, initialData,isUpdate=false }) => {
   const userId = useSelector(state => state.user.userId);
-  const token = useSelector(state => state.user.token);
+  const token = parseCookies().token;
   const item = useSelector(state => state.item.item);
   const [error, setError] = useState(false);
   const dispatch = useDispatch();
