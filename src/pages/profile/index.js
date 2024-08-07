@@ -48,7 +48,7 @@ const Profile = ({ user, userId, message }) => {
               userId={userId}
             />
           </div>
-          <div className='w-full md:w-2/3 h-full flex flex-col mb-4 md:mb-0'>
+          <div className='w-full md:w-5/6 h-full flex flex-col mb-4 md:mb-0'>
             <h1 className='font-extrabold'>LISTING</h1>
             <div className='p-1 h-full flex-grow'>
               <ListingGrid page={page} setPage={setPage} userId={userId} />

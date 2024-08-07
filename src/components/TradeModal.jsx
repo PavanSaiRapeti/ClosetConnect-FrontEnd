@@ -157,8 +157,9 @@ const TradeModalContentNext = ({guestId, itemId, onClose}) => {
 };
 
 
-const TradeModal = ({ isVisible, onClose, product , image, guestId}) => {
+const TradeModal = ({ isVisible, onClose, product , image}) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const guestId = useSelector((state) => state.user.guestId);
 
   const steps = [
     { id: 1, title: 'Tab 1', content: <TradeModalContent product={product} image={image} setCurrentStep={setCurrentStep} currentStep={currentStep}/> },

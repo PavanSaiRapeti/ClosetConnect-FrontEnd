@@ -61,6 +61,7 @@ const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
     return <div className="p-6 bg-ccWhite rounded-lg shadow-lg">Loading...</div>;
   }
   const openModal = () => {
+    console.log(listing,'===>userId');
     if(userId){
       setIsModalVisible(true);
     }else{
@@ -77,7 +78,7 @@ const ItemDetails = ({ item, listingName, itemName, user, listing }) => {
     <nav className="text-sm text-gray-500 mb-4">
         <a href="/" className="hover:underline">Home</a> / <a href={`/browse/${listingName}`} className="hover:underline">{listingName}</a> / <span>{item.name}</span>
       </nav>
-      <ProductPage   product={item} image={image} onTrade={openModal}/>
+      <ProductPage product={item} image={image} onTrade={openModal}/>
     </div>
     <TradeModal isVisible={isModalVisible} onClose={closeModal} product={listing} image={image} guestId={userId} />
     </Layout>

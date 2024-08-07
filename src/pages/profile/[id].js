@@ -38,7 +38,7 @@ const UserProfile = ({ user, userId, guestUser, guestUserId }) => {
               userId={guestUserId}
             />
           </div>
-          <div className='w-full md:w-2/3 h-full flex flex-col mb-4 md:mb-0'>
+          <div className='w-full md:w-5/6 h-full flex flex-col mb-4 md:mb-0'>
             <h1 className='font-extrabold'>LISTING</h1>
             <div className='p-1 h-full flex-grow'>
               <ListingGrid userId={guestUser?.userId} page={page} setPage={setPage} guestUser={guestUser} isOtherUser={isOtherUser}/>

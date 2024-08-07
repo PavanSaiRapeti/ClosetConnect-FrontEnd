@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { openLoginPopup, setPopup } from 'store/actions/commonAction';
 import Avatar from '@/components/Avatar';
 import Image from 'next/image';
+import { setGuestId } from 'store/actions/userAction';
 
 const ListingCard = ({ 
   listing,
@@ -63,6 +64,7 @@ const ListingCard = ({
   const handleTradeNow = () => {
     if (userId) {
       handleOpenModal(listing, image);
+      dispatch(setGuestId(listing?.userId));
     } else {
       dispatch(openLoginPopup());
     }
@@ -71,14 +73,14 @@ const ListingCard = ({
   if (isSmall) {
     return (
       <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
-        <Image src={image} alt={listing.name || defaultText} width={192} height={192} className="w-48 h-48 object-cover" layout='responsive' />
+        <Image src={image} alt={listing.name || defaultText} width={192} height={192} className="w-48 h-48 object-cover" />
         <span className="mt-2 text-center text-sm font-semibold text-gray-700">{listing.name || defaultText}</span>
       </div>
     );
   }
 
   return (
-    <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "350px" }}>
+    <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300 w-full md:w-80">
       <a href={isOtherUser && `/All/${listing.name}?id=${listing?.id}`} className="block">
         <div className="relative">
           <Image 

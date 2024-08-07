@@ -6,7 +6,6 @@ import Skeleton from '../common/Skeleton';
 import CustomPagination from '../customPagination';
 import { handleTrigger } from 'utils/utils';
 import TradeModal from '@/components/TradeModal';
-import { getUserClothingItemsRequest } from 'store/actions/ItemAction';
 
 const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId, guestUser={}, isOtherUser = false }) => {
   const dispatch = useDispatch();
@@ -105,7 +104,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
   return (
     <div className="p-6 bg-ccWhite rounded-lg shadow-lg">
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
           {pageLoading ? (
             <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "250px" }}>
               <Skeleton height="256px" />
@@ -137,7 +136,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
         />
       </div>
       {selectedListing && (
-          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={selectedListing?.guestId} />
         )}
     </div>
   );

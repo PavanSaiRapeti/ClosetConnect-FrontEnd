@@ -169,7 +169,7 @@ useEffect(() => {
         <CustomPagination totalPages={lisitingArray?.totalPages} onPageChange={handlePageChange} />
       </div>
       {selectedListing && (
-          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} />
         )}
     </div>
   );
