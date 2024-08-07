@@ -188,7 +188,8 @@ export const getItemImage = async (itemId, token) => {
 };
 
 
-export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, message, date, location, token }) => {
+export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, message, date, location }) => {
+  const {token} = parseCookies();
   try {
     const tradeData = {
       "tradeInitiatorId": userId,

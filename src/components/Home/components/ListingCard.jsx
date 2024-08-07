@@ -35,15 +35,12 @@ const ListingCard = ({
   };
 
   useEffect(() => {
-    let isMounted = true;
 
     const fetchData = async () => {
       if (listing?.id) {
         try {
           const response = await getItemImage(listing.id, token);
-          if (isMounted) {
             setImage(response);
-          }
         } catch (error) {
           console.error('Failed to fetch item image:', error);
         }
@@ -51,10 +48,6 @@ const ListingCard = ({
     };
 
     fetchData();
-
-    return () => {
-      isMounted = false;
-    };
   }, [listing?.id, token, dispatch]);
 
   const handleDelete = async () => {

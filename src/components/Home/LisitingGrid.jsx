@@ -19,9 +19,6 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
   const [image, setImage] = useState(null);
 
   useEffect(() => {
-    if(isOtherUser){
-      dispatch(getUserClothingItemsRequest(userId,5,page));
-    }
     if (items?.content) {
       const startIndex = (page) * items?.pageable?.pageSize;
       const endIndex = startIndex + items?.pageable?.pageSize;

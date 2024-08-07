@@ -17,8 +17,6 @@ const SwapComponent = lazy(() => import('@/components/SwapComponent'));
 
 
 const ItemDetails = ({ trade, user }) => {
-  const dispatch = useDispatch();
-
 
 
   return (
