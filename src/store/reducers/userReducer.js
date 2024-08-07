@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   token: null,
   notification: [],
+  guestId: null,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -35,6 +36,11 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         userId: action.payload,
+      };
+    case 'SET_GUEST_ID':
+      return {
+        ...state,
+        guestId: action.payload,
       };
     case 'SET_TOKEN':
       return {

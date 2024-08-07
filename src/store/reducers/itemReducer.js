@@ -19,6 +19,7 @@ import {
     GET_ALL_CLOTHING_ITEMS_SUCCESS} from 'store/types/apiActionTypes';
 
 const initialState = {
+    guestItems: [],
     items: [],
     item: null,
     loading: false,
@@ -98,6 +99,12 @@ const itemReducer = (state = initialState, action) => {
                 items: action.payload,
                 loading: false
             };
+            case 'GET_GUEST_USER_CLOTHING_ITEMS_SUCCESS':
+                return {
+                    ...state,
+                    guestItems: action.payload,
+                    loading: false
+                };
         case GET_ALL_CLOTHING_ITEMS_SUCCESS:
             return {
                 ...state,

@@ -13,7 +13,6 @@ export async function checkAuth(token, userId, headers = {}) {
         'Authorization': `Bearer ${token}`,
       },
     });
-    console.log('response==>', response);
     const userData = await response.json();
 
     return { isRedirect: false, user: userData };
@@ -29,7 +28,6 @@ export const validateTokenAndFetchUser = async (store, token, userId, res) => {
   let userData = null;
   if (token) {
     const { user } = await checkAuth(token, userId);
-    console.log('user==>', user, token, userId);
     if (user) {
       store.dispatch({
         type: VALIDATE_TOKEN_SUCCESS,

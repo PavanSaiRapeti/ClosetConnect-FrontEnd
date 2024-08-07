@@ -44,7 +44,6 @@ function* searchUserItemSaga(action) {
 function* searchAllClothingItemsSaga(action) {
     try {
         const {itemType, size, page } = action.payload;
-        console.log('itemName==>', itemType,size,page);
         const requestData = { 
             url: searchAllClothingItemsEndpoint(itemType, size?size:10, page), 
             payload:{},

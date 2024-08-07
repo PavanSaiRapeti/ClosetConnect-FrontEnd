@@ -7,13 +7,11 @@ import { validateTokenFailure, validateTokenSuccess } from 'store/actions/authAc
 import Router from 'next/router';
 
 export function* loginSaga(action) {
-    console.log('Login saga triggered', action);
     try {
         const { email, password } = action.payload;
         const requestData = { url: loginUserEndpoint, payload: { email, password } ,isMethod: 'POST'}; 
         const response = yield call(axios.post, handlerEndpoint, requestData);
         const {token , id}=response.data
-        console.log('==>t0',token);
         setCookie(null, 'token', token, {
             secure: process.env.NODE_ENV !== 'development',
             maxAge: 30 * 24 * 60 * 60,
@@ -41,7 +39,6 @@ export function* loginSaga(action) {
 }
 
 export function* validateTokenAndGetUserSaga(action) {
-  console.log('validated saga triggered', action);
     const { token, userId, headers } = action.payload;
     if (!token || !userId) {
       yield put(validateTokenFailure('Token or userId is missing'));
@@ -55,7 +52,6 @@ export function* validateTokenAndGetUserSaga(action) {
           ...headers
         }
       });
-      console.log('==>response',response.data)
       if (response.data) {
         yield put(validateTokenSuccess(response.data));
       } else {
@@ -97,7 +93,6 @@ export function* registerSaga(action) {
     }
 }
 export function* logoutSaga(action) {
-  console.log('out triggres', action);
     try {
         destroyCookie(null, 'token', { path: '/' });
         destroyCookie(null, 'userId', { path: '/' });

@@ -4,7 +4,6 @@ import watchSearchSagas from './searchSaga';
 import watchItemSagas from './ItemSaga';
 import watchTradeSagas from './TradeSaga';
 export default function* rootSaga() {
-    console.log('Root saga started');
     yield all([
       ...watchAuthSagas(),
       ...watchItemSagas(),

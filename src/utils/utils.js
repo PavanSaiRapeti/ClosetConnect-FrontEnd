@@ -46,7 +46,6 @@ export const getUser = async (id,token) => {
         'Authorization': `Bearer ${token}`
       }
     });
-    console.log(response,'1response2');
     if (response.status === 200 && response) {
       return response.data;
     }
@@ -124,7 +123,8 @@ export const getAllItemsLatest = async (size, page) => {
   return response.json();
 };
 
-export const deleteItem = async (itemId, userId, token) => {
+export const deleteItem = async (itemId, userId) => {
+   const {token} = parseCookies();
   const response = await fetch(deleteItemEndpoint(itemId, userId), {
     method: 'DELETE',
     headers: {
@@ -188,7 +188,8 @@ export const getItemImage = async (itemId, token) => {
 };
 
 
-export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, message, date, location, token }) => {
+export const requestTrade = async ({ userId, userItemId, guestId, guestItemId, message, date, location }) => {
+  const {token} = parseCookies();
   try {
     const tradeData = {
       "tradeInitiatorId": userId,
@@ -241,8 +242,6 @@ export const markNotificationAsRead = async (notificationId) => {
         'Authorization': `Bearer ${token}`,
       },
     });
-    console.log(response, 'response');
-    
     return response.json();
   } catch (error) {
     console.error('Error marking notification as read:', error);

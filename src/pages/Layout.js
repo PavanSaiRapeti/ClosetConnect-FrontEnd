@@ -48,7 +48,6 @@ const Layout = (props) => {
   }, [content]);
   
   useEffect(() => {
-    console.log('isLoading==>', user);
     dispatch(setPageLoading(false));
   }, []);
 

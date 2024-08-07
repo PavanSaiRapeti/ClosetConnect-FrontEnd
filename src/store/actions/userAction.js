@@ -12,6 +12,10 @@ export const updateUserRequest = (user) => ({
     type: SET_USER_ID,
     payload: userId
   });
+  export const setGuestId = (guestId) => ({
+    type: 'SET_GUEST_ID',
+    payload: guestId
+  });
   export const setToken = (token) => ({
     type: 'SET_TOKEN',
     payload: token

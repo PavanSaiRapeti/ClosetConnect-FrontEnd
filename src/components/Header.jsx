@@ -42,7 +42,6 @@ const Header = ({ user }) => {
     const fetchNotifications = async () => {
       if (userId && token) {
         const notifications = await getUserNotifications(userId, token);
-        console.log('==>notifications', notifications, token);
         setNotifications(notifications);
       }
     };

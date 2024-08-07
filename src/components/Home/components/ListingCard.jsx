@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Skeleton from '@/components/common/Skeleton';
-import { deleteItem, getItemImage, getUser, handleTrigger } from 'utils/utils';
+import { deleteItem, getItemImage, handleTrigger } from 'utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { openLoginPopup, setPageLoading, setPopup } from 'store/actions/commonAction';
+import { openLoginPopup, setPopup } from 'store/actions/commonAction';
 import Avatar from '@/components/Avatar';
+import Image from 'next/image';
+import { setGuestId } from 'store/actions/userAction';
 
 const ListingCard = ({ 
   listing,
   guestId = null,
   isSmall = false,
   handleOpenModal,
-  guestUser=null
+  guestUser = null
 }) => {
   const user = useSelector(state => state.auth.user);
   const userId = useSelector(state => state.user.userId);
   const token = useSelector(state => state.user.token);
   const isOtherUser = parseInt(guestId) !== parseInt(userId);
-  const [guestData, setGuestData] = useState(null);
   const dispatch = useDispatch();
   const [image, setImage] = useState('https://via.placeholder.com/250');
   const defaultText = 'N/A';
@@ -32,16 +32,16 @@ const ListingCard = ({
   };
 
   const handleEdit = () => {
-    handleTrigger((user ? true : false), dispatch, setPopup({ title: 'Upload Listing Items', content: 'edit', data: initialData }));
+    handleTrigger((userId ? true : false), dispatch, setPopup({ title: 'Upload Listing Items', content: 'edit', data: initialData }));
   };
 
   useEffect(() => {
-    console.log('listing12==>', handleOpenModal , isOtherUser,guestId,userId,listing);
+
     const fetchData = async () => {
       if (listing?.id) {
         try {
           const response = await getItemImage(listing.id, token);
-          setImage(response);
+            setImage(response);
         } catch (error) {
           console.error('Failed to fetch item image:', error);
         }
@@ -61,23 +61,35 @@ const ListingCard = ({
     }
   };
 
+  const handleTradeNow = () => {
+    if (userId) {
+      handleOpenModal(listing, image);
+      dispatch(setGuestId(listing?.userId));
+    } else {
+      dispatch(openLoginPopup());
+    }
+  };
+
   if (isSmall) {
     return (
       <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-md">
-        <img src={image} alt={listing.name || defaultText} className="w-48 h-48 object-cover" />
+        <Image src={image} alt={listing.name || defaultText} width={192} height={192} className="w-48 h-48 object-cover" />
         <span className="mt-2 text-center text-sm font-semibold text-gray-700">{listing.name || defaultText}</span>
       </div>
     );
   }
 
   return (
-    <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "350px" }}>
+    <div className="space-x-2 rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300 w-full md:w-80">
       <a href={isOtherUser && `/All/${listing.name}?id=${listing?.id}`} className="block">
         <div className="relative">
-          <img 
+          <Image 
             src={image} 
             alt={listing.name || defaultText} 
+            width={350} 
+            height={256} 
             className="w-full h-64 object-cover"
+            layout='responsive'
           />
           {!isOtherUser && (
             <div className="absolute top-2 right-2 flex space-x-2">
@@ -118,10 +130,10 @@ const ListingCard = ({
         </div>
       </a>
       <div className="flex items-center justify-between p-4 border-t">
-        {isOtherUser && <button onClick={() => handleOpenModal} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
+        {isOtherUser && <button onClick={handleTradeNow} className={`mt-2 px-4 py-2 rounded bg-ccBlack text-white`}>Trade Now</button>}
         {isOtherUser && (
           <a href={`/profile/${listing?.userId}`} className="flex items-center">
-            <Avatar username={listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
+            <Avatar username={guestUser?.name || listing?.userFullName || 'closet connect'} profilePicture={listing.sellerImage} />
             <span className="ml-2 text-sm text-gray-700">{guestUser?.name || listing?.userFullName || defaultText}</span>
           </a>
         )}

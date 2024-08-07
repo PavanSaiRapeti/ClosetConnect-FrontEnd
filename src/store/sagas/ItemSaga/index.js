@@ -53,7 +53,6 @@ function* updateClothingItemSaga(action) {
             'Authorization': `Bearer ${token}`
             }};
         const response = yield call(axios.post, handlerEndpoint, requestData);
-        console.log('===>updateResponse', response);
         yield put({ type: UPDATE_CLOTHING_ITEM_SUCCESS, payload: response.data });
     } catch (error) {
         console.error('Update clothing item error:', error?.response);
@@ -103,7 +102,12 @@ function* getUserClothingItemsSaga(action) {
             'Authorization': `Bearer ${token}`
             }, isMethod: 'GET' };
         const response = yield call(axios.post, handlerEndpoint, requestData);
-                yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
+        if(parseInt(userId) !== parseInt(isUserID)){
+            yield put({ type: 'GET_GUEST_USER_CLOTHING_ITEMS_SUCCESS', payload: response.data });
+        }else{
+            yield put({ type: GET_USER_CLOTHING_ITEMS_SUCCESS, payload: response.data });
+        }
+                
             yield put({ type: 'SET_PAGE_LOADING', pageLoading: false });
         }
     } catch (error) {

@@ -7,7 +7,7 @@ import CustomPagination from '../customPagination';
 import { handleTrigger } from 'utils/utils';
 import TradeModal from '@/components/TradeModal';
 
-const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId ,guestUser=null }) => {
+const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSelectedItem = {}, userId, guestUser={}, isOtherUser = false }) => {
   const dispatch = useDispatch();
   const { items, error } = useSelector(state => state.item);
   const pageLoading = useSelector((state) => state.common.pageLoading);
@@ -46,16 +46,12 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
     setPage(selectedPage);
   };
 
-  const openModal = (listing) => {
-    console.log('tri==>', listing);
-    // setImage(image);
+
+  const openModal = (listing, image) => {
+    setImage(image);
     setSelectedListing(listing);
     setIsModalVisible(true);
   };
-
-  useEffect(() => {
-    console.log('isModalVisible==>', currentItems);
-  }, [currentItems]);
 
   const closeModal = () => {
     setIsModalVisible(false);
@@ -85,7 +81,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
               className={`cursor-pointer ${selectedItem === listing.id ? 'border-2 border-blue-500' : ''}`}
               onClick={() => setSelectedItem(listing.id)}
             >
-              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} openModal={() => openModal(listing)} />
+              <ListingCard listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} selectedItem={selectedItem} setSelectedItem={setSelectedItem} handleOpenModal={openModal} guestUser={guestUser}/>
             </div>
           )))
           }
@@ -108,7 +104,7 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
   return (
     <div className="p-6 bg-ccWhite rounded-lg shadow-lg">
       <div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-3 gap-4">
           {pageLoading ? (
             <div className="bg-ccWhite rounded-lg shadow-md overflow-hidden hover:shadow-2xl transition-shadow duration-300" style={{ width: "250px" }}>
               <Skeleton height="256px" />
@@ -122,8 +118,8 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
                 <Skeleton width="60px" height="24px" />
               </div>
             </div>
-          ) : (currentItems?.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} isSmall={isSmall} handleOpenModal={() => openModal(listing)} guestUser={guestUser} />
+          ) : (items?.content?.map((listing) => (
+            <ListingCard key={listing.id} listing={listing} isLoading={false} guestId={userId} handleOpenModal={openModal} guestUser={guestUser}/>
           )))
           }
 
@@ -138,10 +134,10 @@ const ListingGrid = ({ page, setPage, isSmall = false, selectedItem = {}, setSel
           totalPages={items?.totalPages}
           onPageChange={handlePageChange}
         />
-        {selectedListing && (
-          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
-        )}
       </div>
+      {selectedListing && (
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={selectedListing?.guestId} />
+        )}
     </div>
   );
 };

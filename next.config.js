@@ -16,7 +16,7 @@ module.exports = {
     ];
   },
   images: {
-    domains: ['images.unsplash.com', 'example.com','www.svgrepo.com','lottie.host'],
+    domains: ['images.unsplash.com', 'example.com','www.svgrepo.com','lottie.host','via.placeholder.com'],
   },
   swcMinify: true,
 };

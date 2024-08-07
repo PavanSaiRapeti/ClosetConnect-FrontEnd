@@ -1,6 +1,6 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPopup } from 'store/actions/commonAction';
+import { setPageLoading, setPopup } from 'store/actions/commonAction';
 import { acceptOrDeclineTrade, handleTrigger } from 'utils/utils';
 
 const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, receiverName, requestedItemName, senderName, status, tradeId, userName }) => {
@@ -15,6 +15,9 @@ const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, r
     setCurrentStatus('Accepted');
     if (response) {
       handleTrigger(true, dispatch, setPopup({ title: 'success', content: 'Item accepted successfully' }));
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
     } else {
       handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'Item accepted failed' }));
     }
@@ -33,6 +36,10 @@ const SwapComponent = memo(({ exchangeDate, exchangeLocation, offeredItemName, r
       handleTrigger(true, dispatch, setPopup({ title: 'Error', content: 'Item rejected failed' }));
     }
   };
+
+  useEffect(() => {
+    dispatch(setPageLoading(false));
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto">

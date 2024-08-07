@@ -7,11 +7,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { wrapper } from "store";
 import { setPageLoading } from "store/actions/commonAction";
-import { setToken, setUserId } from "store/actions/userAction";
-import { VALIDATE_TOKEN_SUCCESS } from "store/types/apiActionTypes";
-import { checkAuth } from "utils/authHelpers";
-import { getAllItems, getAllItemsLatest } from "utils/utils";
+import { getAllItemsLatest } from "utils/utils";
 import { validateTokenAndFetchUser } from 'utils/authHelpers';
+import TradeModal from "@/components/TradeModal";
+import { getUserClothesEndpoint } from "config/env";
+import { getUserClothingItemsRequest } from "store/actions/ItemAction";
+import Image from 'next/image';
 
 const reviews = [
   {
@@ -43,9 +44,9 @@ const CustomerReviews = () => {
         {reviews.map((review) => (
           <div key={review.id} className="bg-white rounded-lg p-6 m-4 w-full md:w-1/3 shadow-lg">
             <blockquote className="text-gray-800 text-lg mb-4">
-              <span className="text-2xl text-black">"</span>
+              <span className="text-2xl text-black">&ldquo;</span>
               {review.text}
-              <span className="text-2xl text-black">"</span>
+              <span className="text-2xl text-black">&rdquo;</span>
             </blockquote>
             <div className="text-pink-400 mb-4">
               {Array(review.stars).fill().map((_, i) => (
@@ -96,7 +97,7 @@ const HeroSection = () => {
       {slides.length === 0 || pageLoading ? (
         <Skeleton className="w-full h-full rounded-lg" />
       ) : (
-        <img src={slides[currentSlide].image} alt={slides[currentSlide].title} className="w-full object-cover rounded-lg" id="hero-image" />
+        <Image src={slides[currentSlide].image} alt={slides[currentSlide].title} layout="responsive" width={1920} height={1080} className="w-full object-cover rounded-lg" id="hero-image" />
       )}
       <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-ccWhite">
         {slides.length === 0 || pageLoading ? (
@@ -119,8 +120,6 @@ const HeroSection = () => {
     </section>
   );
 };
-
-
 
 const categories = [
   {
@@ -152,10 +151,13 @@ const PromoGridItem = () => {
     {categories.map((category, index) => (
        <div key={index} className="relative w-full h-full border-4 border-white" onClick={()=>router.push(category.link)}>
       <div className="relative w-full h-full border-4 border-white">
-        <img
+        <Image
           className="w-full h-full object-cover"
           src={category.image}
           alt={category.title}
+          layout="responsive"
+          width={500}
+          height={500}
         />
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 text-white p-4">
           <h2 className="text-2xl font-bold">{category.title}</h2>
@@ -169,8 +171,28 @@ const PromoGridItem = () => {
   );
 };
 
-const ProductShowcase = ({ products }) => {
+const ProductShowcase = ({ products, userId }) => {
+  
   const router = useRouter();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedListing, setSelectedListing] = useState(null);
+  const [image, setImage] = useState(null);
+
+  
+  const openModal = (listing, image) => {
+    setImage(image);
+    setSelectedListing(listing);
+    setIsModalVisible(true);
+  };
+
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedListing(null);
+  };
+
+
   return (
     <div className="w-full mb-8">
       <div className="mt-8">
@@ -178,7 +200,7 @@ const ProductShowcase = ({ products }) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {products.content.slice(0, 8).map((product) => (
             <div key={product.id} className="flex justify-center text-center">
-              <ListingCard key={product.id} listing={product} guestId={product?.userId} />
+              <ListingCard key={product.id} listing={product} guestId={product?.userId} handleOpenModal={openModal}/>
             </div>
           ))}
         </div>
@@ -194,11 +216,14 @@ const ProductShowcase = ({ products }) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ">
         <PromoGridItem />
       </div>
+      {selectedListing && (
+          <TradeModal isVisible={isModalVisible} onClose={closeModal} product={selectedListing} image={image} guestId={userId} />
+        )}
     </div>
   );
 };
 
-const Home = ({ user, allItemsLatest }) => {
+const Home = ({ user, allItemsLatest, userId}) => {
   const dispatch = useDispatch();
   const allItems = allItemsLatest;
 
@@ -213,6 +238,13 @@ const Home = ({ user, allItemsLatest }) => {
     initializePage();
   }, [dispatch, allItems]);
 
+  useEffect(() => {
+    if(user){
+      dispatch(getUserClothingItemsRequest(userId, 5, 0));
+    }
+  }, [user]);
+
+
   return (
     <Layout user={user}>
       <div className="flex flex-col items-center justify-center ">
@@ -221,8 +253,9 @@ const Home = ({ user, allItemsLatest }) => {
         </div>
       </div>
       <HeroSection />
-      <ProductShowcase products={allItemsLatest || []} />
+      <ProductShowcase products={allItemsLatest || []} userId={userId} />
       <CustomerReviews />
+     
     </Layout>
   );
 };
@@ -232,7 +265,6 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
   const { token, userId } = cookies;
   store.dispatch(setPageLoading(true));
   const userData = await validateTokenAndFetchUser(store, token, userId, res);
-  console.log('===>serverside', userData);
 
   const allItemsLatest = await getAllItemsLatest(8, 0);
 
@@ -240,6 +272,7 @@ export const getServerSideProps = wrapper.getServerSideProps((store) => async ({
     props: {
       user: userData || null,
       allItemsLatest: allItemsLatest || null,
+      userId:userId || null
     },
   };
 });
